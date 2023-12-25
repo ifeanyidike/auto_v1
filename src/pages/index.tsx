@@ -5,6 +5,8 @@ import { dmSans, robotoMono } from "~/font";
 import Button from "~/components/Button";
 import LeftDashText from "~/components/LeftDashText";
 import HomeServicesCard from "~/components/HomeServicesCard";
+import ReviewCard from "~/components/ReviewCard";
+import ReviewCards from "~/components/ReviewCards";
 
 export default function Home() {
   return (
@@ -16,9 +18,9 @@ export default function Home() {
       </Head>
       <main>
         <div className="flex items-center justify-between bg-gradient-to-r from-[#ECECEE] to-[#ECE7EB] px-14 py-28 max-md:flex-col">
-          <div className="flex w-[50%] flex-col gap-8">
+          <div className="flex w-[50%] flex-col gap-8 max-md:w-full">
             <p
-              className={`${robotoMono.className} text-8xl  uppercase text-[${currentTheme.lightText}]`}
+              className={`${robotoMono.className} text-8xl uppercase  max-lg:text-6xl text-[${currentTheme.lightText}]`}
             >
               One-stop auto service solution.
             </p>
@@ -26,7 +28,7 @@ export default function Home() {
               Lorem ipsum dolor sit amet consectetur adipisicing elit. Aliquam
               provident placeat doloremque id laborum aliquid.
             </p>
-            <div className="flex justify-between">
+            <div className="flex justify-between max-md:flex-col max-md:gap-3">
               <Button
                 hasGradient={true}
                 hasShadow={true}
@@ -50,14 +52,16 @@ export default function Home() {
           </div>
         </div>
 
-        <div className="flex flex-col gap-8 px-14 pb-28 pt-20">
-          <div className="flex flex-col items-center justify-center gap-5">
+        <div className="flex flex-col gap-12 px-14 pb-28 pt-20">
+          <div className="ml-4 flex flex-col justify-center gap-5">
             <LeftDashText text="Our Services" />
-            <span className={`text-5xl  font-semibold ${dmSans.className}`}>
+            <span
+              className={`text-5xl font-semibold  max-md:text-4xl ${dmSans.className}`}
+            >
               Your One-Stop Auto Repairs Solutions
             </span>
           </div>
-          <div className="grid grid-cols-3 gap-x-3 gap-y-12">
+          <div className="grid grid-cols-3 gap-x-3 gap-y-12 max-xl:grid-cols-2 max-lg:grid-cols-2 max-md:grid-cols-1">
             <HomeServicesCard
               category="Repairs"
               details="
@@ -93,6 +97,41 @@ export default function Home() {
               imgSrc="/image/radiator.webp"
               title="Radiator & Engine Cooling"
             />
+          </div>
+        </div>
+
+        <div className="flex items-start justify-between bg-gradient-to-r from-[#ECECEE] to-[#ECE7EB] px-14 py-28 max-md:flex-col max-md:gap-20">
+          <div className="w-[50%] items-center justify-center gap-8 max-md:w-full">
+            <Image
+              src="/image/auto_wheel.webp"
+              alt="engine"
+              width="500"
+              height="514"
+            ></Image>
+          </div>
+          <div className="flex w-[50%] flex-col gap-7 text-left max-lg:w-full">
+            <div className="ml-10">
+              <LeftDashText text="Reviews" />
+            </div>
+            <p
+              className={`ml-10 text-5xl font-semibold  max-md:text-4xl ${dmSans.className} capitalize`}
+            >
+              Approved by{" "}
+              <span
+                style={{
+                  backgroundImage:
+                    "linear-gradient(92deg, #929FAE 49.36%, #807782 88.79%)",
+                  backgroundClip: "text",
+                  WebkitTextFillColor: "transparent",
+                  WebkitBackgroundClip: "text",
+                }}
+              >
+                10+
+              </span>{" "}
+              clients
+            </p>
+
+            <ReviewCards />
           </div>
         </div>
       </main>
