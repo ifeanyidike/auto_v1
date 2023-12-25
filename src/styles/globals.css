@@ -12,6 +12,8 @@
     --color-content: 230deg 13% 18%;
     --color-red1: 0deg 100% 45%;
     --color-red2: 0deg 100% 40%;
+    --color-bg-grad-start: 240deg 6% 93%;
+    --color-bg-grad-end: 312deg 12% 92%;
   }
 
   @media (prefers-color-scheme: dark) {

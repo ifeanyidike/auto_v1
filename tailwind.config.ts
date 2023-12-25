@@ -19,6 +19,12 @@ export default {
           1: "hsl(var(--color-red1) / <alpha-value>)",
           2: "hsl(var(--color-red2) / <alpha-value>)",
         },
+        gradient: {
+          bg: {
+            start: "hsl(var(--color-bg-grad-start) / <alpha-value>)",
+            end: "hsl(var(--color-bg-grad-end) / <alpha-value>)",
+          },
+        },
         dark: "hsl(var(--color-dark) / <alpha-value>)",
         content: {
           normal: "hsl(var(--color-content) / <alpha-value>)",

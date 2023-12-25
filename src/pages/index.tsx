@@ -1,6 +1,5 @@
 import Head from "next/head";
 import Image from "next/image";
-import { colors, currentTheme } from "~/colors";
 import { dmSans, robotoMono } from "~/font";
 import Button from "~/components/Button";
 import LeftDashText from "~/components/LeftDashText";
@@ -8,6 +7,7 @@ import HomeServicesCard from "~/components/HomeServicesCard";
 import ReviewCards from "~/components/ReviewCards";
 import Link from "next/link";
 import ArrowRight from "~/commons/icons/ArrowRight";
+import AllFAQs from "~/components/AllFAQs";
 
 export default function Home() {
   return (
@@ -18,10 +18,10 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main>
-        <div className="flex items-center justify-between bg-gradient-to-r from-[#ECECEE] to-[#ECE7EB] px-14 py-28 max-md:flex-col">
+        <div className="from-gradient-bg-start to-gradient-bg-end flex items-center justify-between bg-gradient-to-r px-14 py-28 max-md:flex-col">
           <div className="flex w-[50%] flex-col gap-8 max-md:w-full">
             <p
-              className={`${robotoMono.className} text-8xl uppercase  max-lg:text-6xl text-[${currentTheme.lightText}]`}
+              className={`${robotoMono.className} text-content-light text-8xl  uppercase max-lg:text-6xl`}
             >
               One-stop auto service solution.
             </p>
@@ -109,7 +109,7 @@ export default function Home() {
           </div>
         </div>
 
-        <div className="flex items-start justify-between bg-gradient-to-r from-[#ECECEE] to-[#ECE7EB] px-14 py-28 max-md:flex-col max-md:gap-20">
+        <div className="from-gradient-bg-start to-gradient-bg-end flex items-start justify-between bg-gradient-to-r px-14 py-28 max-md:flex-col max-md:gap-20">
           <div className="w-[50%] items-center justify-center gap-8 max-md:w-full">
             <Image
               src="/image/auto_wheel.webp"
@@ -141,6 +141,28 @@ export default function Home() {
             </p>
 
             <ReviewCards />
+          </div>
+        </div>
+
+        <div className="flex flex-col gap-12 px-14 pb-28 pt-20">
+          <div className="ml-4 flex flex-col justify-center gap-5">
+            <LeftDashText text="FAQ" />
+            <div className="flex items-end justify-between max-lg:flex-col max-lg:gap-5">
+              <span
+                className={`text-5xl font-semibold  max-md:text-4xl ${dmSans.className}`}
+              >
+                Frequently Asked Questions
+              </span>
+              <Link className="flex gap-2" href="#">
+                <span className="hover:border-content-normal inset-x-0 bottom-0 w-fit border-b border-transparent transition-all duration-1000 ease-in-out">
+                  View All
+                </span>
+                <ArrowRight />
+              </Link>
+            </div>
+          </div>
+          <div className="grid place-items-center gap-6">
+            <AllFAQs />
           </div>
         </div>
       </main>

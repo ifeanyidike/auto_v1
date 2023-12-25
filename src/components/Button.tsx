@@ -1,5 +1,4 @@
 import React from "react";
-import { colors } from "~/colors";
 
 type Props = {
   text: string;
@@ -17,9 +16,6 @@ const Button = (props: Props) => {
   } = props;
   return (
     <button
-      // style={{
-      //   backgroundColor: bgColor,
-      // }}
       className={`${bgColor} rounded-3xl ${
         hasGradient ? "bg-gradient-to-l" : ""
       } from-red-1 px-9 py-3 text-sm font-bold text-white ${
