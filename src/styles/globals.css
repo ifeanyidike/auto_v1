@@ -1,3 +1,36 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+  :root {
+    --color-dark: 0deg 0% 100%;
+    --color-dark: 221deg 39% 11%;
+    --color-text-light: 211deg 29% 37%;
+    --color-yellow: 48deg 100% 50%;
+    --color-accent1: 260deg 88% 60%;
+    --color-content: 230deg 13% 18%;
+    --color-red1: 0deg 100% 45%;
+    --color-red2: 0deg 100% 40%;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --color-dark: 221deg 39% 11%;
+      --color-text-light: 211deg 29% 37%;
+      --color-yellow: 48deg 100% 50%;
+      --color-accent1: 260deg 88% 60%;
+      --color-content: 230deg 13% 18%;
+      --color-red1: 0deg 100% 45%;
+      --color-red2: 0deg 100% 40%;
+    }
+  }
+  :root[data-theme="dark"] {
+    --color-dark: 221deg 39% 11%;
+    --color-text-light: 211deg 29% 37%;
+    --color-yellow: 48deg 100% 50%;
+    --color-accent1: 260deg 88% 60%;
+    --color-red1: 0deg 100% 45%;
+    --color-red2: 0deg 100% 40%;
+  }
+}

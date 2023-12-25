@@ -1,8 +1,7 @@
 import Image from "next/image";
 import React from "react";
-import { colors, currentTheme } from "~/colors";
 import ArrowRight from "~/commons/icons/ArrowRight";
-import { dmSans, manRope, openSans } from "~/font";
+import { dmSans } from "~/font";
 
 type Props = {
   imgSrc: string;
@@ -10,6 +9,7 @@ type Props = {
   category: string;
   details: string;
 };
+
 const HomeServicesCard = (props: Props) => {
   return (
     <div className={`flex h-[450px] flex-col rounded-xl p-4`}>
@@ -25,13 +25,15 @@ const HomeServicesCard = (props: Props) => {
           {props.category}
         </h6>
         <span
-          className={`text-xl font-medium capitalize text-[#292b35] ${dmSans.className}`}
+          className={`text-content-normal text-xl font-medium capitalize ${dmSans.className}`}
         >
           {props.title}
         </span>
-        <p className="text-sm font-normal text-[#292b35]">{props.details}</p>
+        <p className="text-content-normal text-sm font-normal">
+          {props.details}
+        </p>
         <div className="flex cursor-pointer gap-2">
-          <span className="inset-x-0 bottom-0 w-fit border-b border-transparent transition-all duration-1000 ease-in-out hover:border-[#292b35]">
+          <span className="hover:border-content-normal inset-x-0 bottom-0 w-fit border-b border-transparent transition-all duration-1000 ease-in-out">
             View Details
           </span>
           <ArrowRight />
