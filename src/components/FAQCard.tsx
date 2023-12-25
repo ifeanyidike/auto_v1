@@ -9,7 +9,7 @@ type Props = {
 const FAQCard = (props: Props) => {
   const [isOpen, toggleOpen] = useState<boolean>(false);
   return (
-    <div className="flex w-3/5 flex-col gap-3 rounded-xl border border-gray-300 p-3">
+    <div className="flex w-3/5 flex-col gap-3 rounded-xl border border-gray-300 p-3 max-lg:w-4/5 max-md:w-full">
       <div className="flex justify-between gap-4 px-2">
         <p className="flex font-medium">{props.question}</p>
         <button

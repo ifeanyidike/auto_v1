@@ -38,7 +38,7 @@ const Footer = () => {
           </Link>
         </div>
       </div>
-      <div className="my-10 flex w-full justify-center gap-10 text-xs">
+      <div className="my-10 flex w-full justify-center gap-10 text-xs max-md:flex-col">
         <span>&copy; Copyright 2024. All Rights Reserved.</span>
         <Link href="#">Privacy Policy</Link>
         <Link href="#">Terms & Conditions</Link>
