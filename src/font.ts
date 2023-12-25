@@ -2,7 +2,6 @@ import {
   Inter,
   Open_Sans,
   Roboto_Mono,
-  Averia_Sans_Libre,
   Nunito_Sans,
   DM_Sans,
   Manrope,

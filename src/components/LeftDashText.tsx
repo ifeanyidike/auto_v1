@@ -6,7 +6,7 @@ type Props = {
 const LeftDashText = (props: Props) => {
   return (
     <div className="flex items-center space-x-2">
-      <div className={`w-[50px] border border-[#435E7B]`}></div>
+      <div className={`border-content-light w-[50px] border`}></div>
       <p className="text-sm capitalize">{props.text}</p>
       {/* <div className="w-1/4 border-t border-dashed border-gray-500"></div> */}
     </div>

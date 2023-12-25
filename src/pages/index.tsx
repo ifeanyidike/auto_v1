@@ -5,8 +5,9 @@ import { dmSans, robotoMono } from "~/font";
 import Button from "~/components/Button";
 import LeftDashText from "~/components/LeftDashText";
 import HomeServicesCard from "~/components/HomeServicesCard";
-import ReviewCard from "~/components/ReviewCard";
 import ReviewCards from "~/components/ReviewCards";
+import Link from "next/link";
+import ArrowRight from "~/commons/icons/ArrowRight";
 
 export default function Home() {
   return (
@@ -24,7 +25,7 @@ export default function Home() {
             >
               One-stop auto service solution.
             </p>
-            <p className={`text-[${currentTheme.deepText}]`}>
+            <p className={`text-dark`}>
               Lorem ipsum dolor sit amet consectetur adipisicing elit. Aliquam
               provident placeat doloremque id laborum aliquid.
             </p>
@@ -37,7 +38,7 @@ export default function Home() {
               <Button
                 hasGradient={false}
                 hasShadow={false}
-                bgColor={colors.dark}
+                bgColor="bg-dark"
                 text="GET AN ESTIMATE"
               />
             </div>
@@ -55,11 +56,19 @@ export default function Home() {
         <div className="flex flex-col gap-12 px-14 pb-28 pt-20">
           <div className="ml-4 flex flex-col justify-center gap-5">
             <LeftDashText text="Our Services" />
-            <span
-              className={`text-5xl font-semibold  max-md:text-4xl ${dmSans.className}`}
-            >
-              Your One-Stop Auto Repairs Solutions
-            </span>
+            <div className="flex items-end justify-between max-lg:flex-col max-lg:gap-5">
+              <span
+                className={`text-5xl font-semibold  max-md:text-4xl ${dmSans.className}`}
+              >
+                Your One-Stop Auto Repairs Solutions
+              </span>
+              <Link className="flex gap-2" href="#">
+                <span className="hover:border-content-normal inset-x-0 bottom-0 w-fit border-b border-transparent transition-all duration-1000 ease-in-out">
+                  View All
+                </span>
+                <ArrowRight />
+              </Link>
+            </div>
           </div>
           <div className="grid grid-cols-3 gap-x-3 gap-y-12 max-xl:grid-cols-2 max-lg:grid-cols-2 max-md:grid-cols-1">
             <HomeServicesCard

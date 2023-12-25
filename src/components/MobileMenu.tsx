@@ -1,4 +1,3 @@
-import { useHookstate } from "@hookstate/core";
 import React from "react";
 import CloseIcon from "~/commons/icons/CloseIcon";
 import { toggleNav } from "~/states/utility";
@@ -23,7 +22,7 @@ const MobileMenu = () => {
       <Button
         hasGradient={false}
         hasShadow={false}
-        bgColor={colors.dark}
+        bgColor="bg-dark"
         text="GET AN ESTIMATE"
       />
     </div>
