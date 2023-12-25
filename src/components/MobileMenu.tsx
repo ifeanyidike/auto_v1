@@ -2,7 +2,6 @@ import React from "react";
 import CloseIcon from "~/commons/icons/CloseIcon";
 import { toggleNav } from "~/states/utility";
 import Button from "./Button";
-import { colors } from "~/colors";
 
 const MobileMenu = () => {
   return (

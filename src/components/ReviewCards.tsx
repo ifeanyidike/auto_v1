@@ -1,34 +1,126 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import ReviewCard from "./ReviewCard";
 import ArrowLeftAlt from "~/commons/icons/ArrowLeftAlt";
 import ArrowRightAlt from "~/commons/icons/ArrowRightAlt";
+import OutlineDot from "~/commons/icons/OutlineDot";
+import SolidDot from "~/commons/icons/SolidDot";
+
+const data = [
+  {
+    reviewer: "Ifeanyi Dike",
+    role: "Customer",
+    content:
+      "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Facilis, temporibus dolorum? Iste aliquid asperiores voluptate iusto accusantium, magni voluptates quam assumenda quidem et dolorum consequuntur voluptatibus, eos nisi! Quae, veniam.",
+  },
+  {
+    reviewer: "Aja Edward",
+    role: "Manager",
+    content:
+      "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Facilis, temporibus dolorum? Iste aliquid asperiores voluptate iusto accusantium, magni voluptates quam assumenda quidem et dolorum consequuntur voluptatibus, eos nisi! Quae, veniam.",
+  },
+  {
+    reviewer: "Lorem Ipsum",
+    role: "Customer",
+    content:
+      "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Facilis, temporibus dolorum? Iste aliquid asperiores voluptate iusto accusantium, magni voluptates quam assumenda quidem et dolorum consequuntur voluptatibus, eos nisi! Quae, veniam.",
+  },
+  {
+    reviewer: "Mendez Kumer",
+    role: "IT",
+    content:
+      "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Facilis, temporibus dolorum? Iste aliquid asperiores voluptate iusto accusantium, magni voluptates quam assumenda quidem et dolorum consequuntur voluptatibus, eos nisi! Quae, veniam.",
+  },
+  {
+    reviewer: "Manoj Sandeep",
+    role: "Indian",
+    content:
+      "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Facilis, temporibus dolorum? Iste aliquid asperiores voluptate iusto accusantium, magni voluptates quam assumenda quidem et dolorum consequuntur voluptatibus, eos nisi! Quae, veniam.",
+  },
+];
 
 const ReviewCards = () => {
-  const [reviewIndex, setReviewIndex] = useState(0);
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const startXRef = useRef<number | null>(null);
 
-  //   let items = [0, 1, 2, 3, 4]; // Just to hold temp review items
-  const handleLeftArrowClick = () => {
-    if (reviewIndex > 0) {
-      setReviewIndex(reviewIndex - 1);
+  const handlePrev = () => {
+    setCurrentIndex((prevIndex) =>
+      prevIndex === 0 ? data.length - 1 : prevIndex - 1,
+    );
+  };
+
+  const handleNext = () => {
+    setCurrentIndex((prevIndex) =>
+      prevIndex === data.length - 1 ? 0 : prevIndex + 1,
+    );
+  };
+
+  const handleSwipeStart = (e: React.TouchEvent) => {
+    startXRef.current = e.touches[0]!.clientX;
+  };
+
+  const handleSwipeMove = (e: React.TouchEvent) => {
+    if (startXRef.current === null) return;
+
+    const deltaX = e.touches[0]!.clientX - startXRef.current;
+
+    if (deltaX > 50) {
+      handlePrev();
+    } else if (deltaX < -50) {
+      handleNext();
     }
   };
 
-  const handleRightArrowClick = () => {
-    if (reviewIndex < 4) {
-      setReviewIndex(reviewIndex + 1);
-    }
+  const handleSwipeEnd = () => {
+    startXRef.current = null;
   };
+
   return (
-    <div className="flex items-center gap-5">
-      <button onClick={handleLeftArrowClick}>
-        <ArrowLeftAlt />
-      </button>
-      <div className="w-[90%]">
-        <ReviewCard />
+    <div className="flex flex-col items-center gap-7">
+      <div className="carousel relative h-full w-full overflow-hidden">
+        <button
+          className="absolute left-0 top-1/2 z-10 -translate-y-1/2 transform"
+          onClick={handlePrev}
+        >
+          <ArrowLeftAlt />
+        </button>
+        <div
+          className="mx-auto flex w-[87%] transition-transform"
+          style={{ transform: `translateX(-${currentIndex * 100}%)` }}
+          ref={containerRef}
+          onTouchStart={handleSwipeStart}
+          onTouchMove={handleSwipeMove}
+          onTouchEnd={handleSwipeEnd}
+        >
+          {data.map((item, index) => (
+            <div key={index} className={`h-full w-full flex-shrink-0`}>
+              <ReviewCard {...item} isActive={index === currentIndex} />
+            </div>
+          ))}
+        </div>
+        <button
+          className="absolute right-0 top-1/2 z-10 -translate-y-1/2 transform"
+          onClick={handleNext}
+        >
+          <ArrowRightAlt />
+        </button>
       </div>
-      <button onClick={handleRightArrowClick}>
-        <ArrowRightAlt />
-      </button>
+      <div className="flex items-center gap-2">
+        {data.map((_, index) => {
+          if (currentIndex === index) {
+            return (
+              <button>
+                <OutlineDot />
+              </button>
+            );
+          }
+          return (
+            <button onClick={() => setCurrentIndex(index)}>
+              <SolidDot />
+            </button>
+          );
+        })}
+      </div>
     </div>
   );
 };

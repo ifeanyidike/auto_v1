@@ -1,5 +1,4 @@
 import React from "react";
-import { colors } from "~/colors";
 import Logo from "~/commons/icons/Logo";
 import MenuToggle from "~/commons/icons/MenuToggle";
 import { useHookstate } from "@hookstate/core";
