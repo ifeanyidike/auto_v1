@@ -8,6 +8,7 @@ import ReviewCards from "~/components/ReviewCards";
 import Link from "next/link";
 import ArrowRight from "~/commons/icons/ArrowRight";
 import AllFAQs from "~/components/AllFAQs";
+import Footer from "~/components/Footer";
 
 export default function Home() {
   return (
@@ -165,6 +166,7 @@ export default function Home() {
             <AllFAQs />
           </div>
         </div>
+        <Footer />
       </main>
     </>
   );
