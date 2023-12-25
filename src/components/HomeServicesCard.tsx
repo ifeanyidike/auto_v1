@@ -17,8 +17,8 @@ const HomeServicesCard = (props: Props) => {
         src={props.imgSrc}
         alt={props.title}
         width="400"
-        height="200"
-        className="h-[250px] w-auto rounded-2xl"
+        height="280"
+        className="h-[240px] w-auto rounded-2xl"
       ></Image>
       <div className="mb-5 mt-5 flex flex-col gap-3">
         <h6 className={`text-xs font-medium uppercase text-[#9EA1A6]`}>
