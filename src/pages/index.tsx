@@ -19,10 +19,10 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main>
-        <div className="from-gradient-bg-start to-gradient-bg-end flex items-center justify-between bg-gradient-to-r px-14 py-28 max-md:flex-col">
+        <div className="flex items-center justify-between bg-gradient-to-r from-gradient-bg-start to-gradient-bg-end px-14 py-28 max-md:flex-col">
           <div className="flex w-[50%] flex-col gap-8 max-md:w-full">
             <p
-              className={`${robotoMono.className} text-content-light text-8xl  uppercase max-lg:text-6xl`}
+              className={`${robotoMono.className} text-8xl uppercase  text-content-light max-lg:text-6xl`}
             >
               One-stop auto service solution.
             </p>
@@ -64,7 +64,7 @@ export default function Home() {
                 Your One-Stop Auto Repairs Solutions
               </span>
               <Link className="flex gap-2" href="#">
-                <span className="hover:border-content-normal inset-x-0 bottom-0 w-fit border-b border-transparent transition-all duration-1000 ease-in-out">
+                <span className="inset-x-0 bottom-0 w-fit border-b border-transparent transition-all duration-1000 ease-in-out hover:border-content-normal">
                   View All
                 </span>
                 <ArrowRight />
@@ -75,9 +75,11 @@ export default function Home() {
             <HomeServicesCard
               category="Repairs"
               details="
+              
           Lorem ipsum dolor sit amet consectetur adipisicing elit. Iusto quos recusandae earum itaque quis iste quibusdam amet magni nobis labore."
               imgSrc="/image/belt.webp"
               title="Belt & Hoses"
+              href="/servicespage"
             />
             <HomeServicesCard
               category="Servicing"
@@ -85,6 +87,7 @@ export default function Home() {
           Lorem ipsum dolor sit amet consectetur adipisicing elit. Iusto quos recusandae earum itaque quis iste quibusdam amet magni nobis labore."
               imgSrc="/image/battery.webp"
               title="Car Batteries & Charging"
+              href="/servicespage"
             />
             <HomeServicesCard
               category="Repairs"
@@ -92,6 +95,7 @@ export default function Home() {
           Lorem ipsum dolor sit amet consectetur adipisicing elit. Iusto quos recusandae earum itaque quis iste quibusdam amet magni nobis labore."
               imgSrc="/image/mechanical.webp"
               title="Mechanical Repairs"
+              href="/servicespage"
             />
             <HomeServicesCard
               category="Servicing"
@@ -99,9 +103,11 @@ export default function Home() {
           Lorem ipsum dolor sit amet consectetur adipisicing elit. Iusto quos recusandae earum itaque quis iste quibusdam amet magni nobis labore."
               imgSrc="/image/painting.jpeg"
               title="Bodywork & Paint"
+              href="/servicespage"
             />
             <HomeServicesCard
               category="Repairs"
+              href="/servicespage"
               details="
           Lorem ipsum dolor sit amet consectetur adipisicing elit. Iusto quos recusandae earum itaque quis iste quibusdam amet magni nobis labore."
               imgSrc="/image/radiator.webp"
@@ -110,7 +116,7 @@ export default function Home() {
           </div>
         </div>
 
-        <div className="from-gradient-bg-start to-gradient-bg-end flex items-start justify-between bg-gradient-to-r px-14 py-28 max-md:flex-col max-md:gap-20">
+        <div className="flex items-start justify-between bg-gradient-to-r from-gradient-bg-start to-gradient-bg-end px-14 py-28 max-md:flex-col max-md:gap-20">
           <div className="w-[50%] items-center justify-center gap-8 max-md:w-full">
             <Image
               src="/image/auto_wheel.webp"
@@ -155,7 +161,7 @@ export default function Home() {
                 Frequently Asked Questions
               </span>
               <Link className="flex gap-2" href="#">
-                <span className="hover:border-content-normal inset-x-0 bottom-0 w-fit border-b border-transparent transition-all duration-1000 ease-in-out">
+                <span className="inset-x-0 bottom-0 w-fit border-b border-transparent transition-all duration-1000 ease-in-out hover:border-content-normal">
                   View All
                 </span>
                 <ArrowRight />
