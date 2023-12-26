@@ -4,27 +4,30 @@ import MenuToggle from "~/commons/icons/MenuToggle";
 import { useHookstate } from "@hookstate/core";
 import { toggleNav } from "~/states/utility";
 import Button from "./Button";
+import Link from "next/link";
 
 const MainMenu = () => {
   const navOpen = useHookstate(toggleNav);
   return (
-    <div className="relative flex h-20 items-center gap-10 pl-14 max-lg:justify-between max-lg:pr-14">
+    <div className="relative flex h-20 items-center gap-10 px-14 max-lg:justify-between max-lg:pr-14 max-md:px-7">
       <Logo />
       <div
         className={`text-content-light flex flex-initial gap-14 text-sm font-normal max-lg:hidden`}
       >
-        <span
+        <Link
+          href="/"
           className={`hover:text-accent-1 hover:border-content-normal cursor-pointer hover:border-b hover:font-semibold`}
         >
           Home
-        </span>
-        <span
+        </Link>
+        <Link
+          href="#"
           className={`hover:text-accent-1 hover:border-content-normal cursor-pointer hover:border-b hover:font-semibold`}
         >
           Services
-        </span>
+        </Link>
       </div>
-      <div className="ml-auto mr-10 flex gap-3 max-lg:hidden">
+      <div className="ml-auto flex gap-3 max-lg:hidden">
         <div className="flex flex-col gap-0">
           <span className="text-[0.7rem]">Call us for a free estimate</span>
           <span className="text-content-light text-lg font-bold">

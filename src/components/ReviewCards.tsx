@@ -85,7 +85,7 @@ const ReviewCards = () => {
           <ArrowLeftAlt />
         </button>
         <div
-          className="mx-auto flex w-[87%] transition-transform"
+          className="mx-auto flex w-[87%] transition-transform max-md:w-full"
           style={{ transform: `translateX(-${currentIndex * 100}%)` }}
           ref={containerRef}
           onTouchStart={handleSwipeStart}

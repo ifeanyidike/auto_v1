@@ -6,7 +6,7 @@ import Button from "./Button";
 const MobileMenu = () => {
   return (
     <div
-      className={`absolute right-0 top-0 hidden h-screen w-4/5 flex-col gap-12 bg-white px-7 py-8 text-lg transition-all duration-300 ease-in-out max-lg:flex`}
+      className={`fixed right-0 top-0 z-40 hidden h-screen w-4/5 flex-col gap-12 bg-white px-7 py-8 text-lg transition-all duration-300 ease-in-out max-lg:flex`}
     >
       <button
         onClick={() => toggleNav.set(false)}
