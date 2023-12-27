@@ -21,7 +21,7 @@ const HomeServicesCard = (props: Props) => {
           alt={props.title}
           width="400"
           height="280"
-          className="h-[240px] w-auto rounded-2xl"
+          className="h-[240px] w-[400px] rounded-2xl"
         ></Image>
       </Link>
 

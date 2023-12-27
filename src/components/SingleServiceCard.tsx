@@ -1,15 +1,7 @@
-import React from 'react'
-import { ServiceData } from './Data'
+import React from "react";
 
 const SingleServiceCard = () => {
-  return (
-    {ServiceData.map((service)=> (
-<div>
-        
-    </div>
-    ))}
-    
-  )
-}
+  return <div>SingleServiceCard</div>;
+};
 
-export default SingleServiceCard
+export default SingleServiceCard;

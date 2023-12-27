@@ -15,7 +15,7 @@ type Props = {
 const ServicesPageCard = (props: Props) => {
   return (
     <div className={`flex h-[450px] flex-col rounded-xl p-4`}>
-      <Link href={`/singleservicepage/${service._id}`}>
+      <Link href={`/singleservicepage`}>
         <Image
           src={props.imgSrc}
           alt={props.title}
