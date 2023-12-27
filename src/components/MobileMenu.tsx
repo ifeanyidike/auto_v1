@@ -2,6 +2,7 @@ import React from "react";
 import CloseIcon from "~/commons/icons/CloseIcon";
 import { toggleNav } from "~/states/utility";
 import Button from "./Button";
+import Link from "next/link";
 
 const MobileMenu = () => {
   return (
@@ -15,8 +16,12 @@ const MobileMenu = () => {
         <CloseIcon />
       </button>
 
-      <span className="cursor-pointer">Home</span>
-      <span className="cursor-pointer">Services</span>
+      <Link href="/" className="cursor-pointer">
+        Home
+      </Link>
+      <Link href="#" className="cursor-pointer">
+        Services
+      </Link>
 
       <Button
         hasGradient={false}

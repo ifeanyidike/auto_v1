@@ -10,7 +10,9 @@ const MainMenu = () => {
   const navOpen = useHookstate(toggleNav);
   return (
     <div className="relative flex h-20 items-center gap-10 px-14 max-lg:justify-between max-lg:pr-14 max-md:px-7">
-      <Logo />
+      <Link href="/">
+        <Logo />
+      </Link>
       <div
         className={`text-content-light flex flex-initial gap-14 text-sm font-normal max-lg:hidden`}
       >
