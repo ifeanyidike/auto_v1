@@ -70,4 +70,58 @@ export const ServiceData: serviceData[] = [
     title: "AC & Heating",
     href: "/singleservicepage",
   },
+  {
+    _id: "7",
+    category: "Repair",
+    details:
+      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Iusto quos recusandae earum itaque quis iste quibusdam amet magni nobis labore.",
+    imgSrc: "/image/Acheating.webp",
+    title: "AC & Heating",
+    href: "/singleservicepage",
+  },
+  {
+    _id: "7",
+    category: "Repair",
+    details:
+      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Iusto quos recusandae earum itaque quis iste quibusdam amet magni nobis labore.",
+    imgSrc: "/image/Acheating.webp",
+    title: "AC & Heating",
+    href: "/singleservicepage",
+  },
+  {
+    _id: "7",
+    category: "Repair",
+    details:
+      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Iusto quos recusandae earum itaque quis iste quibusdam amet magni nobis labore.",
+    imgSrc: "/image/Acheating.webp",
+    title: "AC & Heating",
+    href: "/singleservicepage",
+  },
+  {
+    _id: "7",
+    category: "Repair",
+    details:
+      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Iusto quos recusandae earum itaque quis iste quibusdam amet magni nobis labore.",
+    imgSrc: "/image/Acheating.webp",
+    title: "AC & Heating",
+    href: "/singleservicepage",
+  },
+  {
+    _id: "7",
+    category: "Repair",
+    details:
+      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Iusto quos recusandae earum itaque quis iste quibusdam amet magni nobis labore.",
+    imgSrc: "/image/Acheating.webp",
+    title: "AC & Heating",
+    href: "/singleservicepage",
+  },
+  {
+    _id: "7",
+    category: "Repair",
+    details:
+      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Iusto quos recusandae earum itaque quis iste quibusdam amet magni nobis labore.",
+    imgSrc: "/image/Acheating.webp",
+    title: "AC & Heating",
+    href: "/singleservicepage",
+  },
 ];
