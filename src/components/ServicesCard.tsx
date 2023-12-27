@@ -12,10 +12,10 @@ type Props = {
   href: string;
 };
 
-const ServicesPageCard = (props: Props) => {
+const ServicesCard = (props: Props) => {
   return (
     <div className={`flex h-[450px] flex-col rounded-xl p-4`}>
-      <Link href={`/singleservicepage`}>
+      <Link href={`/service`}>
         <Image
           src={props.imgSrc}
           alt={props.title}
@@ -38,7 +38,7 @@ const ServicesPageCard = (props: Props) => {
         </p>
         <div className="flex cursor-pointer gap-2">
           <span className="inset-x-0 bottom-0 w-fit border-b border-transparent transition-all duration-1000 ease-in-out hover:border-content-normal">
-            <Link href={`/singleservicepage`}>View Details</Link>
+            <Link href={`/service`}>View Details</Link>
           </span>
           <ArrowRight />
         </div>
@@ -47,4 +47,4 @@ const ServicesPageCard = (props: Props) => {
   );
 };
 
-export default ServicesPageCard;
+export default ServicesCard;

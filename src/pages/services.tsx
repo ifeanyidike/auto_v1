@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import ServicesPageCard from "~/components/ServicesPageCard";
+import ServicesPageCard from "~/components/ServicesCard";
 import ServiceBanner from "~/components/ServiceBanner";
 import { ServiceData } from "~/components/Data";
 import { useInView, animated } from "@react-spring/web";
