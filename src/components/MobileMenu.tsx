@@ -4,6 +4,7 @@ import CloseIcon from "~/commons/icons/CloseIcon";
 import { toggleNav } from "~/states/utility";
 import Button from "./Button";
 import { useHookstate } from "@hookstate/core";
+import Link from "next/link";
 
 const MobileMenu = () => {
   const navOpen = useHookstate(toggleNav);
@@ -20,8 +21,12 @@ const MobileMenu = () => {
             <CloseIcon />
           </button>
 
-          <span className="cursor-pointer">Home</span>
-          <span className="cursor-pointer">Services</span>
+          <Link href="/" className="cursor-pointer">
+            Home
+          </Link>
+          <Link href="/services" className="cursor-pointer">
+            Services
+          </Link>
 
           <Button
             hasGradient={false}

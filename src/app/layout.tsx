@@ -4,6 +4,7 @@ import "~/styles/globals.css";
 import MainMenu from "~/components/MainMenu";
 import MobileMenu from "~/components/MobileMenu";
 import { manRope } from "~/font";
+import Footer from "~/components/Footer";
 
 // const inter = Inter({
 //   subsets: ["latin"],
@@ -28,6 +29,7 @@ export default function RootLayout({
         <MainMenu />
         <MobileMenu />
         {children}
+        <Footer />
       </body>
     </html>
   );

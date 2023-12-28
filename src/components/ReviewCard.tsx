@@ -14,7 +14,7 @@ const ReviewCard = (props: Props) => {
       style={{ opacity: props.isActive ? 1 : 0 }}
       className="flex flex-col gap-5 rounded-2xl bg-white px-10 py-12"
     >
-      <div className="flex gap-3">
+      <div className="flex gap-3 max-sm:flex-col max-sm:items-center max-sm:justify-center max-sm:text-center">
         <Image
           src="/image/avatar.webp"
           alt="avatar"
@@ -27,10 +27,10 @@ const ReviewCard = (props: Props) => {
           </span>
           <span className="text-xs font-light">{props.role}</span>
         </div>
-        <div className="text-yellow ml-auto flex">★ ★ ★ ★ ★</div>
+        <div className="text-yellow ml-auto flex max-sm:mr-auto">★ ★ ★ ★ ★</div>
       </div>
 
-      <p className="text-medium text-content-normal mt-5 font-normal leading-7">
+      <p className="text-medium text-content-normal mt-5 font-normal leading-7 max-sm:text-sm">
         {props.content}
       </p>
     </div>
