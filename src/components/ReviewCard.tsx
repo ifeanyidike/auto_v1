@@ -16,7 +16,7 @@ const ReviewCard = (props: Props) => {
     >
       <div className="flex gap-3 max-sm:flex-col max-sm:items-center max-sm:justify-center max-sm:text-center">
         <Image
-          src="/image/avatar.webp"
+          src="/images/avatar.webp"
           alt="avatar"
           width={50}
           height={50}
@@ -27,10 +27,10 @@ const ReviewCard = (props: Props) => {
           </span>
           <span className="text-xs font-light">{props.role}</span>
         </div>
-        <div className="text-yellow ml-auto flex max-sm:mr-auto">★ ★ ★ ★ ★</div>
+        <div className="ml-auto flex text-yellow max-sm:mr-auto">★ ★ ★ ★ ★</div>
       </div>
 
-      <p className="text-medium text-content-normal mt-5 font-normal leading-7 max-sm:text-sm">
+      <p className="text-medium mt-5 font-normal leading-7 text-content-normal max-sm:text-sm">
         {props.content}
       </p>
     </div>
