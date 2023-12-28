@@ -9,7 +9,7 @@ type serviceData = {
 export const ServiceData: serviceData[] = [
   {
     _id: "1",
-    imgSrc: "/image/belt.webp",
+    imgSrc: "/images/belt.webp",
     category: "Repair",
     title: "Belt & Hoses",
     details:
@@ -18,7 +18,7 @@ export const ServiceData: serviceData[] = [
   },
   {
     _id: "2",
-    imgSrc: "/image/battery.webp",
+    imgSrc: "/images/battery.webp",
     category: "Servicing",
     details:
       " Lorem ipsum dolor sit amet consectetur adipisicing elit. Iusto quos recusandae earum itaque quis iste quibusdam amet magni nobis labore.",
@@ -30,7 +30,7 @@ export const ServiceData: serviceData[] = [
     category: "Servicing",
     details:
       "Lorem ipsum dolor sit amet consectetur adipisicing elit. Iusto quos recusandae earum itaque quis iste quibusdam amet magni nobis labore.",
-    imgSrc: "/image/mechanical.webp",
+    imgSrc: "/images/mechanical.webp",
     title: "Bodywork",
     href: "/service/bodywork",
   },
@@ -39,7 +39,7 @@ export const ServiceData: serviceData[] = [
     category: "Servicing",
     details:
       "Lorem ipsum dolor sit amet consectetur adipisicing elit. Iusto quos recusandae earum itaque quis iste quibusdam amet magni nobis labore.",
-    imgSrc: "/image/painting.jpeg",
+    imgSrc: "/images/painting.jpeg",
     title: "Painting",
     href: "/service/painting",
   },
@@ -48,7 +48,7 @@ export const ServiceData: serviceData[] = [
     category: "Repair",
     details:
       "Lorem ipsum dolor sit amet consectetur adipisicing elit. Iusto quos recusandae earum itaque quis iste quibusdam amet magni nobis labore.",
-    imgSrc: "/image/radiator.webp",
+    imgSrc: "/images/radiator.webp",
     title: "Radiator|Repalcement|Repair",
     href: "/service/readiator",
   },
@@ -57,7 +57,7 @@ export const ServiceData: serviceData[] = [
     category: "Repair",
     details:
       "Lorem ipsum dolor sit amet consectetur adipisicing elit. Iusto quos recusandae earum itaque quis iste quibusdam amet magni nobis labore.",
-    imgSrc: "/image/brakerepairs.webp",
+    imgSrc: "/images/brakerepairs.webp",
     title: "Brake",
     href: "/service/break-repairs",
   },
@@ -66,7 +66,7 @@ export const ServiceData: serviceData[] = [
     category: "Repair",
     details:
       "Lorem ipsum dolor sit amet consectetur adipisicing elit. Iusto quos recusandae earum itaque quis iste quibusdam amet magni nobis labore.",
-    imgSrc: "/image/Acheating.webp",
+    imgSrc: "/images/Acheating.webp",
     title: "AC & Heating",
     href: "/service/ac-heating",
   },
@@ -75,7 +75,7 @@ export const ServiceData: serviceData[] = [
     category: "Repair",
     details:
       "Lorem ipsum dolor sit amet consectetur adipisicing elit. Iusto quos recusandae earum itaque quis iste quibusdam amet magni nobis labore.",
-    imgSrc: "/image/Acheating.webp",
+    imgSrc: "/images/Acheating.webp",
     title: "AC & Heating",
     href: "/service/ac-heating",
   },
@@ -84,7 +84,7 @@ export const ServiceData: serviceData[] = [
     category: "Repair",
     details:
       "Lorem ipsum dolor sit amet consectetur adipisicing elit. Iusto quos recusandae earum itaque quis iste quibusdam amet magni nobis labore.",
-    imgSrc: "/image/Acheating.webp",
+    imgSrc: "/images/Acheating.webp",
     title: "AC & Heating",
     href: "/service/ac-heating",
   },
@@ -93,7 +93,7 @@ export const ServiceData: serviceData[] = [
     category: "Repair",
     details:
       "Lorem ipsum dolor sit amet consectetur adipisicing elit. Iusto quos recusandae earum itaque quis iste quibusdam amet magni nobis labore.",
-    imgSrc: "/image/Acheating.webp",
+    imgSrc: "/images/Acheating.webp",
     title: "AC & Heating",
     href: "/service/ac-heating",
   },
@@ -102,7 +102,7 @@ export const ServiceData: serviceData[] = [
     category: "Repair",
     details:
       "Lorem ipsum dolor sit amet consectetur adipisicing elit. Iusto quos recusandae earum itaque quis iste quibusdam amet magni nobis labore.",
-    imgSrc: "/image/Acheating.webp",
+    imgSrc: "/images/Acheating.webp",
     title: "AC & Heating",
     href: "/service/ac-heating",
   },
@@ -111,7 +111,7 @@ export const ServiceData: serviceData[] = [
     category: "Repair",
     details:
       "Lorem ipsum dolor sit amet consectetur adipisicing elit. Iusto quos recusandae earum itaque quis iste quibusdam amet magni nobis labore.",
-    imgSrc: "/image/Acheating.webp",
+    imgSrc: "/images/Acheating.webp",
     title: "AC & Heating",
     href: "/services/ac-heating",
   },
@@ -120,7 +120,7 @@ export const ServiceData: serviceData[] = [
     category: "Repair",
     details:
       "Lorem ipsum dolor sit amet consectetur adipisicing elit. Iusto quos recusandae earum itaque quis iste quibusdam amet magni nobis labore.",
-    imgSrc: "/image/Acheating.webp",
+    imgSrc: "/images/Acheating.webp",
     title: "AC & Heating",
     href: "/service/ac-heating",
   },

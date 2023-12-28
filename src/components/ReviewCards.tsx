@@ -110,13 +110,13 @@ const ReviewCards = () => {
         {data.map((_, index) => {
           if (currentIndex === index) {
             return (
-              <button>
+              <button key={index}>
                 <OutlineDot />
               </button>
             );
           }
           return (
-            <button onClick={() => setCurrentIndex(index)}>
+            <button key={index} onClick={() => setCurrentIndex(index)}>
               <SolidDot />
             </button>
           );

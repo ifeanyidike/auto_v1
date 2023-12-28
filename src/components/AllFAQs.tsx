@@ -33,8 +33,8 @@ const AllFAQs = () => {
   ];
   return (
     <>
-      {data.map((item) => (
-        <FAQCard {...item} />
+      {data.map((item, index) => (
+        <FAQCard key={index} {...item} />
       ))}
     </>
   );
