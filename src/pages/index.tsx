@@ -74,9 +74,11 @@ export default function Home() {
             <HomeServicesCard
               category="Repairs"
               details="
+              
           Lorem ipsum dolor sit amet consectetur adipisicing elit. Iusto quos recusandae earum itaque quis iste quibusdam amet magni nobis labore."
               imgSrc="/image/belt.webp"
               title="Belt & Hoses"
+              href="/services"
             />
             <HomeServicesCard
               category="Servicing"
@@ -84,6 +86,7 @@ export default function Home() {
           Lorem ipsum dolor sit amet consectetur adipisicing elit. Iusto quos recusandae earum itaque quis iste quibusdam amet magni nobis labore."
               imgSrc="/image/battery.webp"
               title="Car Batteries & Charging"
+              href="/services"
             />
             <HomeServicesCard
               category="Repairs"
@@ -91,6 +94,7 @@ export default function Home() {
           Lorem ipsum dolor sit amet consectetur adipisicing elit. Iusto quos recusandae earum itaque quis iste quibusdam amet magni nobis labore."
               imgSrc="/image/mechanical.webp"
               title="Mechanical Repairs"
+              href="/services"
             />
             <HomeServicesCard
               category="Servicing"
@@ -98,9 +102,11 @@ export default function Home() {
           Lorem ipsum dolor sit amet consectetur adipisicing elit. Iusto quos recusandae earum itaque quis iste quibusdam amet magni nobis labore."
               imgSrc="/image/painting.jpeg"
               title="Bodywork & Paint"
+              href="/services"
             />
             <HomeServicesCard
               category="Repairs"
+              href="/services"
               details="
           Lorem ipsum dolor sit amet consectetur adipisicing elit. Iusto quos recusandae earum itaque quis iste quibusdam amet magni nobis labore."
               imgSrc="/image/radiator.webp"

@@ -23,7 +23,7 @@ const MainMenu = () => {
           Home
         </Link>
         <Link
-          href="#"
+          href="/services"
           className={`hover:text-accent-1 hover:border-content-normal cursor-pointer hover:border-b hover:font-semibold`}
         >
           Services
