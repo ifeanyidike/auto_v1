@@ -8,7 +8,6 @@ import ReviewCards from "~/components/ReviewCards";
 import Link from "next/link";
 import ArrowRight from "~/commons/icons/ArrowRight";
 import AllFAQs from "~/components/AllFAQs";
-import Footer from "~/components/Footer";
 
 export default function Home() {
   return (
@@ -20,9 +19,9 @@ export default function Home() {
       </Head>
       <main>
         <div className="from-gradient-bg-start to-gradient-bg-end flex items-center justify-between bg-gradient-to-r px-14 py-28 max-md:flex-col">
-          <div className="flex w-[50%] flex-col gap-8 max-md:w-full">
+          <div className="flex w-[50%] flex-col gap-8 max-md:w-full max-md:text-center">
             <p
-              className={`${robotoMono.className} text-content-light text-8xl  uppercase max-lg:text-6xl`}
+              className={`${robotoMono.className} text-content-light text-8xl  uppercase max-lg:text-6xl max-md:text-4xl `}
             >
               One-stop auto service solution.
             </p>
@@ -55,11 +54,11 @@ export default function Home() {
         </div>
 
         <div className="flex flex-col gap-12 px-14 pb-28 pt-20">
-          <div className="ml-4 flex flex-col justify-center gap-5">
+          <div className="ml-4 flex flex-col justify-center gap-5 max-md:items-center">
             <LeftDashText text="Our Services" />
-            <div className="flex items-end justify-between max-lg:flex-col max-lg:gap-5">
+            <div className="flex items-end justify-between max-lg:flex-col max-lg:gap-5 max-md:items-center max-md:justify-center max-md:text-center">
               <span
-                className={`text-5xl font-semibold  max-md:text-4xl ${dmSans.className}`}
+                className={`text-5xl font-semibold  max-md:text-4xl max-sm:text-3xl ${dmSans.className}`}
               >
                 Your One-Stop Auto Repairs Solutions
               </span>
@@ -110,7 +109,7 @@ export default function Home() {
           </div>
         </div>
 
-        <div className="from-gradient-bg-start to-gradient-bg-end flex items-start justify-between bg-gradient-to-r px-14 py-28 max-md:flex-col max-md:gap-20">
+        <div className="from-gradient-bg-start to-gradient-bg-end flex items-start justify-between bg-gradient-to-r px-14 py-28 max-md:flex-col max-md:gap-20 max-md:px-7 max-md:text-center">
           <div className="w-[50%] items-center justify-center gap-8 max-md:w-full">
             <Image
               src="/image/auto_wheel.webp"
@@ -119,8 +118,8 @@ export default function Home() {
               height="514"
             ></Image>
           </div>
-          <div className="flex w-[50%] flex-col gap-7 text-left max-lg:w-full">
-            <div className="ml-10">
+          <div className="flex w-[50%] flex-col gap-7 text-left max-lg:w-full max-md:text-center">
+            <div className="ml-10 max-md:ml-auto max-md:mr-auto">
               <LeftDashText text="Reviews" />
             </div>
             <p
@@ -145,10 +144,10 @@ export default function Home() {
           </div>
         </div>
 
-        <div className="flex flex-col gap-12 px-14 pb-28 pt-20">
-          <div className="ml-4 flex flex-col justify-center gap-5">
+        <div className="flex flex-col gap-12 px-14 pb-28 pt-20 max-md:text-center">
+          <div className="ml-4 flex flex-col justify-center gap-5 max-md:ml-0 max-md:items-center">
             <LeftDashText text="FAQ" />
-            <div className="flex items-end justify-between max-lg:flex-col max-lg:gap-5">
+            <div className="flex items-end justify-between max-lg:flex-col max-lg:gap-5 max-md:items-center">
               <span
                 className={`text-5xl font-semibold  max-md:text-4xl ${dmSans.className}`}
               >
@@ -166,7 +165,6 @@ export default function Home() {
             <AllFAQs />
           </div>
         </div>
-        <Footer />
       </main>
     </>
   );
