@@ -7,12 +7,16 @@ type Props = {
   hasShadow?: boolean;
   gradientStart?: string;
   gradientEnd?: string;
+  shadowColor?: string;
+  width?: string;
 };
 const Button = (props: Props) => {
   const {
     bgColor = "bg-yellow",
     hasGradient = false,
     hasShadow = false,
+    shadowColor = "",
+    width = "",
   } = props;
   return (
     <button
@@ -20,7 +24,7 @@ const Button = (props: Props) => {
         hasGradient ? "bg-gradient-to-l" : ""
       } from-red-1 px-9 py-3 text-sm font-bold text-white ${
         hasShadow ? "shadow-right-bottom-md transition-shadow" : ""
-      }  hover:to-red-2 duration-300 hover:shadow-none active:shadow-none`}
+      } ${shadowColor}  ${width} hover:to-red-2 duration-300 hover:shadow-none active:shadow-none`}
     >
       {props.text}
     </button>

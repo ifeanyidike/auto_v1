@@ -2,14 +2,14 @@ import React from "react";
 
 type Props = {
   text: string;
-  textColor: string;
+  lineColor?: string;
 };
 const LeftDashText = (props: Props) => {
+  const { lineColor = "border-content-light", text } = props;
   return (
     <div className="flex items-center space-x-2">
-      <div className={`w-[50px] border border-content-light`}></div>
-      <p className="text-sm capitalize">{props.text}</p>
-      {/* <div className="w-1/4 border-t border-dashed border-gray-500"></div> */}
+      <div className={`${lineColor} w-[50px] border`}></div>
+      <p className="text-sm capitalize">{text}</p>
     </div>
   );
 };

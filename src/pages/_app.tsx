@@ -2,6 +2,7 @@ import { useHookstate } from "@hookstate/core";
 import { type Session } from "next-auth";
 import { SessionProvider } from "next-auth/react";
 import { type AppType } from "next/app";
+import Footer from "~/components/Footer";
 import MainMenu from "~/components/MainMenu";
 import MobileMenu from "~/components/MobileMenu";
 import { manRope } from "~/font";
@@ -20,6 +21,7 @@ const MyApp: AppType<{ session: Session | null }> = ({
         <MainMenu />
         {navOpen.get() && <MobileMenu />}
         <Component {...pageProps} />
+        <Footer />
       </main>
     </SessionProvider>
   );
