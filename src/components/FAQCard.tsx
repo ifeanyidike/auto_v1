@@ -1,3 +1,4 @@
+"use client";
 import React, { useState } from "react";
 import MinusIcon from "~/commons/icons/MinusIcon";
 import PlusIcon from "~/commons/icons/PlusIcon";

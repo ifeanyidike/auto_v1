@@ -1,3 +1,4 @@
+"use client";
 import React, { useState, useRef } from "react";
 import ReviewCard from "./ReviewCard";
 import ArrowLeftAlt from "~/commons/icons/ArrowLeftAlt";
