@@ -1,3 +1,4 @@
+"use client";
 import React, { useState, useRef } from "react";
 import ReviewCard from "./ReviewCard";
 import ArrowLeftAlt from "~/commons/icons/ArrowLeftAlt";
@@ -109,13 +110,13 @@ const ReviewCards = () => {
         {data.map((_, index) => {
           if (currentIndex === index) {
             return (
-              <button>
+              <button key={index}>
                 <OutlineDot />
               </button>
             );
           }
           return (
-            <button onClick={() => setCurrentIndex(index)}>
+            <button key={index} onClick={() => setCurrentIndex(index)}>
               <SolidDot />
             </button>
           );

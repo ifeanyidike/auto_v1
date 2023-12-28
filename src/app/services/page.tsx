@@ -1,3 +1,4 @@
+"use client";
 import React, { useEffect, useState } from "react";
 import ServicesPageCard from "~/components/ServicesCard";
 import ServiceBanner from "~/components/ServiceBanner";

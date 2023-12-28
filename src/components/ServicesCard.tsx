@@ -15,7 +15,7 @@ type Props = {
 const ServicesCard = (props: Props) => {
   return (
     <div className={`flex h-[450px] flex-col rounded-xl p-4`}>
-      <Link href={`/service`}>
+      <Link href={props.href}>
         <Image
           src={props.imgSrc}
           alt={props.title}
@@ -29,16 +29,16 @@ const ServicesCard = (props: Props) => {
           {props.category}
         </h6>
         <span
-          className={`text-xl font-medium capitalize text-content-normal ${dmSans.className}`}
+          className={`text-content-normal text-xl font-medium capitalize ${dmSans.className}`}
         >
           {props.title}
         </span>
-        <p className="text-sm font-normal text-content-normal">
+        <p className="text-content-normal text-sm font-normal">
           {props.details}
         </p>
         <div className="flex cursor-pointer gap-2">
-          <span className="inset-x-0 bottom-0 w-fit border-b border-transparent transition-all duration-1000 ease-in-out hover:border-content-normal">
-            <Link href={`/service`}>View Details</Link>
+          <span className="hover:border-content-normal inset-x-0 bottom-0 w-fit border-b border-transparent transition-all duration-1000 ease-in-out">
+            <Link href={props.href}>View Details</Link>
           </span>
           <ArrowRight />
         </div>

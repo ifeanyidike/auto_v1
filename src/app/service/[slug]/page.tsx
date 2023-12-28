@@ -12,7 +12,7 @@ const Service = () => {
   return (
     <main>
       <div
-        className={`flex h-[500px] w-full flex-col justify-center gap-10 bg-stone-900/100 bg-[url("/image/car_radiator.jpg")] bg-cover bg-center bg-no-repeat px-20 py-5 text-white bg-blend-overlay max-md:h-[550px] max-md:items-center max-md:px-3 max-md:text-center`}
+        className={`flex h-[500px] w-full flex-col justify-center gap-10 bg-stone-900/100 bg-[url("/images/car_radiator.jpg")] bg-cover bg-center bg-no-repeat px-20 py-5 text-white bg-blend-overlay max-md:h-[550px] max-md:items-center max-md:px-3 max-md:text-center`}
       >
         <LeftDashText lineColor="border-white" text="Service" />
         <h2
@@ -56,7 +56,7 @@ const Service = () => {
           />
         </div>
       </div>
-      <div className="from-gradient-bg-start to-gradient-bg-end flex w-full items-center gap-14 bg-gradient-to-r px-20 py-14 max-md:flex-col-reverse max-md:gap-3 max-md:px-5">
+      <div className="flex w-full items-center gap-14 bg-gradient-to-r from-gradient-bg-start to-gradient-bg-end px-20 py-14 max-md:flex-col-reverse max-md:gap-3 max-md:px-5">
         <div className="flex flex-1 flex-col">
           <div className="w-full">
             <FAQCard
@@ -104,7 +104,7 @@ const Service = () => {
             />
           </div>
         </div>
-        <div className="from-gradient-bg-start to-gradient-bg-end sticky top-0 flex h-full w-1/4 flex-col items-center gap-5 bg-gradient-to-r py-8 max-md:w-full">
+        <div className="sticky top-0 flex h-full w-1/4 flex-col items-center gap-5 bg-gradient-to-r from-gradient-bg-start to-gradient-bg-end py-8 max-md:w-full">
           <Button
             hasShadow
             bgColor="bg-dark"
@@ -112,7 +112,7 @@ const Service = () => {
             width="w-full"
           />
           <Link className="flex gap-2" href="#">
-            <span className="hover:border-content-normal  inset-x-0 bottom-0 w-fit border-b border-transparent transition-all duration-1000 ease-in-out">
+            <span className="inset-x-0  bottom-0 w-fit border-b border-transparent transition-all duration-1000 ease-in-out hover:border-content-normal">
               Learn More
             </span>
             <ArrowRight />
@@ -130,7 +130,7 @@ const Service = () => {
               Explore other similar services
             </span>
             <Link className="flex gap-2" href="#">
-              <span className="hover:border-content-normal inset-x-0 bottom-0 w-fit border-b border-transparent transition-all duration-1000 ease-in-out">
+              <span className="inset-x-0 bottom-0 w-fit border-b border-transparent transition-all duration-1000 ease-in-out hover:border-content-normal">
                 View All
               </span>
               <ArrowRight />
@@ -142,22 +142,25 @@ const Service = () => {
             category="Repairs"
             details="
           Lorem ipsum dolor sit amet consectetur adipisicing elit. Iusto quos recusandae earum itaque quis iste quibusdam amet magni nobis labore."
-            imgSrc="/image/belt.webp"
+            imgSrc="/images/belt.webp"
             title="Belt & Hoses"
+            href="/service/belt"
           />
           <HomeServicesCard
             category="Servicing"
             details="
           Lorem ipsum dolor sit amet consectetur adipisicing elit. Iusto quos recusandae earum itaque quis iste quibusdam amet magni nobis labore."
-            imgSrc="/image/battery.webp"
+            imgSrc="/images/battery.webp"
             title="Car Batteries & Charging"
+            href="/service/batteries"
           />
           <HomeServicesCard
             category="Repairs"
             details="
           Lorem ipsum dolor sit amet consectetur adipisicing elit. Iusto quos recusandae earum itaque quis iste quibusdam amet magni nobis labore."
-            imgSrc="/image/mechanical.webp"
+            imgSrc="/images/mechanical.webp"
             title="Mechanical Repairs"
+            href="/service/mechanical"
           />
         </div>
       </div>

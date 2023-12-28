@@ -5,7 +5,7 @@ import SearchIcon from "~/commons/icons/SearchIcon";
 
 const ServiceBanner = () => {
   const bannerStyle: CSSProperties = {
-    backgroundImage: `url(/image/servicebannerimage.jpg)`,
+    backgroundImage: `url(/images/servicebannerimage.jpg)`,
     backgroundSize: "cover",
     backgroundPosition: "center",
   };

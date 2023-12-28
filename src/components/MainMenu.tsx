@@ -1,3 +1,4 @@
+"use client";
 import React from "react";
 import Logo from "~/commons/icons/Logo";
 import MenuToggle from "~/commons/icons/MenuToggle";
