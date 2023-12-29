@@ -9,7 +9,7 @@ import XIcon from "~/commons/icons/XIcon";
 const Footer = () => {
   return (
     <div className="from-gradient-bg-start to-gradient-bg-end flex flex-col items-start justify-between gap-1 bg-gradient-to-r px-14 py-3 ">
-      <div className="flex w-full items-center justify-between border-b-2 border-slate-300">
+      <div className="flex w-full items-center justify-between border-b-2 border-slate-300 max-md:flex-col max-md:pb-7">
         <Logo />
         <div className="flex h-fit w-fit gap-4">
           <Link
@@ -38,7 +38,7 @@ const Footer = () => {
           </Link>
         </div>
       </div>
-      <div className="my-10 flex w-full justify-center gap-10 text-xs max-md:flex-col">
+      <div className="my-10 flex w-full justify-center gap-10 text-xs max-md:flex-col max-md:text-center">
         <span>&copy; Copyright 2024. All Rights Reserved.</span>
         <Link href="#">Privacy Policy</Link>
         <Link href="#">Terms & Conditions</Link>
