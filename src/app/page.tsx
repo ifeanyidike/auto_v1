@@ -8,14 +8,12 @@ import ReviewCards from "~/components/ReviewCards";
 import Link from "next/link";
 import ArrowRight from "~/commons/icons/ArrowRight";
 import AllFAQs from "~/components/AllFAQs";
-import { fetchUsers } from "~/server/data";
 
 export default async function Home() {
-  const users = await fetchUsers();
-  console.log("users", users);
   return (
     <>
       <main>
+        {/* <button onClick={handleCreateMerchant}>Create Merchant</button> */}
         <div className="flex items-center justify-between bg-gradient-to-r from-gradient-bg-start to-gradient-bg-end px-14 py-28 max-md:flex-col">
           <div className="flex w-[50%] flex-col gap-8 max-md:w-full max-md:text-center">
             <p
