@@ -3,31 +3,35 @@ import Logo from "~/commons/icons/Logo";
 import MenuToggle from "~/commons/icons/MenuToggle";
 import { useHookstate } from "@hookstate/core";
 import { toggleNav } from "~/states/utility";
+import Link from "next/link";
 import Button from "./Button";
 
 const MainMenu = () => {
   const navOpen = useHookstate(toggleNav);
   return (
     <div className="relative flex h-20 items-center gap-10 pl-14 max-lg:justify-between max-lg:pr-14">
-      <Logo />
+      <Link href={"/#"}>
+        <Logo />
+      </Link>
+
       <div
-        className={`text-content-light flex flex-initial gap-14 text-sm font-normal max-lg:hidden`}
+        className={`flex flex-initial gap-14 text-sm font-normal text-content-light max-lg:hidden`}
       >
         <span
-          className={`hover:text-accent-1 hover:border-content-normal cursor-pointer hover:border-b hover:font-semibold`}
+          className={`cursor-pointer hover:border-b hover:border-content-normal hover:font-semibold hover:text-accent-1`}
         >
-          Home
+          <Link href={"/#"}>Home</Link>
         </span>
         <span
-          className={`hover:text-accent-1 hover:border-content-normal cursor-pointer hover:border-b hover:font-semibold`}
+          className={`cursor-pointer hover:border-b hover:border-content-normal hover:font-semibold hover:text-accent-1`}
         >
-          Services
+          <Link href={"/services"}> Services</Link>
         </span>
       </div>
       <div className="ml-auto mr-10 flex gap-3 max-lg:hidden">
         <div className="flex flex-col gap-0">
           <span className="text-[0.7rem]">Call us for a free estimate</span>
-          <span className="text-content-light text-lg font-bold">
+          <span className="text-lg font-bold text-content-light">
             <a href="tel:+23412838478">(234)12838478</a>
           </span>
         </div>

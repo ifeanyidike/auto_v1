@@ -63,7 +63,7 @@ export default function Home() {
               >
                 Your One-Stop Auto Repairs Solutions
               </span>
-              <Link className="flex gap-2" href="#">
+              <Link className="flex gap-2" href="/services">
                 <span className="inset-x-0 bottom-0 w-fit border-b border-transparent transition-all duration-1000 ease-in-out hover:border-content-normal">
                   View All
                 </span>
