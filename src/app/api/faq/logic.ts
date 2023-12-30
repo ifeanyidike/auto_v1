@@ -1,5 +1,5 @@
 import { type Prisma } from '@prisma/client';
-import Utility from './utility';
+import Utility from '../../../server/utility';
 
 export default class FAQ extends Utility {
   constructor() {
