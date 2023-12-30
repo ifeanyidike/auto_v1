@@ -43,6 +43,7 @@ const MainMenu = () => {
             <a href="tel:+23412838478">(234)12838478</a>
           </span>
         </div>
+        <a href="/api/auth/login">Login</a>
         <Button
           hasGradient={false}
           hasShadow={false}

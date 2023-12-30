@@ -2,8 +2,7 @@ run:
 	pnpm dev
 
 migrate:
-	npx primsa db push
+	npx prisma migrate dev
 
-.PHONY:
-	run migrate
+.PHONY: run migrate
 	

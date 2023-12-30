@@ -5,6 +5,10 @@ import MainMenu from '~/components/MainMenu';
 import MobileMenu from '~/components/MobileMenu';
 import { manRope } from '~/font';
 import Footer from '~/components/Footer';
+import { Session, getSession } from '@auth0/nextjs-auth0';
+import { UserProvider } from '@auth0/nextjs-auth0/client';
+import User from './api/user/logic';
+import Auth0 from '~/server/auth0';
 
 // const inter = Inter({
 //   subsets: ["latin"],
@@ -17,20 +21,25 @@ export const metadata = {
   icons: [{ rel: 'icon', url: '/favicon.ico' }],
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  // const auth0Class = new Auth0();
+  // const auth0User = await auth0Class.findOrCreateAuth0User();
   // className={`font-sans ${inter.variable}`}
+
   return (
     <html lang="en" className={manRope.className}>
-      <body className={manRope.className}>
-        <MainMenu />
-        <MobileMenu />
-        {children}
-        <Footer />
-      </body>
+      <UserProvider>
+        <body className={manRope.className}>
+          <MainMenu />
+          <MobileMenu />
+          {children}
+          <Footer />
+        </body>
+      </UserProvider>
     </html>
   );
 }

@@ -7,28 +7,21 @@ import ReviewCards from '~/components/ReviewCards';
 import Link from 'next/link';
 import ArrowRight from '~/commons/icons/ArrowRight';
 import AllFAQs from '~/components/AllFAQs';
+
+import { headers } from 'next/headers';
+import Util from '~/server/utils';
 import Merchant from './api/merchant/logic';
-import MyButton from './MyButton';
+import { notFound } from 'next/navigation';
+
 export default async function Home() {
+  const headersList = headers();
+  const hostname = headersList.get('host');
+  const slug = Util.getSubdomain(hostname ?? '');
+
   const merchant = new Merchant();
-  console.log(await merchant.getAll());
+  const merchantData = await merchant.getOne({ slug });
+  if (!merchantData) return notFound();
 
-  const handleCreateMerchant = async () => {
-    'use server';
-
-    const merchant = new Merchant();
-    const createdMerchant = await merchant.create({
-      slug: 'edward',
-      email: 'edward123@gmail.com',
-      name: 'Edward Autos',
-      address: '123 Chief Road',
-      phoneNo: '+238448484',
-      caption: 'One stop Destination for Auto',
-      shortDescription:
-        'Affordable auto mechanic services in the best location in Nigeria offered to you.',
-    });
-    return createdMerchant;
-  };
   return (
     <>
       <main>
@@ -66,7 +59,6 @@ export default async function Home() {
             ></Image>
           </div>
         </div>
-        <MyButton handleCreateMerchant={handleCreateMerchant} />
         <div className="flex flex-col gap-12 px-14 pb-28 pt-20">
           <div className="ml-4 flex flex-col justify-center gap-5 max-md:items-center">
             <LeftDashText text="Our Services" />
