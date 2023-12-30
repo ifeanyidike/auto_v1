@@ -1,18 +1,34 @@
-import Head from "next/head";
-import Image from "next/image";
-import { dmSans, robotoMono } from "~/font";
-import Button from "~/components/Button";
-import LeftDashText from "~/components/LeftDashText";
-import HomeServicesCard from "~/components/HomeServicesCard";
-import ReviewCards from "~/components/ReviewCards";
-import Link from "next/link";
-import ArrowRight from "~/commons/icons/ArrowRight";
-import AllFAQs from "~/components/AllFAQs";
-import { fetchUsers } from "~/server/data";
-
+import Image from 'next/image';
+import { dmSans, robotoMono } from '~/font';
+import Button from '~/components/Button';
+import LeftDashText from '~/components/LeftDashText';
+import HomeServicesCard from '~/components/HomeServicesCard';
+import ReviewCards from '~/components/ReviewCards';
+import Link from 'next/link';
+import ArrowRight from '~/commons/icons/ArrowRight';
+import AllFAQs from '~/components/AllFAQs';
+import Merchant from './api/merchant/logic';
+import MyButton from './MyButton';
 export default async function Home() {
-  const users = await fetchUsers();
-  console.log("users", users);
+  const merchant = new Merchant();
+  console.log(await merchant.getAll());
+
+  const handleCreateMerchant = async () => {
+    'use server';
+
+    const merchant = new Merchant();
+    const createdMerchant = await merchant.create({
+      slug: 'edward',
+      email: 'edward123@gmail.com',
+      name: 'Edward Autos',
+      address: '123 Chief Road',
+      phoneNo: '+238448484',
+      caption: 'One stop Destination for Auto',
+      shortDescription:
+        'Affordable auto mechanic services in the best location in Nigeria offered to you.',
+    });
+    return createdMerchant;
+  };
   return (
     <>
       <main>
@@ -50,7 +66,7 @@ export default async function Home() {
             ></Image>
           </div>
         </div>
-
+        <MyButton handleCreateMerchant={handleCreateMerchant} />
         <div className="flex flex-col gap-12 px-14 pb-28 pt-20">
           <div className="ml-4 flex flex-col justify-center gap-5 max-md:items-center">
             <LeftDashText text="Our Services" />
@@ -129,18 +145,18 @@ export default async function Home() {
             <p
               className={`ml-10 text-5xl font-semibold  max-md:text-4xl ${dmSans.className} capitalize`}
             >
-              Approved by{" "}
+              Approved by{' '}
               <span
                 style={{
                   backgroundImage:
-                    "linear-gradient(92deg, #929FAE 49.36%, #807782 88.79%)",
-                  backgroundClip: "text",
-                  WebkitTextFillColor: "transparent",
-                  WebkitBackgroundClip: "text",
+                    'linear-gradient(92deg, #929FAE 49.36%, #807782 88.79%)',
+                  backgroundClip: 'text',
+                  WebkitTextFillColor: 'transparent',
+                  WebkitBackgroundClip: 'text',
                 }}
               >
                 10+
-              </span>{" "}
+              </span>{' '}
               clients
             </p>
 
