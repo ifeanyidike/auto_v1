@@ -1,19 +1,16 @@
-import Head from "next/head";
-import Image from "next/image";
-import { dmSans, robotoMono } from "~/font";
-import Button from "~/components/Button";
-import LeftDashText from "~/components/LeftDashText";
-import HomeServicesCard from "~/components/HomeServicesCard";
-import ReviewCards from "~/components/ReviewCards";
-import Link from "next/link";
-import ArrowRight from "~/commons/icons/ArrowRight";
-import AllFAQs from "~/components/AllFAQs";
-
+import Image from 'next/image';
+import { dmSans, robotoMono } from '~/font';
+import Button from '~/components/Button';
+import LeftDashText from '~/components/LeftDashText';
+import HomeServicesCard from '~/components/HomeServicesCard';
+import ReviewCards from '~/components/ReviewCards';
+import Link from 'next/link';
+import ArrowRight from '~/commons/icons/ArrowRight';
+import AllFAQs from '~/components/AllFAQs';
 export default async function Home() {
   return (
     <>
       <main>
-        {/* <button onClick={handleCreateMerchant}>Create Merchant</button> */}
         <div className="flex items-center justify-between bg-gradient-to-r from-gradient-bg-start to-gradient-bg-end px-14 py-28 max-md:flex-col">
           <div className="flex w-[50%] flex-col gap-8 max-md:w-full max-md:text-center">
             <p
@@ -127,18 +124,18 @@ export default async function Home() {
             <p
               className={`ml-10 text-5xl font-semibold  max-md:text-4xl ${dmSans.className} capitalize`}
             >
-              Approved by{" "}
+              Approved by{' '}
               <span
                 style={{
                   backgroundImage:
-                    "linear-gradient(92deg, #929FAE 49.36%, #807782 88.79%)",
-                  backgroundClip: "text",
-                  WebkitTextFillColor: "transparent",
-                  WebkitBackgroundClip: "text",
+                    'linear-gradient(92deg, #929FAE 49.36%, #807782 88.79%)',
+                  backgroundClip: 'text',
+                  WebkitTextFillColor: 'transparent',
+                  WebkitBackgroundClip: 'text',
                 }}
               >
                 10+
-              </span>{" "}
+              </span>{' '}
               clients
             </p>
 

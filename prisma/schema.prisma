@@ -15,41 +15,50 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Merchant {
-  id        String            @id @default(cuid())
-  slug      String
-  name      String
-  address   String
-  services  MerchantService[]
-  booking   Booking?
 
-  createdAt DateTime          @default(now())
-  updatedAt DateTime          @updatedAt
+model Merchant {
+  id                String            @id @default(cuid())
+  slug              String
+  email             String            
+  name              String
+  address           String
+  phoneNo           String            // @db.VarChar(12) // Uncomment for production
+  caption           String            // @db.VarChar(4)  // Uncomment for production
+  shortDescription  String            // @db.VarChar(20)  //Uncomment for production
+  services          MerchantService[]
+
+  createdAt         DateTime          @default(now())
+  updatedAt         DateTime          @updatedAt
   
+  @@index([id, slug])
 }
 
 model MerchantService {
   id        String              @id @default(cuid())
   faqs      FAQ[]
+  imgUrl    String
   keyPoints ServiceKeyPoint[]
   booking   Booking?
 
-  Service   Service?            @relation(fields: [serviceId], references: [id])
+  service   Service?            @relation(fields: [serviceId], references: [id])
   serviceId String?             
 
-  Merchant   Merchant?          @relation(fields: [merchantId], references: [id])
+  merchant   Merchant?          @relation(fields: [merchantId], references: [id])
   merchantId String?            
 
   createdAt DateTime            @default(now())
   updatedAt DateTime            @updatedAt
+
+  @@index([id, serviceId, merchantId])
 }
 
 // Services - independent of any merchant.
 model Service {
   id                String              @id @default(cuid())
-  type              String              @default("REPAIR")//ServiceType         @default(REPAIR)
-  title             String
+  type              String              @default("REPAIR")    //ServiceType         @default(REPAIR)
+  title             String              @unique
   description       String
+  imgUrl            String
 
   faqs              FAQ[]
   merchantServices  MerchantService[]
@@ -66,7 +75,7 @@ model FAQ {
   Service           Service?         @relation(fields: [serviceId], references: [id])
   serviceId         String?          
 
-  MerchantService   MerchantService? @relation(fields: [merchantServiceId], references: [id])
+  merchantService   MerchantService? @relation(fields: [merchantServiceId], references: [id])
   merchantServiceId String?          
 
   createdAt         DateTime         @default(now())
@@ -76,7 +85,7 @@ model FAQ {
 model ServiceKeyPoint {
   id                String           @id @default(cuid())
   point             String
-  MerchantService   MerchantService? @relation(fields: [merchantServiceId], references: [id])
+  merchantService   MerchantService? @relation(fields: [merchantServiceId], references: [id])
   merchantServiceId String?          
 
   createdAt         DateTime         @default(now())
@@ -89,8 +98,8 @@ model Booking {
   merchantService   MerchantService @relation(fields: [merchantServiceId], references: [id])
   merchantServiceId String          @unique 
 
-  merchant          Merchant        @relation(fields: [merchantId], references: [id])
-  merchantId        String          @unique 
+  user              User            @relation(fields: [userId], references: [id])
+  userId            String          @unique 
 
   payment           Payment?
 
@@ -107,7 +116,60 @@ model Payment {
     updatedAt  DateTime  @updatedAt
 }
 
+
+
+
+// User schema
+
+// Necessary for Next auth
+model Account {
+    id                String  @id @default(cuid())
+    userId            String
+    type              String
+    provider          String
+    providerAccountId String
+    refresh_token     String? // @db.Text
+    access_token      String? // @db.Text
+    expires_at        Int?
+    token_type        String?
+    scope             String?
+    id_token          String? // @db.Text
+    session_state     String?
+    user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+    @@unique([provider, providerAccountId])
+}
+
+model Session {
+    id           String   @id @default(cuid())
+    sessionToken String   @unique
+    userId       String
+    expires      DateTime
+    user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model User {
+    id            String    @id @default(cuid())
+    name          String?
+    email         String?   @unique
+    emailVerified DateTime?
+    image         String?
+    booking       Booking?
+    accounts      Account[]
+    sessions      Session[]
+}
+
+model VerificationToken {
+    identifier String
+    token      String   @unique
+    expires    DateTime
+
+    @@unique([identifier, token])
+}
+
+
 // enum ServiceType {
 //   REPAIR
 //   SERVICING
 // }
+
