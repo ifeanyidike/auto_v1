@@ -1,0 +1,6 @@
+{
+  "prettier.proseWrap": "always",
+  "editor.formatOnSave": true,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "search.useIgnoreFiles": false
+}

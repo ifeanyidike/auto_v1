@@ -8,30 +8,35 @@ import SolidDot from "~/commons/icons/SolidDot";
 
 const data = [
   {
+    id: 1,
     reviewer: "Ifeanyi Dike",
     role: "Customer",
     content:
       "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Facilis, temporibus dolorum? Iste aliquid asperiores voluptate iusto accusantium, magni voluptates quam assumenda quidem et dolorum consequuntur voluptatibus, eos nisi! Quae, veniam.",
   },
   {
+    id: 2,
     reviewer: "Aja Edward",
     role: "Manager",
     content:
       "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Facilis, temporibus dolorum? Iste aliquid asperiores voluptate iusto accusantium, magni voluptates quam assumenda quidem et dolorum consequuntur voluptatibus, eos nisi! Quae, veniam.",
   },
   {
+    id: 3,
     reviewer: "Lorem Ipsum",
     role: "Customer",
     content:
       "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Facilis, temporibus dolorum? Iste aliquid asperiores voluptate iusto accusantium, magni voluptates quam assumenda quidem et dolorum consequuntur voluptatibus, eos nisi! Quae, veniam.",
   },
   {
+    id: 4,
     reviewer: "Mendez Kumer",
     role: "IT",
     content:
       "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Facilis, temporibus dolorum? Iste aliquid asperiores voluptate iusto accusantium, magni voluptates quam assumenda quidem et dolorum consequuntur voluptatibus, eos nisi! Quae, veniam.",
   },
   {
+    id: 5,
     reviewer: "Manoj Sandeep",
     role: "Indian",
     content:
@@ -94,7 +99,7 @@ const ReviewCards = () => {
           onTouchEnd={handleSwipeEnd}
         >
           {data.map((item, index) => (
-            <div key={index} className={`h-full w-full flex-shrink-0`}>
+            <div key={item.id} className={`h-full w-full flex-shrink-0`}>
               <ReviewCard {...item} isActive={index === currentIndex} />
             </div>
           ))}
@@ -107,16 +112,16 @@ const ReviewCards = () => {
         </button>
       </div>
       <div className="flex items-center gap-2">
-        {data.map((_, index) => {
+        {data.map((item, index) => {
           if (currentIndex === index) {
             return (
-              <button key={index}>
+              <button key={item.id}>
                 <OutlineDot />
               </button>
             );
           }
           return (
-            <button key={index} onClick={() => setCurrentIndex(index)}>
+            <button key={item.id} onClick={() => setCurrentIndex(index)}>
               <SolidDot />
             </button>
           );
