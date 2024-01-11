@@ -5,10 +5,9 @@ import MainMenu from '~/components/MainMenu';
 import MobileMenu from '~/components/MobileMenu';
 import { manRope } from '~/font';
 import Footer from '~/components/Footer';
-import { Session, getSession } from '@auth0/nextjs-auth0';
 import { UserProvider } from '@auth0/nextjs-auth0/client';
-import User from './api/user/logic';
-import Auth0 from '~/server/auth0';
+import Page from '~/components/Page';
+import Util from '~/server/utils';
 
 // const inter = Inter({
 //   subsets: ["latin"],
@@ -26,18 +25,32 @@ export default async function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  // const auth0Class = new Auth0();
-  // const auth0User = await auth0Class.findOrCreateAuth0User();
-  // className={`font-sans ${inter.variable}`}
+  const { isAdminLogin, merchantData, slug } =
+    await Util.getMerchantDataBySubdomain();
+  const rawPhoneNo = merchantData?.phoneNo;
+  const formattedPhoneNo = Util.formatPhoneNo(rawPhoneNo!);
 
   return (
     <html lang="en" className={manRope.className}>
-      <UserProvider>
+      <UserProvider loginUrl="/api/auth/login">
         <body className={manRope.className}>
-          <MainMenu />
-          <MobileMenu />
-          {children}
-          <Footer />
+          {!isAdminLogin && (
+            <>
+              <MainMenu
+                formattedPhoneNo={formattedPhoneNo}
+                rawPhoneNo={rawPhoneNo}
+              />
+              <MobileMenu />
+            </>
+          )}
+          <Page
+            isAdminLogin={isAdminLogin}
+            merchantData={merchantData}
+            slug={slug}
+          >
+            {children}
+          </Page>
+          {!isAdminLogin && <Footer />}
         </body>
       </UserProvider>
     </html>

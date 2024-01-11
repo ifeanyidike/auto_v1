@@ -6,9 +6,17 @@ import { useHookstate } from '@hookstate/core';
 import { getSubdomain, subdomainFunc, toggleNav } from '~/states/utility';
 import Button from './Button';
 import Link from 'next/link';
+import { useUser } from '@auth0/nextjs-auth0/client';
+import DropdownUserMenu from './DropdownUserMenu';
+import LoginButton from './LoginButton';
 
-const MainMenu = () => {
+type Props = {
+  formattedPhoneNo: string | undefined;
+  rawPhoneNo: string | undefined;
+};
+const MainMenu = (props: Props) => {
   const navOpen = useHookstate(toggleNav);
+  const { user } = useUser();
 
   useEffect(() => {
     const domain = getSubdomain();
@@ -40,16 +48,17 @@ const MainMenu = () => {
         <div className="flex flex-col gap-0">
           <span className="text-[0.7rem]">Call us for a free estimate</span>
           <span className="text-content-light text-lg font-bold">
-            <a href="tel:+23412838478">(234)12838478</a>
+            <a href={`tel:${props.rawPhoneNo}`}>{props.formattedPhoneNo} </a>
           </span>
         </div>
-        <a href="/api/auth/login">Login</a>
         <Button
           hasGradient={false}
           hasShadow={false}
           bgColor="bg-dark"
           text="GET AN ESTIMATE"
         />
+
+        {!user ? <LoginButton /> : <DropdownUserMenu user={user} />}
       </div>
       <div
         className="hidden cursor-pointer max-lg:flex"

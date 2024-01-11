@@ -1,5 +1,6 @@
 import { type Prisma } from '@prisma/client';
 import Utility from '../../../server/utility';
+import { DefaultArgs } from '@prisma/client/runtime/library';
 
 export default class Merchant extends Utility {
   constructor() {
@@ -24,7 +25,12 @@ export default class Merchant extends Utility {
     });
   }
 
-  public async getOne(data: { id?: string; slug?: string }) {
+  public async getOne(data: {
+    id?: string;
+    slug?: string;
+  }): Promise<Prisma.MerchantGetPayload<
+    Prisma.MerchantDefaultArgs<DefaultArgs>
+  > | null> {
     const { id, slug } = data || {};
     return this.process(async () => {
       if (!id && !slug) throw new Error('Either id or slug must be provided');

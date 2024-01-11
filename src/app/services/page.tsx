@@ -1,48 +1,20 @@
-"use client";
-import React, { useEffect, useState } from "react";
-import ServicesPageCard from "~/components/ServicesCard";
-import ServiceBanner from "~/components/ServiceBanner";
-import { ServiceData } from "~/components/Data";
-import { useInView, animated } from "@react-spring/web";
+import React from 'react';
+import ServiceBanner from '~/components/ServiceBanner';
+import ServiceClient from './ServiceClient';
+import Util from '~/server/utils';
+import { redirect } from 'next/navigation';
+import MerchantService from '../api/merchant_service/logic';
 
-const Services = () => {
-  const [visibleServices, setVisibleServices] = useState(3);
+const Services = async () => {
+  const { isAdminLogin, slug } = Util.getRouteType();
+  if (isAdminLogin) redirect('/manage');
 
-  const [ref, inView] = useInView();
-
-  const isInView: boolean = inView || false;
-
-  const loadMoreServices = () => {
-    if (isInView) {
-      setVisibleServices((prevCount) => prevCount + 3);
-    }
-  };
-
-  useEffect(() => {
-    window.addEventListener("scroll", loadMoreServices);
-    return () => {
-      window.removeEventListener("scroll", loadMoreServices);
-    };
-  }, [isInView]);
-
+  const merchantService = new MerchantService();
+  const { services } = await merchantService.getAllByMerchant(slug);
   return (
-    <div ref={ref}>
+    <div>
       <ServiceBanner />
-      <div className="flex flex-col gap-12 px-14 pb-28 pt-20">
-        <div className="grid grid-cols-3 gap-x-3 gap-y-12 max-xl:grid-cols-2 max-lg:grid-cols-2 max-md:grid-cols-1">
-          {ServiceData.slice(0, visibleServices).map((service, index) => (
-            <animated.div key={index} style={{ opacity: isInView ? 1 : 0 }}>
-              <ServicesPageCard
-                category={service.category}
-                details={service.details}
-                imgSrc={service.imgSrc}
-                title={service.title}
-                href={service.href}
-              />
-            </animated.div>
-          ))}
-        </div>
-      </div>
+      <ServiceClient services={services} />
     </div>
   );
 };

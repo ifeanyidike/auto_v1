@@ -36,12 +36,14 @@ model Merchant {
 model MerchantService {
   id        String              @id @default(cuid())
   faqs      FAQ[]
-  imgUrl    String
+  imgUrl    String?
+  description String?
+  
   keyPoints ServiceKeyPoint[]
   booking   Booking?
 
   service   Service?            @relation(fields: [serviceId], references: [id])
-  serviceId String?             
+  serviceId String?             @unique
 
   merchant   Merchant?          @relation(fields: [merchantId], references: [id])
   merchantId String?            
