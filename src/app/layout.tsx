@@ -5,6 +5,9 @@ import MainMenu from '~/components/MainMenu';
 import MobileMenu from '~/components/MobileMenu';
 import { manRope } from '~/font';
 import Footer from '~/components/Footer';
+import { UserProvider } from '@auth0/nextjs-auth0/client';
+import Page from '~/components/Page';
+import Util from '~/server/utils';
 
 // const inter = Inter({
 //   subsets: ["latin"],
@@ -17,20 +20,39 @@ export const metadata = {
   icons: [{ rel: 'icon', url: '/favicon.ico' }],
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  // className={`font-sans ${inter.variable}`}
+  const { isAdminLogin, merchantData, slug } =
+    await Util.getMerchantDataBySubdomain();
+  const rawPhoneNo = merchantData?.phoneNo;
+  const formattedPhoneNo = Util.formatPhoneNo(rawPhoneNo!);
+
   return (
     <html lang="en" className={manRope.className}>
-      <body className={manRope.className}>
-        <MainMenu />
-        <MobileMenu />
-        {children}
-        <Footer />
-      </body>
+      <UserProvider loginUrl="/api/auth/login">
+        <body className={manRope.className}>
+          {!isAdminLogin && (
+            <>
+              <MainMenu
+                formattedPhoneNo={formattedPhoneNo}
+                rawPhoneNo={rawPhoneNo}
+              />
+              <MobileMenu />
+            </>
+          )}
+          <Page
+            isAdminLogin={isAdminLogin}
+            merchantData={merchantData}
+            slug={slug}
+          >
+            {children}
+          </Page>
+          {!isAdminLogin && <Footer />}
+        </body>
+      </UserProvider>
     </html>
   );
 }

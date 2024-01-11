@@ -7,28 +7,18 @@ import ReviewCards from '~/components/ReviewCards';
 import Link from 'next/link';
 import ArrowRight from '~/commons/icons/ArrowRight';
 import AllFAQs from '~/components/AllFAQs';
-import Merchant from './api/merchant/logic';
-import MyButton from './MyButton';
+import Util from '~/server/utils';
+import { redirect } from 'next/navigation';
+import MerchantService from './api/merchant_service/logic';
+
 export default async function Home() {
-  const merchant = new Merchant();
-  console.log(await merchant.getAll());
+  const { isAdminLogin, slug } = Util.getRouteType();
+  if (isAdminLogin) redirect('/manage');
 
-  const handleCreateMerchant = async () => {
-    'use server';
-
-    const merchant = new Merchant();
-    const createdMerchant = await merchant.create({
-      slug: 'edward',
-      email: 'edward123@gmail.com',
-      name: 'Edward Autos',
-      address: '123 Chief Road',
-      phoneNo: '+238448484',
-      caption: 'One stop Destination for Auto',
-      shortDescription:
-        'Affordable auto mechanic services in the best location in Nigeria offered to you.',
-    });
-    return createdMerchant;
-  };
+  const merchantService = new MerchantService();
+  const { merchant, services } = await merchantService.getAllByMerchant(slug);
+  const unshuffledFaqs = services?.map(s => s.faqs).flat();
+  const faqs = Util.shuffleArray(unshuffledFaqs ?? []).slice(0, 7);
   return (
     <>
       <main>
@@ -37,11 +27,11 @@ export default async function Home() {
             <p
               className={`${robotoMono.className} text-8xl uppercase  text-content-light max-lg:text-6xl max-md:text-4xl `}
             >
-              One-stop auto service solution.
+              {merchant?.caption ?? 'One-stop auto service solution.'}
             </p>
             <p className={`text-dark`}>
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Aliquam
-              provident placeat doloremque id laborum aliquid.
+              {merchant?.shortDescription ??
+                'Lorem ipsum dolor sit amet consectetur adipisicing elit. Aliquam provident placeat doloremque id laborum aliquid.'}
             </p>
             <div className="flex justify-between max-md:flex-col max-md:gap-3">
               <Button
@@ -66,7 +56,6 @@ export default async function Home() {
             ></Image>
           </div>
         </div>
-        <MyButton handleCreateMerchant={handleCreateMerchant} />
         <div className="flex flex-col gap-12 px-14 pb-28 pt-20">
           <div className="ml-4 flex flex-col justify-center gap-5 max-md:items-center">
             <LeftDashText text="Our Services" />
@@ -76,7 +65,7 @@ export default async function Home() {
               >
                 Your One-Stop Auto Repairs Solutions
               </span>
-              <Link className="flex gap-2" href="#">
+              <Link className="flex gap-2" href="/services">
                 <span className="inset-x-0 bottom-0 w-fit border-b border-transparent transition-all duration-1000 ease-in-out hover:border-content-normal">
                   View All
                 </span>
@@ -85,47 +74,21 @@ export default async function Home() {
             </div>
           </div>
           <div className="grid grid-cols-3 gap-x-3 gap-y-12 max-xl:grid-cols-2 max-lg:grid-cols-2 max-md:grid-cols-1">
-            <HomeServicesCard
-              category="Repairs"
-              details="
-              
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Iusto quos recusandae earum itaque quis iste quibusdam amet magni nobis labore."
-              imgSrc="/images/belt.webp"
-              title="Belt & Hoses"
-              href="/services"
-            />
-            <HomeServicesCard
-              category="Servicing"
-              details="
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Iusto quos recusandae earum itaque quis iste quibusdam amet magni nobis labore."
-              imgSrc="/images/battery.webp"
-              title="Car Batteries & Charging"
-              href="/services"
-            />
-            <HomeServicesCard
-              category="Repairs"
-              details="
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Iusto quos recusandae earum itaque quis iste quibusdam amet magni nobis labore."
-              imgSrc="/images/mechanical.webp"
-              title="Mechanical Repairs"
-              href="/services"
-            />
-            <HomeServicesCard
-              category="Servicing"
-              details="
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Iusto quos recusandae earum itaque quis iste quibusdam amet magni nobis labore."
-              imgSrc="/images/painting.jpeg"
-              title="Bodywork & Paint"
-              href="/services"
-            />
-            <HomeServicesCard
-              category="Repairs"
-              href="/services"
-              details="
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Iusto quos recusandae earum itaque quis iste quibusdam amet magni nobis labore."
-              imgSrc="/images/radiator.webp"
-              title="Radiator & Engine Cooling"
-            />
+            {services
+              ?.slice(0, 5)
+              ?.map(s => (
+                <HomeServicesCard
+                  key={s.id}
+                  category={s.service?.type ?? 'Repair'}
+                  details={
+                    s.service?.description ??
+                    'Lorem ipsum dolor sit amet consectetur adipisicing elit. Iusto quos recusandae earum itaque quis iste quibusdam amet magni nobis labore.'
+                  }
+                  imgSrc={s.imgUrl ?? s.service?.imgUrl ?? ''}
+                  title={s.service?.title ?? ''}
+                  href={`/service/${s.service?.title?.toLowerCase() ?? ''}`}
+                />
+              ))}
           </div>
         </div>
 
@@ -182,7 +145,7 @@ export default async function Home() {
             </div>
           </div>
           <div className="grid place-items-center gap-6">
-            <AllFAQs />
+            <AllFAQs data={faqs} />
           </div>
         </div>
       </main>
