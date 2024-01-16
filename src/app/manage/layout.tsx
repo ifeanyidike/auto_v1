@@ -1,7 +1,8 @@
 import { notFound } from 'next/navigation';
-import PageNotFound from '~/components/PageNotFound';
 import Util from '~/server/utils';
 import '~/styles/globals.css';
+import Sidebar from './components/Sidebar';
+import TopMenu from './components/TopMenu';
 
 export const metadata = {
   title: 'Admin Page',
@@ -17,5 +18,13 @@ export default async function Layout({
   const { isAdminLogin } = Util.getRouteType();
   if (!isAdminLogin) return notFound();
 
-  return <>{children}</>;
+  return (
+    <div className="flex">
+      <Sidebar />
+      <div className="flex flex-col">
+        <TopMenu />
+        {children}
+      </div>
+    </div>
+  );
 }
