@@ -11,6 +11,7 @@ import WalletIcon from '~/commons/icons/WalletIcon';
 import ProfileIcon from '~/commons/icons/ProfileIcon';
 import ChevroLeftRoundedIcon from '~/commons/icons/ChevroLeftRoundedIcon';
 import ChevroRightRoundedIcon from '~/commons/icons/ChevroRightRoundedIcon';
+import Link from 'next/link';
 import { useUser } from '@auth0/nextjs-auth0/client';
 import EllipsisIcon from '~/commons/icons/EllipsisIcon';
 import { useClickOutside } from '~/hooks/useClickOutside';
@@ -93,23 +94,26 @@ const Sidebar = () => {
             />
           }
         />
-        <MenuItem
-          isSelected={selected === MenuEnum.booking}
-          setIsSelected={setIsSelected}
-          title={MenuEnum.booking}
-          isCollapsed={isCollapsed}
-          Icon={
-            <BookingIcon
-              strokeWidth="2"
-              //   strokeColor={
-              //     selected === MenuEnum.booking ? 'currentColor' : '#484848'
-              //   }
-              strokeColor="currentColor"
-              width="18"
-              height="18"
-            />
-          }
-        />
+        <Link href={'/booking'}>
+          <MenuItem
+            isSelected={selected === MenuEnum.booking}
+            setIsSelected={setIsSelected}
+            title={MenuEnum.booking}
+            isCollapsed={isCollapsed}
+            Icon={
+              <BookingIcon
+                strokeWidth="2"
+                //   strokeColor={
+                //     selected === MenuEnum.booking ? 'currentColor' : '#484848'
+                //   }
+                strokeColor="currentColor"
+                width="18"
+                height="18"
+              />
+            }
+          />
+        </Link>
+
         <MenuItem
           isSelected={selected === MenuEnum.subscription}
           setIsSelected={setIsSelected}

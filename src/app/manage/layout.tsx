@@ -4,6 +4,7 @@ import '~/styles/globals.css';
 import Sidebar from './components/Sidebar';
 import TopMenu from './components/TopMenu';
 
+
 export const metadata = {
   title: 'Admin Page',
   description: 'TO DO',

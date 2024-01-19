@@ -125,3 +125,97 @@ export const ServiceData: serviceData[] = [
     href: '/service/ac-heating',
   },
 ];
+
+export type bookingData = {
+  _id: string;
+  imgSrc: string;
+  name: string;
+  title: string;
+  category: string;
+  status: string;
+  date: string;
+  action: string;
+};
+
+export const BookingData: bookingData[] = [
+  {
+    _id: '1',
+    name: 'Monica Gloria',
+    imgSrc: '/images/belt.webp',
+    category: 'Repair',
+    title: 'Belt & Hoses',
+    status: 'Completed',
+    date: '11/11/2023',
+    action: 'view',
+  },
+  {
+    _id: '2',
+    imgSrc: '/images/battery.webp',
+    name: 'Victorial Ogani',
+    category: 'Servicing',
+    title: 'Car Batteries & Charging',
+    status: ' In progress',
+    date: '20/01/24',
+    action: 'view',
+  },
+  {
+    _id: '3',
+    category: 'Servicing',
+    name: 'Musa Ismali',
+    imgSrc: '/images/mechanical.webp',
+    title: 'Bodywork',
+    status: 'Requested',
+    date: '13/08/24',
+    action: 'view',
+  },
+  {
+    _id: '4',
+    category: 'Servicing',
+    name: 'Innocent Vibros',
+    imgSrc: '/images/painting.jpeg',
+    title: 'Painting',
+    status: 'Completed',
+    date: '15/02/24',
+    action: 'view',
+  },
+  {
+    _id: '5',
+    category: 'Repair',
+    name: 'Micah Odogwu',
+    imgSrc: '/images/radiator.webp',
+    title: 'Radiator repalcement',
+    status: 'In progress',
+    date: '28/04/24',
+    action: 'view',
+  },
+  {
+    _id: '6',
+    category: 'Repair',
+    name: 'Bruce Anointing',
+    imgSrc: '/images/brakerepairs.webp',
+    title: 'Brake',
+    status: 'Requested',
+    date: '19/04/25',
+    action: 'view',
+  },
+  {
+    _id: '7',
+    category: 'Repair',
+    name: 'Nginika Onokwu',
+    imgSrc: '/images/Acheating.webp',
+    title: 'AC & Heating',
+    status: 'Completed',
+    date: '05/03/24',
+    action: 'view',
+  },
+  {
+    _id: '8',
+    category: 'Repair',
+    name: 'Mirabel Longinus',
+    imgSrc: '/images/Acheating.webp',
+    title: 'AC & Heating',
+    status: 'In progress',
+    date: '08/08/25',
+    action: 'view',
+  },
+];
