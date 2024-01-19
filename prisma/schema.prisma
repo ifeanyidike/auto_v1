@@ -38,8 +38,12 @@ model MerchantService {
   faqs      FAQ[]
   imgUrl    String?
   description String?
+
+  pricingType String            @default("SUV/CAR")
   
   keyPoints ServiceKeyPoint[]
+  priceList PriceList[]
+
   booking   Booking?
 
   service   Service?            @relation(fields: [serviceId], references: [id])
@@ -52,6 +56,22 @@ model MerchantService {
   updatedAt DateTime            @updatedAt
 
   @@index([id, serviceId, merchantId])
+}
+
+model PriceList {
+  id                String              @id @default(cuid())
+
+  merchantService   MerchantService?    @relation(fields: [merchantServiceId], references: [id])
+  merchantServiceId String?    
+
+  amount            Decimal
+  brand             String 
+  type              String              @default("SUV/CAR")
+
+  createdAt DateTime            @default(now())
+  updatedAt DateTime            @updatedAt
+
+  @@index([id, merchantServiceId])
 }
 
 // Services - independent of any merchant.
