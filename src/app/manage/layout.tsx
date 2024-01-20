@@ -4,7 +4,6 @@ import '~/styles/globals.css';
 import Sidebar from './components/Sidebar';
 import TopMenu from './components/TopMenu';
 
-
 export const metadata = {
   title: 'Admin Page',
   description: 'TO DO',
@@ -20,9 +19,9 @@ export default async function Layout({
   if (!isAdminLogin) return notFound();
 
   return (
-    <div className="flex">
+    <div className="flex bg-[#E3E9EE]">
       <Sidebar />
-      <div className="flex flex-col">
+      <div className="flex flex-col flex-1 overflow-hidden">
         <TopMenu />
         {children}
       </div>

@@ -1,23 +1,23 @@
 import React from 'react';
 type Props = {
-  width?: string;
-  height?: string;
+  // width?: string;
+  // height?: string;
   viewBox?: string;
   strokeColor?: string;
   fillColor?: string;
   strokeWidth?: string;
+  className?: string;
 };
 const ChevroDownIcon = (props: Props) => {
   const {
-    width = '24',
-    height = '24',
+    className = 'w-6 h-6',
     viewBox = '0 0 24 24',
     strokeColor = '#212121',
     strokeWidth = '1.5',
     fillColor = 'none',
   } = props;
   return (
-    <svg width={width} height={height} viewBox={viewBox} fill={fillColor}>
+    <svg className={className} viewBox={viewBox} fill={fillColor}>
       <g id="Iconly/Light/Arrow - Down 2">
         <g id="Arrow - Down 2">
           <path

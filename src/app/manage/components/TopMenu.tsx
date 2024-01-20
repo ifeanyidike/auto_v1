@@ -1,6 +1,7 @@
 'use client';
 import { useUser } from '@auth0/nextjs-auth0/client';
 import React from 'react';
+import { dmSans } from '~/font';
 
 const getHour = () => {
   const date = new Date();
@@ -18,7 +19,9 @@ const TopMenu = () => {
     isMorning ? 'Morning' : isAfternoon ? 'Afternoon' : 'Evening'
   }`;
   return (
-    <div className={`text-sm px-8 py-5 font-bold `}>
+    <div
+      className={`text-lg px-8 py-5 font-medium w-full bg-white ${dmSans.className}`}
+    >
       {greeting} {user?.name && `${user.name}!`}
     </div>
   );

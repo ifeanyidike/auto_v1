@@ -29,7 +29,7 @@ const Sidebar = () => {
   const { user } = useUser();
   return (
     <div
-      className={`relative flex-initial flex flex-col items-center gap-4 ${
+      className={`relative flex-initial flex flex-col items-center gap-4 bg-white ${
         isCollapsed ? 'w-20' : 'w-48'
       } h-screen border-r border-stone-200 py-5 max-md:w-20 ease-in duration-300`}
     >
@@ -94,7 +94,10 @@ const Sidebar = () => {
             />
           }
         />
-        <Link href={'/booking'}>
+        <Link
+          href={'/manage/booking'}
+          className="flex flex-col w-full justify-start"
+        >
           <MenuItem
             isSelected={selected === MenuEnum.booking}
             setIsSelected={setIsSelected}
