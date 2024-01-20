@@ -33,7 +33,7 @@ const BuyIcon = (props: Props) => {
         strokeLinejoin="round"
       />
       <path
-        fill-rule="evenodd"
+        fillRule="evenodd"
         clip-rule="evenodd"
         d="M5.15435 18.2025C5.45535 18.2025 5.69835 18.4465 5.69835 18.7465C5.69835 19.0475 5.45535 19.2915 5.15435 19.2915C4.85335 19.2915 4.61035 19.0475 4.61035 18.7465C4.61035 18.4465 4.85335 18.2025 5.15435 18.2025Z"
         fill={strokeColor}
@@ -43,7 +43,7 @@ const BuyIcon = (props: Props) => {
         strokeLinejoin="round"
       />
       <path
-        fill-rule="evenodd"
+        fillRule="evenodd"
         clip-rule="evenodd"
         d="M16.4346 18.2025C16.7356 18.2025 16.9796 18.4465 16.9796 18.7465C16.9796 19.0475 16.7356 19.2915 16.4346 19.2915C16.1336 19.2915 15.8906 19.0475 15.8906 18.7465C15.8906 18.4465 16.1336 18.2025 16.4346 18.2025Z"
         fill={strokeColor}
