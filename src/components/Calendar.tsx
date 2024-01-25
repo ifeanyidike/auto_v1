@@ -95,7 +95,7 @@ const Calendar = (props: Props) => {
           />
           <path
             fillRule="evenodd"
-            clip-rule="evenodd"
+            clipRule="evenodd"
             d="M14.2383 2.57922H5.77096C2.83427 2.57922 1 4.21516 1 7.22225V16.2719C1 19.3263 2.83427 21 5.77096 21H14.229C17.175 21 19 19.3546 19 16.3475V7.22225C19.0092 4.21516 17.1842 2.57922 14.2383 2.57922Z"
             stroke={'currentColor'}
             strokeWidth="1.5"

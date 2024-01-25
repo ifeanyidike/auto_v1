@@ -1,9 +1,11 @@
+'use client';
 import React, {
   type ReactNode,
   type Dispatch,
   type SetStateAction,
 } from 'react';
 import { type MenuEnum } from '../types/menu';
+import Link from 'next/link';
 
 type ItemProps = {
   title: MenuEnum;
@@ -11,9 +13,11 @@ type ItemProps = {
   isSelected: boolean;
   isCollapsed: boolean;
   setIsSelected: Dispatch<SetStateAction<MenuEnum | null>>;
+  href: string;
 };
 const MenuItem = (props: ItemProps) => (
-  <button
+  <Link
+    href={`/manage/${props.href}`}
     onClick={() => props.setIsSelected(props.title)}
     className={`flex  max-md:justify-center gap-2 py-5 px-5 max-md:px-0 text-gray-500 ${
       !props.isCollapsed ? 'px-5' : 'px-0 justify-center'
@@ -29,7 +33,7 @@ const MenuItem = (props: ItemProps) => (
     {!props.isCollapsed && (
       <span className="text-sm max-md:hidden">{props.title}</span>
     )}
-  </button>
+  </Link>
 );
 
 export default MenuItem;

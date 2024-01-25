@@ -19,7 +19,7 @@ export default async function Layout({
   if (!isAdminLogin) return notFound();
 
   return (
-    <div className="flex bg-[#E3E9EE]">
+    <div className="relative flex bg-cyanBlue/40">
       <Sidebar />
       <div className="flex flex-col flex-1 overflow-hidden">
         <TopMenu />

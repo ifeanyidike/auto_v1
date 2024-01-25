@@ -14,6 +14,7 @@
     --color-red2: 0deg 100% 40%;
     --color-bg-grad-start: 240deg 6% 93%;
     --color-bg-grad-end: 312deg 12% 92%;
+    --color-cyan-blue: 207deg 24% 91%;
   }
 
   @media (prefers-color-scheme: dark) {
@@ -27,7 +28,7 @@
       --color-red2: 0deg 100% 40%;
     }
   }
-  :root[data-theme="dark"] {
+  :root[data-theme='dark'] {
     --color-dark: 221deg 39% 11%;
     --color-text-light: 211deg 29% 37%;
     --color-yellow: 48deg 100% 50%;
@@ -35,6 +36,4 @@
     --color-red1: 0deg 100% 45%;
     --color-red2: 0deg 100% 40%;
   }
-  
- 
 }
