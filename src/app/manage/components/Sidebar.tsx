@@ -11,7 +11,6 @@ import WalletIcon from '~/commons/icons/WalletIcon';
 import ProfileIcon from '~/commons/icons/ProfileIcon';
 import ChevroLeftRoundedIcon from '~/commons/icons/ChevroLeftRoundedIcon';
 import ChevroRightRoundedIcon from '~/commons/icons/ChevroRightRoundedIcon';
-import Link from 'next/link';
 import { useUser } from '@auth0/nextjs-auth0/client';
 import EllipsisIcon from '~/commons/icons/EllipsisIcon';
 import { useClickOutside } from '~/hooks/useClickOutside';
@@ -29,9 +28,9 @@ const Sidebar = () => {
   const { user } = useUser();
   return (
     <div
-      className={`relative flex-initial flex flex-col items-center gap-4 bg-white ${
+      className={`sticky top-0 h-screen  flex-initial flex flex-col items-center gap-4 bg-white ${
         isCollapsed ? 'w-20' : 'w-48'
-      } h-screen border-r border-stone-200 py-5 max-md:w-20 ease-in duration-300`}
+      } border-r border-stone-200 py-5 max-md:w-20 ease-in duration-300`}
     >
       <button
         onClick={() => setIsCollapsed(!isCollapsed)}
@@ -52,7 +51,7 @@ const Sidebar = () => {
         )}
       </button>
 
-      <div className="flex w-full px-5 pb-4 cursor-pointer">
+      <div className="flex w-full px-5 pb-[2px] cursor-pointer">
         <div className={`max-md:hidden ${isCollapsed ? 'hidden' : 'flex'}`}>
           <Image
             className="cursor-pointer"
@@ -78,6 +77,7 @@ const Sidebar = () => {
       </div>
       <div className="flex flex-col w-full justify-start">
         <MenuItem
+          href=""
           isSelected={selected === MenuEnum.home}
           setIsSelected={setIsSelected}
           title={MenuEnum.home}
@@ -94,30 +94,28 @@ const Sidebar = () => {
             />
           }
         />
-        <Link
-          href={'/manage/booking'}
-          className="flex flex-col w-full justify-start"
-        >
-          <MenuItem
-            isSelected={selected === MenuEnum.booking}
-            setIsSelected={setIsSelected}
-            title={MenuEnum.booking}
-            isCollapsed={isCollapsed}
-            Icon={
-              <BookingIcon
-                strokeWidth="2"
-                //   strokeColor={
-                //     selected === MenuEnum.booking ? 'currentColor' : '#484848'
-                //   }
-                strokeColor="currentColor"
-                width="18"
-                height="18"
-              />
-            }
-          />
-        </Link>
 
         <MenuItem
+          href="booking"
+          isSelected={selected === MenuEnum.booking}
+          setIsSelected={setIsSelected}
+          title={MenuEnum.booking}
+          isCollapsed={isCollapsed}
+          Icon={
+            <BookingIcon
+              strokeWidth="2"
+              //   strokeColor={
+              //     selected === MenuEnum.booking ? 'currentColor' : '#484848'
+              //   }
+              strokeColor="currentColor"
+              width="18"
+              height="18"
+            />
+          }
+        />
+
+        <MenuItem
+          href="#"
           isSelected={selected === MenuEnum.subscription}
           setIsSelected={setIsSelected}
           title={MenuEnum.subscription}
@@ -135,6 +133,7 @@ const Sidebar = () => {
           }
         />
         <MenuItem
+          href="pricing"
           isSelected={selected === MenuEnum.pricing}
           setIsSelected={setIsSelected}
           title={MenuEnum.pricing}
@@ -152,6 +151,7 @@ const Sidebar = () => {
           }
         />
         <MenuItem
+          href="fund"
           isSelected={selected === MenuEnum.fund}
           setIsSelected={setIsSelected}
           title={MenuEnum.fund}
@@ -170,6 +170,7 @@ const Sidebar = () => {
         />
 
         <MenuItem
+          href="account"
           isSelected={selected === MenuEnum.account}
           setIsSelected={setIsSelected}
           title={MenuEnum.account}
@@ -190,7 +191,7 @@ const Sidebar = () => {
 
       <div
         ref={optionsRef}
-        className={`mt-auto w-full flex gap-[2px] relative ease-in duration-300
+        className={`sticky bottom-0 mt-auto w-full flex gap-[2px] ease-in duration-300
         ${
           !isCollapsed ? 'px-2' : 'justify-center'
         } max-md:px-0 max-md:justify-center
@@ -211,14 +212,16 @@ const Sidebar = () => {
             />
           </a>
         </div>
-        <Image
-          className="rounded-full w-[30px] h-[30px]"
-          src={user?.picture ?? ''}
-          width={28}
-          height={28}
-          alt={user?.name ?? ''}
-          onClick={() => toggleOptions(!openOptions)}
-        />
+        {user?.picture ? (
+          <Image
+            className="rounded-full w-[30px] h-[30px]"
+            src={user?.picture ?? ''}
+            width={28}
+            height={28}
+            alt={user?.name ?? ''}
+            onClick={() => toggleOptions(!openOptions)}
+          />
+        ) : null}
 
         <>
           <div

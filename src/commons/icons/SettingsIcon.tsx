@@ -7,7 +7,7 @@ type Props = {
   fillColor?: string;
   strokeWidth?: string;
 };
-const ProfileIcon = (props: Props) => {
+const SettingsIcon = (props: Props) => {
   const {
     width = '20',
     height = '22',
@@ -40,4 +40,4 @@ const ProfileIcon = (props: Props) => {
   );
 };
 
-export default ProfileIcon;
+export default SettingsIcon;

@@ -1,7 +1,6 @@
 'use client';
 import React, { useState } from 'react';
-import Bookings from '../components/Bookings';
-import { BookingData } from '~/components/Data';
+import { transactionList } from '~/components/Data';
 import OpenLeftIcon from '~/commons/icons/OpenLeftIcon';
 import DocumentIcon from '~/commons/icons/DocumentIcon';
 import DownloadIcon from '~/commons/icons/DownloadIcon';
@@ -10,8 +9,9 @@ import FilterIcon from '~/commons/icons/FilterIcon';
 import 'react-datepicker/dist/react-datepicker.css';
 import Calendar from '~/components/Calendar';
 import DropdownSelect from '~/components/DropdownSelect';
+import HomeTransactionTable from './HomeTransactionTable';
 
-const BookingList = () => {
+const HomeTransactionList = () => {
   const [popupOpen, togglePopup] = useState<number | null>(null);
   const [dropdownOpen, toggleDropdown] = useState<boolean>(false);
 
@@ -23,7 +23,10 @@ const BookingList = () => {
     toggleDropdown(false);
   }) as React.MutableRefObject<HTMLDivElement | null>;
 
-  const heading = { _id: 'table_header' } as unknown as (typeof BookingData)[0];
+  const heading = {
+    _id: 'table_header',
+  } as unknown as (typeof transactionList)[0];
+
   const renderPopup = () => {
     if (popupOpen === null) {
       return null;
@@ -34,11 +37,12 @@ const BookingList = () => {
 
     const positionAbove = spaceBelow < popupHeight;
 
-    const top = popupOpen - popupHeight + 32;
+    const top = popupOpen - popupHeight;
 
     const setStyle = positionAbove
-      ? { bottom: spaceBelow - 54 + 'px' }
+      ? { bottom: spaceBelow - 32 + 'px' }
       : { top: top + 'px' };
+
     return (
       <>
         <div
@@ -96,7 +100,7 @@ const BookingList = () => {
     </>
   );
   return (
-    <div className="relative mt-8">
+    <div className="relative mt-8 mx-5 mb-5">
       <div>
         <button
           onClick={() => toggleDropdown(true)}
@@ -107,13 +111,13 @@ const BookingList = () => {
         {dropdownOpen && renderDropdown()}
       </div>
       <div className="border-2 relative border-white rounded-xl mt-3 overflow-auto bg-white">
-        {[heading, ...BookingData].map((data, index) => (
+        {[heading, ...transactionList].map((data, index) => (
           <div key={data._id} className={`hover:bg-gray-100 relative`}>
-            <Bookings
+            <HomeTransactionTable
               _id={data._id}
               index={index}
               data={data}
-              length={BookingData.length}
+              length={transactionList.length}
               popupOpen={popupOpen}
               togglePopup={togglePopup}
             />
@@ -125,4 +129,4 @@ const BookingList = () => {
   );
 };
 
-export default BookingList;
+export default HomeTransactionList;
