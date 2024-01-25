@@ -219,3 +219,79 @@ export const BookingData: bookingData[] = [
     action: 'view',
   },
 ];
+
+export type subscriptionData = {
+  _id: string;
+  name: string;
+  service: string;
+  date: string;
+  time: string;
+  status: string;
+   action: string,
+};
+
+export const SubscriptionData: subscriptionData[] = [
+  {
+    _id: '1',
+    name: 'Micah Jones Motors',
+    service: 'General Service',
+    date: '11/11/2023',
+    time: '11:25:00 AM',
+    status: 'Completed',
+    action: 'view',
+  },
+  {
+    _id: '2',
+    name: 'Davido Oluwafemmi',
+    service: 'Oil Change',
+    date: '12/10/2024',
+    time: '12:20:00 PM',
+    status: 'In Progress',
+    action: 'view',
+  },
+  {
+    _id: '3',
+    name: 'Mogabus Motors',
+    service: 'Wash & Paint',
+    date: '01/02/2025',
+    time: '03:45:00 PM',
+    status: 'Cancelled',
+    action: 'view',
+  },
+  {
+    _id: '4',
+    name: 'Kindsley Okonjo',
+    service: 'Diagnosis',
+    date: '04/05/2024',
+    time: '07:00:00 PM',
+    status: 'Requested',
+    action: 'view',
+  },
+  {
+    _id: '5',
+    name: 'G.U.O Motors',
+    service: 'General Service',
+    date: '10/12/2025',
+    time: '06:15:00 AM',
+    status: 'In Progress',
+    action: 'view',
+  },
+  {
+    _id: '6',
+    name: 'Delta State Govn/t',
+    service: 'Diagnosis',
+    date: '08/08/2023',
+    time: '09:00:00 AM',
+    status: 'Completed',
+    action: 'view',
+  },
+  {
+    _id: '7',
+    name: 'O. J Motors',
+    service: 'Wash & Paint',
+    date: '08/11/2024',
+    time: '06:40:00 PM',
+    status: 'Requested',
+    action: 'view',
+  },
+];

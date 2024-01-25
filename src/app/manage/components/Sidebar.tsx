@@ -116,24 +116,29 @@ const Sidebar = () => {
             }
           />
         </Link>
+        <Link
+          href={'/manage/subscription'}
+          className="flex flex-col w-full justify-start"
+        >
+          <MenuItem
+            isSelected={selected === MenuEnum.subscription}
+            setIsSelected={setIsSelected}
+            title={MenuEnum.subscription}
+            isCollapsed={isCollapsed}
+            Icon={
+              <CalendarIcon
+                strokeWidth="2"
+                //   strokeColor={
+                //     selected === MenuEnum.subscription ? 'currentColor' : '#484848'
+                //   }
+                strokeColor="currentColor"
+                width="18"
+                height="18"
+              />
+            }
+          />
+        </Link>
 
-        <MenuItem
-          isSelected={selected === MenuEnum.subscription}
-          setIsSelected={setIsSelected}
-          title={MenuEnum.subscription}
-          isCollapsed={isCollapsed}
-          Icon={
-            <CalendarIcon
-              strokeWidth="2"
-              //   strokeColor={
-              //     selected === MenuEnum.subscription ? 'currentColor' : '#484848'
-              //   }
-              strokeColor="currentColor"
-              width="18"
-              height="18"
-            />
-          }
-        />
         <MenuItem
           isSelected={selected === MenuEnum.pricing}
           setIsSelected={setIsSelected}
