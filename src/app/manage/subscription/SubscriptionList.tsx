@@ -42,14 +42,12 @@ const SubscriptionList = () => {
         className={`bg-white absolute right-5 w-48 z-50 text-content-normal text-xs flex-flex-col items-center rounded-xl border border-stone-200`}
         style={{ top: popupOpen ? 120 : 0 }}
       >
-        <Link href={`subscription/${id}`}>
-          <button className="flex gap-2 w-full items-center p-4 hover:bg-stone-200 hover:rounded-t-xl">
-            <span>
-              <OpenLeftIcon />
-            </span>
-            <span>View details</span>
-          </button>
-        </Link>
+        <button className="flex gap-2 w-full items-center p-4 hover:bg-stone-200 hover:rounded-t-xl">
+          <span>
+            <OpenLeftIcon />
+          </span>
+          <span>View details</span>
+        </button>
 
         <button className="flex gap-2 w-full items-center p-4 hover:bg-stone-200">
           <span>
