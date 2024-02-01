@@ -38,7 +38,7 @@ const DropdownSelect = <T,>(props: Props<T>) => {
                 setSelected(item);
                 toggleDropdown(false);
               }}
-              className="flex flex-col w-full px-4 py-3 text-start hover:bg-[#E3E9EE]"
+              className="flex flex-col w-full px-4 py-3 text-start hover:bg-cyanBlue"
               key={index}
             >
               {item.caption}

@@ -33,12 +33,9 @@ const PageNotFound = (props: Props) => {
           </p>
         )}
       </div>
-      <Button
-        bgColor="bg-red-700"
-        hasGradient
-        hasShadow
-        text="Back to Homepage"
-      />
+      <Button bgColor="bg-red-700" hasGradient hasShadow>
+        Back to Homepage
+      </Button>
     </div>
   );
 };

@@ -12,16 +12,16 @@ type Props = {
   togglePopup: React.Dispatch<React.SetStateAction<number | null>>;
 };
 
-const Bookings = (props: Props) => {
+const HomeTransactionTable = (props: Props) => {
   const headers = [
     {
       _id: 'id',
       customWidth: 'w-16',
     },
-    { name: 'Bookers name', grow: true },
-    { image: 'Image', customWidth: 'w-16' },
+    { title: 'Customer Name', grow: true },
     { title: 'Title', grow: true },
     { category: 'Category' },
+    { mode: 'Mode' },
     { status: 'Status' },
     { date: 'Date', customWidth: 'w-24' },
   ];
@@ -66,4 +66,4 @@ const Bookings = (props: Props) => {
   );
 };
 
-export default Bookings;
+export default HomeTransactionTable;

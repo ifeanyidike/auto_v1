@@ -69,11 +69,12 @@ const Client = ({ topServices, subdomain }: Props) => {
           <Button
             hasGradient
             hasShadow
-            text="Book Now"
             shadowColor="shadow-stone-400"
             width="w-full"
             onClick={handleAction}
-          />
+          >
+            Book Now
+          </Button>
         </div>
       </div>
 
@@ -103,12 +104,9 @@ const Client = ({ topServices, subdomain }: Props) => {
             ))}
           </div>
           <div className="sticky top-0 flex h-full w-1/4 flex-col items-center gap-5 bg-gradient-to-r from-gradient-bg-start to-gradient-bg-end py-8 max-md:w-full">
-            <Button
-              hasShadow
-              bgColor="bg-dark"
-              text="Request Appointment"
-              width="w-full"
-            />
+            <Button hasShadow bgColor="bg-dark" width="w-full">
+              Request Appointment
+            </Button>
             <Link className="flex gap-2" href="#">
               <span className="inset-x-0  bottom-0 w-fit border-b border-transparent transition-all duration-1000 ease-in-out hover:border-content-normal">
                 Learn More

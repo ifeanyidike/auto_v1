@@ -54,12 +54,9 @@ const MobileMenu = () => {
           </Link>
 
           <div>
-            <Button
-              hasGradient={false}
-              hasShadow={false}
-              bgColor="bg-dark"
-              text="GET AN ESTIMATE"
-            />
+            <Button hasGradient={false} hasShadow={false} bgColor="bg-dark">
+              GET AN ESTIMATE
+            </Button>
           </div>
         </div>
       )}
