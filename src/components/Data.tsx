@@ -219,3 +219,87 @@ export const BookingData: bookingData[] = [
     action: 'view',
   },
 ];
+
+export type subscriptionData = {
+  _id: string;
+  name: string;
+  duration: string;
+  qty: number;
+  date: string;
+  time: string;
+  status: string;
+  action: string;
+};
+
+export const SubscriptionData: subscriptionData[] = [
+  {
+    _id: '1',
+    name: 'Micah Jones Motors',
+    duration: 'Monthly',
+    date: '11/11/2023',
+    time: '11:25:00 AM',
+    status: 'Completed',
+    qty: 1,
+    action: 'view',
+  },
+  {
+    _id: '2',
+    name: 'Davido Oluwafemmi',
+    duration: 'Bi Annually',
+    qty: 3,
+    date: '12/10/2024',
+    time: '12:20:00 PM',
+    status: 'In Progress',
+    action: 'view',
+  },
+  {
+    _id: '3',
+    name: 'Mogabus Motors',
+    duration: 'Quaterly',
+    qty: 2,
+    date: '01/02/2025',
+    time: '03:45:00 PM',
+    status: 'Cancelled',
+    action: 'view',
+  },
+  {
+    _id: '4',
+    name: 'Kindsley Okonjo',
+    duration: 'Monthly',
+    qty: 2,
+    date: '04/05/2024',
+    time: '07:00:00 PM',
+    status: 'Requested',
+    action: 'view',
+  },
+  {
+    _id: '5',
+    name: 'G.U.O Motors',
+    duration: 'Bi Annually',
+    qty: 3,
+    date: '10/12/2025',
+    time: '06:15:00 AM',
+    status: 'In Progress',
+    action: 'view',
+  },
+  {
+    _id: '6',
+    name: 'Delta State Govn/t',
+    duration: 'Quarterly',
+    qty: 4,
+    date: '08/08/2023',
+    time: '09:00:00 AM',
+    status: 'Completed',
+    action: 'view',
+  },
+  {
+    _id: '7',
+    name: 'O. J Motors',
+    duration: 'Monthly',
+    qty: 1,
+    date: '08/11/2024',
+    time: '06:40:00 PM',
+    status: 'Requested',
+    action: 'view',
+  },
+];
