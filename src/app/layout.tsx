@@ -8,6 +8,8 @@ import Footer from '~/components/Footer';
 import { UserProvider } from '@auth0/nextjs-auth0/client';
 import Page from '~/components/Page';
 import Util from '~/server/utils';
+import { Suspense } from 'react';
+import Loading from './loading';
 
 // const inter = Inter({
 //   subsets: ["latin"],
@@ -43,13 +45,15 @@ export default async function RootLayout({
               <MobileMenu />
             </>
           )}
-          <Page
-            isAdminLogin={isAdminLogin}
-            merchantData={merchantData}
-            slug={slug}
-          >
-            {children}
-          </Page>
+          <Suspense fallback={<Loading />}>
+            <Page
+              isAdminLogin={isAdminLogin}
+              merchantData={merchantData}
+              slug={slug}
+            >
+              {children}
+            </Page>
+          </Suspense>
           {!isAdminLogin && <Footer />}
         </body>
       </UserProvider>

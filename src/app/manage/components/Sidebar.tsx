@@ -15,6 +15,7 @@ import { useUser } from '@auth0/nextjs-auth0/client';
 import EllipsisIcon from '~/commons/icons/EllipsisIcon';
 import { useClickOutside } from '~/hooks/useClickOutside';
 import Button from '~/components/Button';
+import AddItemIcon from '~/commons/icons/AddItemIcon';
 
 const Sidebar = () => {
   const [selected, setIsSelected] = useState<MenuEnum | null>(null);
@@ -85,9 +86,6 @@ const Sidebar = () => {
           Icon={
             <HomeIcon
               strokeWidth="2"
-              //   strokeColor={
-              //     selected === MenuEnum.home ? 'currentColor' : '#484848'
-              //   }
               strokeColor="currentColor"
               width="18"
               height="18"
@@ -115,6 +113,21 @@ const Sidebar = () => {
         />
 
         <MenuItem
+          href="product"
+          isSelected={selected === MenuEnum.product}
+          setIsSelected={setIsSelected}
+          title={MenuEnum.product}
+          isCollapsed={isCollapsed}
+          Icon={
+            <AddItemIcon
+              strokeWidth="2"
+              strokeColor="currentColor"
+              classNames="w-[18px] h-[18px]"
+            />
+          }
+        />
+
+        <MenuItem
           href="#"
           isSelected={selected === MenuEnum.subscription}
           setIsSelected={setIsSelected}
@@ -123,9 +136,6 @@ const Sidebar = () => {
           Icon={
             <CalendarIcon
               strokeWidth="2"
-              //   strokeColor={
-              //     selected === MenuEnum.subscription ? 'currentColor' : '#484848'
-              //   }
               strokeColor="currentColor"
               width="18"
               height="18"
@@ -207,9 +217,10 @@ const Sidebar = () => {
               hasGradient={true}
               hasShadow={false}
               bgColor="bg-yellow rounded-xl"
-              text="Logout"
               width="w-44"
-            />
+            >
+              Logout
+            </Button>
           </a>
         </div>
         {user?.picture ? (

@@ -34,17 +34,12 @@ export default async function Home() {
                 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Aliquam provident placeat doloremque id laborum aliquid.'}
             </p>
             <div className="flex justify-between max-md:flex-col max-md:gap-3">
-              <Button
-                hasGradient={true}
-                hasShadow={true}
-                text="REQUEST APPOINTMENT"
-              />
-              <Button
-                hasGradient={false}
-                hasShadow={false}
-                bgColor="bg-dark"
-                text="GET AN ESTIMATE"
-              />
+              <Button hasGradient={true} hasShadow={true}>
+                REQUEST APPOINTMENT
+              </Button>
+              <Button hasGradient={false} hasShadow={false} bgColor="bg-dark">
+                GET AN ESTIMATE
+              </Button>
             </div>
           </div>
           <div className="ml-auto">

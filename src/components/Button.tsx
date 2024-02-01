@@ -1,7 +1,7 @@
 import React from 'react';
 
 type Props = {
-  text: string;
+  children: React.ReactNode;
   bgColor?: string;
   hasGradient?: boolean;
   hasShadow?: boolean;
@@ -9,6 +9,9 @@ type Props = {
   gradientEnd?: string;
   shadowColor?: string;
   width?: string;
+  px?: string;
+  py?: string;
+  radius?: string;
   onClick?: () => void;
 };
 const Button = (props: Props) => {
@@ -20,17 +23,20 @@ const Button = (props: Props) => {
     width = '',
     gradientStart = 'from-red-1',
     gradientEnd = 'to-red-2',
+    px = 'px-9',
+    py = 'py-3',
+    radius = 'rounded-3xl',
   } = props;
   return (
     <button
       onClick={props.onClick && props.onClick}
-      className={`${bgColor} rounded-3xl ${
+      className={`${bgColor} ${radius} ${
         hasGradient ? 'bg-gradient-to-l' : ''
-      } ${gradientStart} px-9 py-3 text-sm font-bold text-white ${
+      } ${gradientStart} ${px} ${py} text-sm font-bold text-white ${
         hasShadow ? 'shadow-right-bottom-md transition-shadow' : ''
       } ${shadowColor}  ${width} hover:${gradientEnd} duration-300 hover:shadow-none active:shadow-none`}
     >
-      {props.text}
+      {props.children}
     </button>
   );
 };

@@ -1,10 +1,10 @@
-import React from "react";
+import React from 'react';
 
 type Props = {
   classNames?: string;
 };
 const PlusIcon = (props: Props) => {
-  const { classNames = "h-6 w-6" } = props;
+  const { classNames = 'h-6 w-6' } = props;
   return (
     <svg viewBox="0 0 24 24" fill="currentColor" className={classNames}>
       <path
