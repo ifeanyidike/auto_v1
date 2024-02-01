@@ -51,12 +51,9 @@ const MainMenu = (props: Props) => {
             <a href={`tel:${props.rawPhoneNo}`}>{props.formattedPhoneNo} </a>
           </span>
         </div>
-        <Button
-          hasGradient={false}
-          hasShadow={false}
-          bgColor="bg-dark"
-          text="GET AN ESTIMATE"
-        />
+        <Button hasGradient={false} hasShadow={false} bgColor="bg-dark">
+          GET AN ESTIMATE
+        </Button>
 
         {!user ? <LoginButton /> : <DropdownUserMenu user={user} />}
       </div>
