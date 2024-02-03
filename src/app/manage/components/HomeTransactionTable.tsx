@@ -2,14 +2,15 @@
 import Image from 'next/image';
 import React from 'react';
 import Table from './Table';
+import { type TablePopupData } from '../types/general';
 
 type Props = {
   _id: string;
   index: number;
   length: number;
-  popupOpen: number | null;
+  popupOpen: TablePopupData | null;
   data: Record<string, string>;
-  togglePopup: React.Dispatch<React.SetStateAction<number | null>>;
+  togglePopup: React.Dispatch<React.SetStateAction<TablePopupData | null>>;
 };
 
 const HomeTransactionTable = (props: Props) => {

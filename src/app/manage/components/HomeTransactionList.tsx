@@ -10,9 +10,10 @@ import 'react-datepicker/dist/react-datepicker.css';
 import Calendar from '~/components/Calendar';
 import DropdownSelect from '~/components/DropdownSelect';
 import HomeTransactionTable from './HomeTransactionTable';
+import { type TablePopupData } from '../types/general';
 
 const HomeTransactionList = () => {
-  const [popupOpen, togglePopup] = useState<number | null>(null);
+  const [popupOpen, togglePopup] = useState<TablePopupData | null>(null);
   const [dropdownOpen, toggleDropdown] = useState<boolean>(false);
 
   const popupRef = useClickOutside(() => {
@@ -33,11 +34,11 @@ const HomeTransactionList = () => {
     }
 
     const popupHeight = 158;
-    const spaceBelow = window.innerHeight - popupOpen;
+    const spaceBelow = window.innerHeight - popupOpen.position;
 
     const positionAbove = spaceBelow < popupHeight;
 
-    const top = popupOpen - popupHeight;
+    const top = popupOpen.position - popupHeight;
 
     const setStyle = positionAbove
       ? { bottom: spaceBelow - 32 + 'px' }
