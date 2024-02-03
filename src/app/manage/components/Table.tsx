@@ -2,18 +2,20 @@
 import React from 'react';
 import EllipsisIcon from '~/commons/icons/EllipsisIcon';
 import { dmSans } from '~/font';
+import { type TablePopupData } from '../types/general';
 
 type Header = {
   [key: string]: string | boolean | undefined;
   grow?: boolean;
   customWidth?: string;
 };
+
 type Props = {
   _id: string;
   index: number;
   length: number;
-  popupOpen: number | null;
-  togglePopup: React.Dispatch<React.SetStateAction<number | null>>;
+  popupOpen: TablePopupData | null;
+  togglePopup: React.Dispatch<React.SetStateAction<TablePopupData | null>>;
   headers: Header[];
   data: Record<string, React.ReactNode>;
   hasAction: boolean;
@@ -97,7 +99,10 @@ const Table = (props: Props) => {
                 if (props.popupOpen) {
                   props.togglePopup(null);
                 } else {
-                  props.togglePopup(rect.top);
+                  props.togglePopup({
+                    position: rect.top,
+                    id: props._id,
+                  });
                 }
               }}
               className={`py-1 px-3 h-8 flex rounded-full hover:bg-content-normal/5 items-center hover:shadow-2xl transition-all duration-800 ease-in-out`}
