@@ -1,17 +1,17 @@
 import React from 'react';
-import SubscriptionDetail from './SubscriptionDetail';
+import BookingDetailList from './BookingDetailList';
 
-const SubscriberDetailPage = () => {
+const page = () => {
   return (
     <div>
       <h5
         className={`font-semibold w-[300px] h-auto bg-slate-100 text-center text-xl p-4 mb-2 rounded-b-xl text-black shadow-md`}
       >
-        Subscription Detail
+        Booking Detail
       </h5>
-      <SubscriptionDetail />
+      <BookingDetailList />
     </div>
   );
 };
 
-export default SubscriberDetailPage;
+export default page;

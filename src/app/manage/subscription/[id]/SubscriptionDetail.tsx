@@ -1,37 +1,56 @@
 'use client';
 
 import React from 'react';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useRouter, useParams } from 'next/navigation';
 import { SubscriptionData } from '~/components/Data';
 
 const SubscriptionDetail = () => {
   const router = useRouter();
 
-  const searchParams = useSearchParams();
-  const id = searchParams.get('_id');
+  const { id: subscriptionId } = useParams<{ id: string }>();
+
   const subscription = SubscriptionData.find(
-    item => String(item._id) === String(id)
+    item => String(item._id) === String(subscriptionId)
   );
   return (
-    <div>
+    <div className={`bg-gray-100 min-h-screen p-4`}>
       {subscription ? (
         <div
-          className={`flex items-center w-300 gap-4 text-xs hover:bg-slate-100 cursor-pointer min-w-max relative rounded-b-xl`}
+          className={`max-w-2xl mx-auto hover:bg-white p-6 rounded-lg shadow-md mt-8 bg-slate-100 cursor-pointer min-w-max relative rounded-b-xl`}
         >
-          <h2 className="text-[30px] flex items-center w-auto h-auto gap-4 bg-white p-4">
+          <h2 className="  text-2xl font-bold mb-4 text-[30px] flex items-center w-full h-auto gap-4 bg-white p-4">
             {subscription.name}
           </h2>
 
-          <div className="flex  text-30px flex-col p-4  bg-white">
-            <div> Subscription Duration is Monthly</div>
-            <div> The list of subscritions are Monthly</div>
-            <div> The subscription was made on 11/11/2023 </div>
-            <div> At Exactly 11:25:00 AM</div>
-            <div>The subscription is completed</div>
+          <div className="flex  text-30px flex-col p-4 w-full gap-4 bg-white">
+            <div className="text-gray-700">
+              <span className="font-bold">Subscription Duration:</span>{' '}
+              {subscription.duration}
+            </div>
+            <div className="text-gray-700">
+              <span className="font-bold">Number of Subscriptions:</span>{' '}
+              {subscription.qty}
+            </div>
+            <div className="text-gray-700">
+              <span className="font-bold">Number of Subscriptions:</span>{' '}
+              {subscription.service}
+            </div>
+            <div className="text-gray-700">
+              <span className="font-bold">Time of Subscription:</span>{' '}
+              {subscription.time}
+            </div>
+            <div className="text-gray-700">
+              <span className="font-bold">Date of Subscription:</span>{' '}
+              {subscription.date}
+            </div>
+            <div className="text-gray-700">
+              <span className="font-bold">The Current Status:</span>{' '}
+              {subscription.status}
+            </div>
           </div>
         </div>
       ) : (
-        <div>Loding ...</div>
+        <div className="text-center text-gray-700 mt-8">Loading...</div>
       )}
     </div>
   );

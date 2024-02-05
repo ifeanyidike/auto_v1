@@ -1,5 +1,7 @@
 'use client';
 import React, { useState } from 'react';
+import { useParams } from 'next/navigation';
+
 import Bookings from '../components/Bookings';
 import { BookingData } from '~/components/Data';
 import OpenLeftIcon from '~/commons/icons/OpenLeftIcon';
@@ -10,10 +12,14 @@ import FilterIcon from '~/commons/icons/FilterIcon';
 import 'react-datepicker/dist/react-datepicker.css';
 import Calendar from '~/components/Calendar';
 import DropdownSelect from '~/components/DropdownSelect';
+import { type TablePopupData } from '../types/general';
+import Link from 'next/link';
 
 const BookingList = () => {
-  const [popupOpen, togglePopup] = useState<number | null>(null);
+  const [popupOpen, togglePopup] = useState<TablePopupData | null>(null);
   const [dropdownOpen, toggleDropdown] = useState<boolean>(false);
+
+  const { id: bookingId } = useParams<{ id: string }>();
 
   const popupRef = useClickOutside(() => {
     togglePopup(null);
@@ -30,11 +36,11 @@ const BookingList = () => {
     }
 
     const popupHeight = 158;
-    const spaceBelow = window.innerHeight - popupOpen;
+    const spaceBelow = window.innerHeight - popupOpen.position;
 
     const positionAbove = spaceBelow < popupHeight;
 
-    const top = popupOpen - popupHeight + 32;
+    const top = popupOpen.position - popupHeight + 32;
 
     const setStyle = positionAbove
       ? { bottom: spaceBelow - 54 + 'px' }
@@ -109,14 +115,16 @@ const BookingList = () => {
       <div className="border-2 relative border-white rounded-xl mt-3 overflow-auto bg-white">
         {[heading, ...BookingData].map((data, index) => (
           <div key={data._id} className={`hover:bg-gray-100 relative`}>
-            <Bookings
-              _id={data._id}
-              index={index}
-              data={data}
-              length={BookingData.length}
-              popupOpen={popupOpen}
-              togglePopup={togglePopup}
-            />
+            <Link href={`/manage/booking/${data._id}`}>
+              <Bookings
+                _id={data._id}
+                index={index}
+                data={data}
+                length={BookingData.length}
+                popupOpen={popupOpen}
+                togglePopup={togglePopup}
+              />
+            </Link>
           </div>
         ))}
       </div>
