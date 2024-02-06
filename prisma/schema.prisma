@@ -36,8 +36,9 @@ model Merchant {
 model MerchantService {
   id        String              @id @default(cuid())
   faqs      FAQ[]
-  imgUrl    String?
-  description String?
+  imgUrl    String
+  description String
+  
   
   keyPoints ServiceKeyPoint[]
   booking   Booking?
@@ -59,8 +60,8 @@ model Service {
   id                String              @id @default(cuid())
   type              String              @default("REPAIR")    //ServiceType         @default(REPAIR)
   title             String              @unique
-  description       String
-  imgUrl            String
+  description       String?
+  imgUrl            String?
 
   faqs              FAQ[]
   merchantServices  MerchantService[]
