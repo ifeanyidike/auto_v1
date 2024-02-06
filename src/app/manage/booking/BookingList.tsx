@@ -54,12 +54,15 @@ const BookingList = () => {
             ...setStyle,
           }}
         >
-          <button className="flex gap-2 w-full items-center p-4 hover:bg-stone-200 hover:rounded-t-xl">
+          <Link
+            href={`/manage/booking/${popupOpen.id}`}
+            className="flex gap-2 w-full items-center p-4 hover:bg-stone-200 hover:rounded-t-xl"
+          >
             <span>
               <OpenLeftIcon />
             </span>
             <span>View details</span>
-          </button>
+          </Link>
           <button className="flex gap-2 w-full items-center p-4 hover:bg-stone-200">
             <span>
               <DocumentIcon />
@@ -115,16 +118,14 @@ const BookingList = () => {
       <div className="border-2 relative border-white rounded-xl mt-3 overflow-auto bg-white">
         {[heading, ...BookingData].map((data, index) => (
           <div key={data._id} className={`hover:bg-gray-100 relative`}>
-            <Link href={`/manage/booking/${data._id}`}>
-              <Bookings
-                _id={data._id}
-                index={index}
-                data={data}
-                length={BookingData.length}
-                popupOpen={popupOpen}
-                togglePopup={togglePopup}
-              />
-            </Link>
+            <Bookings
+              _id={data._id}
+              index={index}
+              data={data}
+              length={BookingData.length}
+              popupOpen={popupOpen}
+              togglePopup={togglePopup}
+            />
           </div>
         ))}
       </div>

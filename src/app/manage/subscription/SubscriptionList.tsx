@@ -60,13 +60,14 @@ const SubscriptionList = () => {
             ...setStyle,
           }}
         >
-          <Link href={`/manage/subscription/${subscriptionId}`}>
-            <a className="flex gap-2 w-full items-center p-4 hover:bg-stone-200 hover:rounded-t-xl">
-              <span>
-                <OpenLeftIcon />
-              </span>
-              <span>View details</span>
-            </a>
+          <Link
+            href={`/manage/subscription/${popupOpen.id}`}
+            className="flex gap-2 w-full items-center p-4 hover:bg-stone-200 hover:rounded-t-xl"
+          >
+            <span>
+              <OpenLeftIcon />
+            </span>
+            <span>View details</span>
           </Link>
 
           <button className="flex gap-2 w-full items-center p-4 hover:bg-stone-200">
@@ -126,16 +127,14 @@ const SubscriptionList = () => {
         {[heading, ...SubscriptionData].map((data, index) => (
           <>
             <div key={data._id} className={`hover:bg-gray-100 relative`}>
-              <Link href={`/manage/subscription/${data._id}`}>
-                <Subscription
-                  _id={data._id}
-                  index={index}
-                  data={data}
-                  popupOpen={popupOpen}
-                  togglePopup={togglePopup}
-                  length={SubscriptionData.length}
-                />
-              </Link>
+              <Subscription
+                _id={data._id}
+                index={index}
+                data={data}
+                popupOpen={popupOpen}
+                togglePopup={togglePopup}
+                length={SubscriptionData.length}
+              />
             </div>
           </>
         ))}
