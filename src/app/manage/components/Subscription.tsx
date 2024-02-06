@@ -1,8 +1,8 @@
-'use client';
-import Image from 'next/image';
 import React from 'react';
+import EllipsisIcon from '~/commons/icons/EllipsisIcon';
 import Table from './Table';
 import { type TablePopupData } from '../types/general';
+import { dmSans } from '~/font';
 
 type Props = {
   _id: string;
@@ -13,40 +13,33 @@ type Props = {
   togglePopup: React.Dispatch<React.SetStateAction<TablePopupData | null>>;
 };
 
-const Bookings = (props: Props) => {
+const Subscription = (props: Props) => {
   const headers = [
     {
       _id: 'id',
       customWidth: 'w-16',
     },
-    { name: 'Bookers name', grow: true },
-    { image: 'Image', customWidth: 'w-16' },
-    { title: 'Title', grow: true },
-    { category: 'Category' },
+    { name: 'Subscriber', grow: true },
+    { duration: 'Duration', grow: true },
+    { qty: 'Number' },
+    { time: 'Time' },
     { status: 'Status' },
     { date: 'Date', customWidth: 'w-24' },
   ];
+
   const status = props.data?.status;
   const data = {
     ...props.data,
-    image: (
-      <Image
-        width={25}
-        height={25}
-        src={props.data.image!}
-        alt="service image"
-      />
-    ),
     status: (
       <span
         className={`flex-shrink-0 w-12px  border rounded-full px-3 py-1 ${
           status === 'Completed'
-            ? 'border-green-500 text-green-500'
-            : status === 'In progress'
-              ? 'border-red-500 text-red-500'
+            ? 'bg-green-100 text-green-600'
+            : status === 'In Progress'
+              ? 'bg-pink-100 text-pink-600'
               : status === 'Requested'
-                ? 'border-purple-400 text-purple-400'
-                : 'border-pink-600 text-pink-600'
+                ? 'bg-purple-100 text-purple-600'
+                : 'bg-red-100 text-pink-600'
         }`}
       >
         {status}
@@ -67,4 +60,4 @@ const Bookings = (props: Props) => {
   );
 };
 
-export default Bookings;
+export default Subscription;

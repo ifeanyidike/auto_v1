@@ -128,7 +128,7 @@ const Sidebar = () => {
         />
 
         <MenuItem
-          href="#"
+          href="subscription"
           isSelected={selected === MenuEnum.subscription}
           setIsSelected={setIsSelected}
           title={MenuEnum.subscription}
