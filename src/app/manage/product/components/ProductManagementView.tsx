@@ -11,10 +11,7 @@ import { type MultiValue, type SingleValue } from 'react-select';
 import TopMenu from '../../components/TopMenu';
 import BackToPage from '../../components/BackToPage';
 import Button from '~/components/Button';
-import {
-  NewMerchantServiceType,
-  type CreateMerchantServiceParamType,
-} from '~/types/utils';
+import { type CreateMerchantServiceParamType } from '~/types/utils';
 import Spinner from '~/components/Spinner';
 import { SnackbarProvider, enqueueSnackbar } from 'notistack';
 import axios from 'axios';
@@ -129,7 +126,7 @@ type Props = {
   product?: MerchantServiceType | null;
 };
 
-const Client = (props: Props) => {
+const ProductManagementView = (props: Props) => {
   const [data, setData] = useState<CreateMerchantServiceParamType>(init);
   const [saving, setSaving] = useState<boolean>(false);
   const [savingDraft, setSavingDraft] = useState<boolean>(false);
@@ -559,7 +556,7 @@ const Client = (props: Props) => {
                   <span>
                     {!props.product?.isDraft
                       ? 'Update Product'
-                      : 'Save Product'}
+                      : 'Publish Product'}
                   </span>
                 </div>
               </Button>
@@ -794,4 +791,4 @@ const Client = (props: Props) => {
   );
 };
 
-export default Client;
+export default ProductManagementView;

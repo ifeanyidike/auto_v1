@@ -30,7 +30,7 @@ const TopMenu = (props: Props) => {
   const {
     showToggle = true,
     component = (
-      <span>
+      <span className={`text-base ${dmSans.className}`}>
         {greeting} {user?.name && `${user.name}!`}
       </span>
     ),

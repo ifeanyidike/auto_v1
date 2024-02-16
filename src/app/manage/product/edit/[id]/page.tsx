@@ -2,7 +2,6 @@ import React from 'react';
 import ProductManagementView from '../../components/ProductManagementView';
 import Util from '~/server/utils';
 import Merchant from '~/app/api/merchant/logic';
-import Auth0 from '~/server/auth0';
 import MerchantService from '~/app/api/merchant_service/logic';
 
 const EditProduct = async ({
@@ -18,7 +17,6 @@ const EditProduct = async ({
 
   const service = new MerchantService();
   const serviceData = await service.getOne({ id: params.id });
-  console.log('serviceData', serviceData);
 
   return (
     <div className={`gap-5`}>

@@ -2,7 +2,6 @@
 import React, { useState } from 'react';
 import ProductListListView from './ProductListListView';
 import ProductListCardView from './ProductListCardView';
-import { type MerchantServiceType } from '~/app/api/merchant_service/logic';
 import { type NewMerchantServiceType } from '~/types/utils';
 import TopMenu from '../../components/TopMenu';
 import BackToPage from '../../components/BackToPage';

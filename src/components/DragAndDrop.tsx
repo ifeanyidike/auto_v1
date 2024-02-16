@@ -151,8 +151,8 @@ const DragAndDrop = (props: Props) => {
 
   return (
     <section
-      className={`container w-full h-full bg-stone-300/50 rounded-xl flex items-center justify-center box-border ${
-        (files.length && !isMultiple) || defaultValue ? '' : 'p-3'
+      className={`container w-full h-full bg-stone-200/50 rounded-xl flex items-center justify-center box-border ${
+        (files.length && !isMultiple) || defaultValue ? '' : 'p-2'
       }`}
     >
       {preview ? (
