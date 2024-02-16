@@ -565,7 +565,7 @@ const ProductManagementView = (props: Props) => {
         }
       />
 
-      <div className="pt-5 mb-8 px-8 flex max-lg:flex-col gap-5 w-full">
+      <div className="pt-5 mb-8 max-sm:mb-24 px-8 flex max-lg:flex-col gap-5 w-full">
         <div className="flex sticky top-2 h-screen flex-col flex-[0.4] w-2/5 max-lg:w-full max-lg:flex-1 gap-5">
           <div className="w-full h-72">
             <DragAndDrop
