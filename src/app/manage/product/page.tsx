@@ -15,9 +15,6 @@ const Product = async () => {
 
   const merchantService = new MerchantService();
   const all_products = await merchantService.getAllByMerchant(slug);
-  // const published_products = all_products.services?.filter(
-  //   product => !product.isDraft
-  // );
   const formatted_products = (all_products.services ?? [])?.map(p => {
     const formatted_pricing = p.pricing?.map(pricing => ({
       ...pricing,

@@ -1,8 +1,8 @@
 import React from 'react';
-import ProductManagementView from '../components/ProductManagementView';
 import Util from '~/server/utils';
 import Merchant from '~/app/api/merchant/logic';
 import Auth0 from '~/server/auth0';
+import NewProductView from '../components/NewProductView';
 
 const AddNewProduct = async () => {
   const { slug } = Util.getRouteType();
@@ -11,7 +11,7 @@ const AddNewProduct = async () => {
 
   return (
     <div className={`gap-5`}>
-      <ProductManagementView merchantId={merchantData?.id} />
+      <NewProductView merchantId={merchantData?.id} />
     </div>
   );
 };

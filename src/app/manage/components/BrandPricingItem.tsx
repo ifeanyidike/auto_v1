@@ -36,7 +36,9 @@ const BrandPricingItem = (props: Props) => {
             placeholder="Auto type"
             isCreateable={mode === 'BRAND'}
             data={props.listItems}
-            defaultValue={props.defaultList}
+            defaultValue={props.listItems.filter(
+              m => m.value === props.currItem.type
+            )}
             getValue={e => {
               const value = (
                 e as SingleValue<Record<'label' | 'value', string>>
@@ -101,6 +103,7 @@ const BrandPricingItem = (props: Props) => {
             } else {
               newData.pricing.data[brandIndex]!.amount = amount;
             }
+            props.setData(newData);
           }}
         />
       </div>

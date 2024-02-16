@@ -1,6 +1,6 @@
-import { Prisma } from '@prisma/client';
-import { DefaultArgs } from '@prisma/client/runtime/library';
-import { MerchantServiceType } from '~/app/api/merchant_service/logic';
+import { type Prisma } from '@prisma/client';
+import { type DefaultArgs } from '@prisma/client/runtime/library';
+import { type MerchantServiceType } from '~/app/api/merchant_service/logic';
 
 export type CreateMerchantServiceParamType = {
   product_type: {

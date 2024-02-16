@@ -1,11 +1,12 @@
 import React from 'react';
-import ProductManagementView from '../../components/ProductManagementView';
 import Util from '~/server/utils';
 import Merchant from '~/app/api/merchant/logic';
 import MerchantService from '~/app/api/merchant_service/logic';
+import Client from './Client';
 
 const EditProduct = async ({
   params,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   searchParams,
 }: {
   params: { id: string };
@@ -20,10 +21,7 @@ const EditProduct = async ({
 
   return (
     <div className={`gap-5`}>
-      <ProductManagementView
-        product={serviceData}
-        merchantId={merchantData?.id}
-      />
+      <Client product={serviceData} merchantId={merchantData?.id} />
     </div>
   );
 };
