@@ -53,7 +53,7 @@ const HomeTransactionTable = (props: Props) => {
       </span>
     ),
   };
-  console.log('data', data);
+
   return (
     <Table
       _id={props._id}

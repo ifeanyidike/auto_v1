@@ -139,8 +139,6 @@ const DragAndDrop = (props: Props) => {
     return () => files.forEach(file => URL.revokeObjectURL(file.preview));
   }, []);
 
-  console.log('defaultValue', defaultValue);
-
   const getPreviewValue = () => {
     if (!isMultiple && files.length === 1) {
       return files[0]!.preview;
