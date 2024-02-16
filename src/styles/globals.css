@@ -37,3 +37,10 @@
     --color-red2: 0deg 100% 40%;
   }
 }
+
+.hide {
+  visibility: hidden;
+}
+.hover-target:hover .hide {
+  visibility: visible;
+}

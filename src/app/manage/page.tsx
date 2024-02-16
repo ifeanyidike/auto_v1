@@ -11,10 +11,12 @@ import HomePieChart from './components/HomePieChart';
 import { dmSans } from '~/font';
 import Link from 'next/link';
 import HomeTransactionList from './components/HomeTransactionList';
+import TopMenu from './components/TopMenu';
 
 const Home = async () => {
   return (
     <div className="w-full h-full">
+      <TopMenu showToggle />
       <div className="flex max-lg:flex-col gap-4 px-4 py-6 pr-2">
         <div className="flex flex-[0.4] max-lg:flex-1 gap-3 mt-4 flex-wrap ">
           <HomeCard

@@ -13,12 +13,14 @@ import RemoveIcon from '~/commons/icons/RemoveIcon';
 import { dmSans } from '~/font';
 
 // Interface to extend Blob type
-interface ExtendedBlob extends Blob {
+interface ExtendedFile extends File {
   preview: string;
 }
 
 type Props = {
   isMultiple?: boolean;
+  getFiles: (files: File[]) => void;
+  defaultValue?: string | null;
 };
 
 const UploadIcon = () => (
@@ -54,8 +56,8 @@ const AlterIcon = () => (
 );
 
 const DragAndDrop = (props: Props) => {
-  const { isMultiple = false } = props;
-  const [files, setFiles] = useState<ExtendedBlob[]>([]);
+  const { isMultiple = false, defaultValue = '' } = props;
+  const [files, setFiles] = useState<ExtendedFile[]>([]);
   // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call
   const {
     getRootProps,
@@ -68,6 +70,7 @@ const DragAndDrop = (props: Props) => {
     accept: {
       'image/png': ['.png'],
       'image/jpg': ['.jpg', '.jpeg'],
+      'image/webp': ['.webp'],
     },
     maxSize: 10 * 1024 * 1024,
     multiple: isMultiple,
@@ -80,7 +83,8 @@ const DragAndDrop = (props: Props) => {
     onDropRejected: (fileRejections: FileRejection[], event: DropEvent) => {
       console.log('fileRejected', fileRejections, event);
     },
-    onDrop: useCallback<(_: Blob[]) => void>(acceptedFiles => {
+    onDrop: useCallback<(_: File[]) => void>(acceptedFiles => {
+      props.getFiles(acceptedFiles);
       const files = acceptedFiles.map(file =>
         Object.assign(file, {
           preview: URL.createObjectURL(file),
@@ -94,7 +98,7 @@ const DragAndDrop = (props: Props) => {
     }, []),
   });
 
-  const renderSingleFile = (file: ExtendedBlob) => {
+  const renderSingleFile = (preview: string) => {
     return (
       <div className="flex min-w-0 overflow-hidden w-full h-full relative">
         <div className="absolute w-full h-full top-0 flex-col justify-center gap-5 flex opacity-0 transition-opacity duration-300 hover:opacity-100 hover:bg-stone-600/50 rounded-xl">
@@ -117,13 +121,13 @@ const DragAndDrop = (props: Props) => {
           </button>
         </div>
         <Image
-          src={file.preview}
+          src={preview}
           width={100}
           height={100}
           alt="Image"
           className="block w-full h-full rounded-xl object-cover object-top"
           onLoad={() => {
-            URL.revokeObjectURL(file.preview);
+            URL.revokeObjectURL(preview);
           }}
         />
       </div>
@@ -135,23 +139,33 @@ const DragAndDrop = (props: Props) => {
     return () => files.forEach(file => URL.revokeObjectURL(file.preview));
   }, []);
 
+  console.log('defaultValue', defaultValue);
+
+  const getPreviewValue = () => {
+    if (!isMultiple && files.length === 1) {
+      return files[0]!.preview;
+    }
+    if (defaultValue) return defaultValue;
+  };
+  const preview = getPreviewValue();
+
   return (
     <section
       className={`container w-full h-full bg-stone-300/50 rounded-xl flex items-center justify-center box-border ${
-        files.length && !isMultiple ? '' : 'p-3'
+        (files.length && !isMultiple) || defaultValue ? '' : 'p-3'
       }`}
     >
-      {!isMultiple && files.length === 1 ? (
-        renderSingleFile(files[0]!)
+      {preview ? (
+        renderSingleFile(preview)
       ) : (
         <div
           {...getRootProps({ className: 'dropzone' })}
-          className="flex flex-col justify-center items-center w-full h-full cursor-pointer border-2 border-dashed border-content-light/50 rounded-xl"
+          className="flex flex-col justify-center items-center min-w-72 w-full h-full cursor-pointer border-2 border-dashed border-content-light/50 rounded-xl"
         >
           <input {...getInputProps()} />
           <DragDropImageIcon />
           <p
-            className={`flex gap-1 items-center mt-8 text-lg max-md:text-base max-sm:text-sm font-medium ${dmSans.className}`}
+            className={`flex gap-1 items-center mt-8 text-lg max-xl:text-base max-sm:text-sm font-medium ${dmSans.className}`}
           >
             <span className="text-blue-600">
               <UploadIcon />

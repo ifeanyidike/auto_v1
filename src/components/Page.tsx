@@ -4,6 +4,7 @@ import PageNotFound from './PageNotFound';
 import { type Prisma } from '@prisma/client';
 import { type DefaultArgs } from '@prisma/client/runtime/library';
 import { redirect } from 'next/navigation';
+import { manRope } from '~/font';
 
 type Props = {
   children: React.ReactNode;
@@ -18,7 +19,7 @@ const Page = async (props: Props) => {
   //   if (isAdminLogin) redirect('/manage');
   if (!merchantData) return PageNotFound({ slug });
 
-  return <div>{props.children}</div>;
+  return <div className={manRope.className}>{props.children}</div>;
 };
 
 export default Page;

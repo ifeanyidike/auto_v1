@@ -48,13 +48,17 @@ const ProductPane = (props: Props) => {
   const [isExpanded, setIsExpanded] = useState<boolean>(!!props.initExpanded);
   const isIncomplete = numCompleted < numItems;
   return (
-    <div className="bg-white rounded-xl pb-3">
+    <div className={`bg-white rounded-xl ${!isExpanded ? 'pb-14' : 'pb-3'}`}>
       <div className="border border-b-stone-200 py-3 px-3 flex justify-between rounded-t-xl">
-        <span className={`${dmSans.className}`}>{props.paneTitle}</span>
+        <span className={`${dmSans.className} font-bold`}>
+          {props.paneTitle}
+        </span>
         <div className="ml-auto flex justify-center gap-4">
           <div
             className={`text-[10px] ${dmSans.className} flex ${
-              isIncomplete ? 'gap-2' : 'gap-1 bg-content-normal'
+              isIncomplete
+                ? 'gap-2 text-content-normal'
+                : 'gap-1 bg-content-normal text-white'
             } border border-stone-200 rounded-xl items-center px-2`}
           >
             {isIncomplete ? (
@@ -73,7 +77,7 @@ const ProductPane = (props: Props) => {
             ) : (
               <CheckFilledIcon />
             )}
-            <span className="text-white">
+            <span>
               {numCompleted}/{numItems}
             </span>
           </div>

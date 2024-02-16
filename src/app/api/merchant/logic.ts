@@ -1,6 +1,6 @@
 import { type Prisma } from '@prisma/client';
 import Utility from '../../../server/utility';
-import { DefaultArgs } from '@prisma/client/runtime/library';
+import { type DefaultArgs } from '@prisma/client/runtime/library';
 
 export default class Merchant extends Utility {
   constructor() {
