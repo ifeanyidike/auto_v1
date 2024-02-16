@@ -5,6 +5,7 @@ type Props = {
   viewBox?: string;
   fillColor?: string;
   className?: string;
+  
 };
 
 const OpenLeftIcon = (props: Props) => {
