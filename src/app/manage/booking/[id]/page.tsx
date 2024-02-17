@@ -1,14 +1,24 @@
 import React from 'react';
 import BookingDetailList from './BookingDetailList';
+import BackToPage from '../../components/BackToPage';
+import TopMenu from '../../components/TopMenu';
 
 const page = () => {
   return (
     <div>
-      <h5
-        className={`font-semibold w-[300px] h-auto bg-slate-100 text-center text-xl p-4 mb-2 rounded-b-xl text-black shadow-md`}
-      >
-        Booking Detail
-      </h5>
+      <TopMenu
+        showToggle
+        component={
+          <div className="flex justify-between items-center w-full">
+            <BackToPage
+              toHref="/manage/booking"
+              prevTitle="Booking List"
+              currTitle="Booking Details"
+            />
+          </div>
+        }
+      />
+
       <BookingDetailList />
     </div>
   );

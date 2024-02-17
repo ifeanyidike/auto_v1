@@ -1,7 +1,9 @@
 'use client';
 import { useUser } from '@auth0/nextjs-auth0/client';
 import React from 'react';
+import MenuToggle from '~/commons/icons/MenuToggle';
 import { dmSans } from '~/font';
+import { hideAdminBar } from '~/states/utility';
 
 const getHour = () => {
   const date = new Date();
@@ -9,7 +11,13 @@ const getHour = () => {
   return hour;
 };
 
-const TopMenu = () => {
+type Props = {
+  showToggle?: boolean;
+  component?: React.ReactNode;
+  customStyle?: string;
+};
+const TopMenu = (props: Props) => {
+  const { customStyle } = props;
   const { user } = useUser();
   const hour = getHour();
   const isMorning = hour < 12;
@@ -18,11 +26,28 @@ const TopMenu = () => {
   const greeting = `Good ${
     isMorning ? 'Morning' : isAfternoon ? 'Afternoon' : 'Evening'
   }`;
+
+  const {
+    showToggle = true,
+    component = (
+      <span className={`text-base ${dmSans.className}`}>
+        {greeting} {user?.name && `${user.name}!`}
+      </span>
+    ),
+  } = props;
   return (
     <div
-      className={`text-lg px-8 py-5 font-medium w-full bg-white ${dmSans.className}`}
+      className={`${customStyle} flex max-sm:justify-between gap-4 items-center text-lg px-8 py-5 font-medium w-full bg-white ${dmSans.className}`}
     >
-      {greeting} {user?.name && `${user.name}!`}
+      {showToggle && (
+        <button
+          onClick={() => hideAdminBar.set(false)}
+          className=" bg-white text-stone-200 hidden max-sm:flex"
+        >
+          <MenuToggle />
+        </button>
+      )}
+      {component}
     </div>
   );
 };

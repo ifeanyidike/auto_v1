@@ -28,7 +28,38 @@ export default class ServiceKeypoint extends Utility {
 
   public async getOne(id: string) {
     return this.process(async () => {
-      return await this.db.merchant.findFirst({ where: { id } });
+      return await this.db.serviceKeyPoint.findFirst({ where: { id } });
     });
+  }
+
+  public async getManyByData(data: string[]) {
+    return this.process(async () => {
+      return await Promise.all(
+        data.map(point =>
+          this.db.serviceKeyPoint.findFirst({
+            where: { point },
+          })
+        )
+      );
+    });
+  }
+
+  public async findItem(point: string) {
+    return this.process(async () => {
+      return await this.db.serviceKeyPoint.findFirst({
+        where: { point },
+      });
+    });
+  }
+
+  public async getOrCreateMany(data: string[]) {
+    return await Promise.all(
+      data.map(async point => {
+        const keypoint = await this.findItem(point);
+        if (keypoint) return keypoint.id;
+        const keypoint_data = await this.create({ point });
+        return keypoint_data.id;
+      })
+    );
   }
 }

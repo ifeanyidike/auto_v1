@@ -13,6 +13,7 @@ type Props = {
   py?: string;
   radius?: string;
   onClick?: () => void;
+  isDisabled?: boolean;
 };
 const Button = (props: Props) => {
   const {
@@ -26,15 +27,17 @@ const Button = (props: Props) => {
     px = 'px-9',
     py = 'py-3',
     radius = 'rounded-3xl',
+    isDisabled = false,
   } = props;
   return (
     <button
+      disabled={isDisabled}
       onClick={props.onClick && props.onClick}
       className={`${bgColor} ${radius} ${
         hasGradient ? 'bg-gradient-to-l' : ''
       } ${gradientStart} ${px} ${py} text-sm font-bold text-white ${
         hasShadow ? 'shadow-right-bottom-md transition-shadow' : ''
-      } ${shadowColor}  ${width} hover:${gradientEnd} duration-300 hover:shadow-none active:shadow-none`}
+      } ${shadowColor}  ${width} hover:${gradientEnd} duration-300 hover:shadow-none active:shadow-none disabled:opacity-60 disabled:shadow-none`}
     >
       {props.children}
     </button>

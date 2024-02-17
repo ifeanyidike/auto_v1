@@ -5,33 +5,39 @@ import {
   Nunito_Sans,
   DM_Sans,
   Manrope,
-} from "next/font/google";
+} from 'next/font/google';
 export const inter = Inter({
-  subsets: ["latin"],
-  display: "swap",
+  variable: '--font-inter',
+  subsets: ['latin'],
+  // display: "swap",
 });
 
 export const robotoMono = Roboto_Mono({
-  subsets: ["latin"],
-  display: "swap",
+  variable: '--font-roboto-mono',
+  subsets: ['latin'],
+  // display: "swap",
 });
 
 export const openSans = Open_Sans({
-  subsets: ["latin"],
-  display: "swap",
+  variable: '--font-open-sans',
+  subsets: ['latin'],
+  // display: "swap",
 });
 
 export const nunitoSans = Nunito_Sans({
-  subsets: ["latin"],
-  display: "swap",
+  variable: '--font-nunito-sans',
+  subsets: ['latin'],
+  // display: "swap",
 });
 
 export const dmSans = DM_Sans({
-  subsets: ["latin"],
-  display: "swap",
+  variable: '--font-dm-sans',
+  subsets: ['latin'],
+  // display: "swap",
 });
 
 export const manRope = Manrope({
-  subsets: ["latin"],
-  display: "swap",
+  variable: '--font-manrope',
+  subsets: ['latin'],
+  // display: "swap",
 });

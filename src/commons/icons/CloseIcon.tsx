@@ -1,13 +1,23 @@
-import React from "react";
+import React from 'react';
 
-const CloseIcon = () => {
+type Props = {
+  classNames?: string;
+  strokeWidth?: number;
+  strokeColor?: string;
+};
+const CloseIcon = (props: Props) => {
+  const {
+    classNames = 'h-6 w-6',
+    strokeWidth = 1.5,
+    strokeColor = 'currentColor',
+  } = props;
   return (
     <svg
       fill="none"
       viewBox="0 0 24 24"
-      strokeWidth={1.5}
-      stroke="currentColor"
-      className="h-6 w-6"
+      strokeWidth={strokeWidth}
+      stroke={strokeColor}
+      className={classNames}
     >
       <path
         strokeLinecap="round"

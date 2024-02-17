@@ -22,3 +22,5 @@ export const getSubdomain = (url = window.location.host) => {
   }
   return urlParts.length <= 2 ? '' : urlParts[0];
 };
+
+export const hideAdminBar = hookstate<boolean>(false);

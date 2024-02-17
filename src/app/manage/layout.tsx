@@ -2,7 +2,6 @@ import { notFound } from 'next/navigation';
 import Util from '~/server/utils';
 import '~/styles/globals.css';
 import Sidebar from './components/Sidebar';
-import TopMenu from './components/TopMenu';
 
 export const metadata = {
   title: 'Admin Page',
@@ -21,10 +20,7 @@ export default async function Layout({
   return (
     <div className="relative flex bg-cyanBlue/40">
       <Sidebar />
-      <div className="flex flex-col flex-1 overflow-hidden">
-        <TopMenu />
-        {children}
-      </div>
+      <div className="flex flex-col flex-1 overflow-hidden">{children}</div>
     </div>
   );
 }

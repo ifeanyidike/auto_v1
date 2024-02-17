@@ -19,7 +19,7 @@ const HomeTransactionTable = (props: Props) => {
       _id: 'id',
       customWidth: 'w-16',
     },
-    { title: 'Customer Name', grow: true },
+    { name: 'Customer Name', grow: true },
     { title: 'Title', grow: true },
     { category: 'Category' },
     { mode: 'Mode' },
@@ -53,6 +53,7 @@ const HomeTransactionTable = (props: Props) => {
       </span>
     ),
   };
+
   return (
     <Table
       _id={props._id}

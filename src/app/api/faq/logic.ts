@@ -34,4 +34,37 @@ export default class FAQ extends Utility {
       });
     });
   }
+
+  public async getManyByData(data: Record<'question' | 'answer', string>[]) {
+    return this.process(async () => {
+      return await Promise.all(
+        data.map(d =>
+          this.db.fAQ.findFirst({
+            where: { ...d },
+          })
+        )
+      );
+    });
+  }
+
+  public async findByQuestionAndAnswer(
+    data: Record<'question' | 'answer', string>
+  ) {
+    return this.process(async () => {
+      return await this.db.fAQ.findFirst({
+        where: { ...data },
+      });
+    });
+  }
+
+  public async getOrCreateMany(data: Record<'question' | 'answer', string>[]) {
+    return await Promise.all(
+      data.map(async item => {
+        const faq = await this.findByQuestionAndAnswer(item);
+        if (faq) return faq.id;
+        const faqData = await this.create(item);
+        return faqData.id;
+      })
+    );
+  }
 }
