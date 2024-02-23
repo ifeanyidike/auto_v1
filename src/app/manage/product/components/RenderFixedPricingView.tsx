@@ -6,7 +6,7 @@ import TextInput from '~/components/TextInput';
 import { type CreateMerchantServiceParamType } from '~/types/utils';
 
 type Props = {
-  product: MerchantServiceType;
+  product?: MerchantServiceType;
   data: CreateMerchantServiceParamType;
   setData: Dispatch<SetStateAction<CreateMerchantServiceParamType>>;
 };

@@ -39,10 +39,14 @@ model MerchantService {
   imageId     String?
   description String?
   isDraft     Boolean @default(false)
+  allowOutsideWork  Boolean @default(false)
+
   pricingMode String  @default("FIXED") //Could be "BRAND" OR "SUV_SEDAN"
+  subscriptionTypes SubscriptionType[]
 
   keyPoints ServiceKeyPoint[]
-  booking   Booking?
+  bookings   Booking[]
+  subscriptions   Subscription[]
 
   service   Service? @relation(fields: [serviceId], references: [id])
   serviceId String?  @unique
@@ -53,6 +57,7 @@ model MerchantService {
   createdAt      DateTime        @default(now())
   updatedAt      DateTime        @updatedAt
   servicePricing ServicePricing[]
+  discounts  Discount[]
 
   @@index([id, serviceId, merchantId])
 }
@@ -64,7 +69,37 @@ model ServicePricing {
   mode              String
   type              String?
   amount            Decimal
+  
+
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt @default(now())
 }
+
+// Discount
+// Depends on - merchantService
+
+model Discount {
+  id                String           @id @default(cuid())
+  code              String
+  value             String
+  type              String
+  merchantService   MerchantService[]   
+
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt @default(now())
+}
+
+// SubscriptionType
+// Depends on MerchantService
+model SubscriptionType {
+  id                String           @id @default(cuid())
+  name              String
+  merchantService   MerchantService[]   
+
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
+}
+
 
 // Services - independent of any merchant.
 model Service {
@@ -105,11 +140,26 @@ model ServiceKeyPoint {
   updatedAt DateTime @updatedAt
 }
 
+model Subscription {
+  id String @id @default(cuid())
+
+  merchantService   MerchantService @relation(fields: [merchantServiceId], references: [id])
+  merchantServiceId String        
+
+  user   User   @relation(fields: [userId], references: [id])
+  userId String @unique
+
+  payment Payment?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
 model Booking {
   id String @id @default(cuid())
 
   merchantService   MerchantService @relation(fields: [merchantServiceId], references: [id])
-  merchantServiceId String          @unique
+  merchantServiceId String
 
   user   User   @relation(fields: [userId], references: [id])
   userId String @unique
@@ -121,12 +171,15 @@ model Booking {
 }
 
 model Payment {
-  id        String  @id @default(cuid())
-  bookingId String  @unique
-  booking   Booking @relation(fields: [bookingId], references: [id])
+  id             String  @id @default(cuid())
+  bookingId      String  @unique
+  booking        Booking @relation(fields: [bookingId], references: [id])
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  subscriptionId String  @unique
+  subscription   Subscription @relation(fields: [subscriptionId], references: [id])
+
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
 }
 
 // User schema
@@ -138,6 +191,7 @@ model User {
   email     String   @unique
   imgUrl    String?
   booking   Booking?
+  subscription Subscription?
 }
 
 // enum ServiceType {

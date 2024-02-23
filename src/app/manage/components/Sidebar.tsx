@@ -18,6 +18,7 @@ import Button from '~/components/Button';
 import AddItemIcon from '~/commons/icons/AddItemIcon';
 import { useHookstate } from '@hookstate/core';
 import { hideAdminBar } from '~/states/utility';
+import { manRope } from '~/font';
 
 const Sidebar = () => {
   const [selected, setIsSelected] = useState<MenuEnum | null>(null);
@@ -34,7 +35,9 @@ const Sidebar = () => {
     <div
       className={`${
         hideBar.get() && 'max-sm:hidden'
-      } max-sm:absolute z-30 sticky top-0 max-sm:h-full h-screen  flex-initial flex flex-col items-center gap-4 bg-white ${
+      } max-sm:absolute z-30 sticky top-0 max-sm:h-full h-screen ${
+        manRope.className
+      } flex-initial flex flex-col items-center gap-4 bg-white ${
         isCollapsed ? 'w-20' : 'w-48'
       } border-r border-stone-200 py-5 max-md:w-20 ease-in duration-300`}
     >

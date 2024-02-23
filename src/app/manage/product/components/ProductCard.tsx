@@ -1,6 +1,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react';
+import { manRope } from '~/font';
 import { type NewMerchantServiceType } from '~/types/utils';
 
 type Props = {
@@ -89,8 +90,18 @@ const ProductCard = (props: Props) => {
     const additional = length > 120 ? '...' : '';
     return shortened + additional;
   };
+
+  const discounts = ['monthly', 'quarterly', 'annually'].map(type => {
+    const discount = props.product?.discounts?.find(d => d.type === type);
+    return {
+      type,
+      ...(discount && { ...discount }),
+    };
+  });
   return (
-    <div className="w-full relative border border-[#484848]/30 rounded-xl">
+    <div
+      className={`w-full relative border border-[#484848]/30 rounded-xl ${manRope.className}`}
+    >
       <div
         className={`text-[10px] absolute top-3 right-3 font-semibold text-white px-3 py-1 ${
           product.isDraft ? 'bg-red-800' : 'bg-green-800'
@@ -144,6 +155,24 @@ const ProductCard = (props: Props) => {
         <p className="flex text-xs text-stone-700 leading-4">
           {getShortenedDescription()}
         </p>
+      </div>
+
+      <div className="flex flex-col mt-6 px-2 gap-1 ">
+        <span className="text-xs uppercase underline font-bold">Discounts</span>
+        <div className="flex gap-14">
+          {discounts?.map((discount, index) => (
+            <div key={index} className="flex flex-col">
+              <span className="text-[10px] uppercase font-semibold">
+                {discount.type}
+              </span>
+              {
+                <span className="text-xs">
+                  {discount.value ? `${parseInt(discount.value)}%` : '_'}
+                </span>
+              }
+            </div>
+          ))}
+        </div>
       </div>
 
       <div className="flex flex-col mt-6 px-2 gap-1 mb-6">

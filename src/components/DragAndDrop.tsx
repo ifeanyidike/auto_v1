@@ -10,7 +10,7 @@ import {
 } from 'react-dropzone';
 import DragDropImageIcon from '~/commons/icons/DragDropImageIcon';
 import RemoveIcon from '~/commons/icons/RemoveIcon';
-import { dmSans } from '~/font';
+import { dmSans, manRope } from '~/font';
 
 // Interface to extend Blob type
 interface ExtendedFile extends File {
@@ -149,7 +149,9 @@ const DragAndDrop = (props: Props) => {
 
   return (
     <section
-      className={`container w-full h-full bg-stone-200/50 rounded-xl flex items-center justify-center box-border ${
+      className={`container ${
+        manRope.className
+      } w-full h-full bg-stone-200/50 rounded-xl flex items-center justify-center box-border ${
         (files.length && !isMultiple) || defaultValue ? '' : 'p-2'
       }`}
     >

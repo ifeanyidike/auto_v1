@@ -39,6 +39,28 @@ const Client = (props: Props) => {
         );
       }
 
+      if (props.product?.subscriptionTypes) {
+        newData.subscriptions = props.product.subscriptionTypes.map(
+          s => s.name
+        );
+      }
+
+      if (props.product?.discounts) {
+        const newDiscountData = newData.pricing.discounts.map(d => {
+          const savedDiscount = props.product?.discounts?.find(
+            dis => dis.type === d.type
+          );
+          return {
+            ...d,
+            ...(savedDiscount && {
+              code: savedDiscount.code,
+              value: savedDiscount.value,
+            }),
+          };
+        });
+        newData.pricing.discounts = newDiscountData;
+      }
+
       const faqs = props.product?.faqs;
       if (faqs?.length) {
         const faqData = faqs.map(faq => ({

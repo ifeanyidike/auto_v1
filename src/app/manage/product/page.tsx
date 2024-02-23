@@ -9,6 +9,7 @@ import MerchantService from '~/app/api/merchant_service/logic';
 import Util from '~/server/utils';
 import ProductList from './components/ProductList';
 import { type NewMerchantServiceType } from '~/types/utils';
+import { manRope } from '~/font';
 
 const Product = async () => {
   const { slug } = Util.getRouteType();
@@ -28,7 +29,7 @@ const Product = async () => {
 
   return (
     <div
-      className={`h-screen w-full flex-1 text-inherit rounded-xl items-center max-sm:justify-center`}
+      className={`h-screen ${manRope.className} w-full flex-1 text-inherit rounded-xl items-center max-sm:justify-center`}
     >
       {!all_products.services?.length ? (
         <div className="text-base font-normal px-8 flex flex-col gap-10 mt-20 max-sm:mt-0 mb-10 items-center">

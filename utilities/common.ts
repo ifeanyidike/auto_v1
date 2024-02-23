@@ -4,7 +4,29 @@ export const initProductData: CreateMerchantServiceParamType = {
   product_type: {} as CreateMerchantServiceParamType['product_type'],
   image: {} as CreateMerchantServiceParamType['image'],
   description: {} as CreateMerchantServiceParamType['description'],
-  pricing: {} as CreateMerchantServiceParamType['pricing'],
+  pricing: {
+    discounts: [
+      {
+        id: globalThis.crypto.randomUUID(),
+        code: '',
+        value: '',
+        type: 'monthly',
+      },
+      {
+        id: globalThis.crypto.randomUUID(),
+        code: '',
+        value: '',
+        type: 'quarterly',
+      },
+      {
+        id: globalThis.crypto.randomUUID(),
+        code: '',
+        value: '',
+        type: 'annually',
+      },
+    ],
+  } as CreateMerchantServiceParamType['pricing'],
+  subscriptions: [],
   faq_keypoints: {
     faq: [
       {
