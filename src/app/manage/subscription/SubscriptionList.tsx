@@ -19,6 +19,8 @@ const SubscriptionList = () => {
   const [popupOpen, togglePopup] = useState<TablePopupData | null>(null);
   const [dropdownOpen, toggleDropdown] = useState<boolean>(false);
 
+ 
+
   const router = useRouter();
 
   const { id: subscriptionId } = useParams<{ id: string }>();

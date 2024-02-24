@@ -24,6 +24,8 @@ type Props = {
 const Table = (props: Props) => {
   const isHeader = props._id === 'table_header';
 
+  console.log(props.popupOpen);
+
   const renderHeader = () => {
     return (
       <div
