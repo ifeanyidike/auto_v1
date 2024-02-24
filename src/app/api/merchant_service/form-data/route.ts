@@ -38,6 +38,13 @@ const getFormDataFields = (formData: FormData) => {
         value.toString()
       ) as CreateMerchantServiceParamType['pricing'];
     }
+
+    if (name === 'subscriptions') {
+      data[name] = JSON.parse(
+        value.toString()
+      ) as CreateMerchantServiceParamType['subscriptions'];
+    }
+
     if (name === 'merchantId') merchantId = value.toString();
     if (name === 'mode') mode = value.toString();
 

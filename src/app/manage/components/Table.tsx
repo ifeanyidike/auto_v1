@@ -1,7 +1,7 @@
 'use client';
 import React from 'react';
 import EllipsisIcon from '~/commons/icons/EllipsisIcon';
-import { dmSans } from '~/font';
+import { dmSans, manRope } from '~/font';
 import { type TablePopupData } from '../types/general';
 
 type Header = {
@@ -65,7 +65,9 @@ const Table = (props: Props) => {
     return (
       <>
         <div
-          className={`flex items-center w-full gap-4 text-xs bg-white hover:bg-slate-100 cursor-pointer min-w-max relative ${
+          className={`${
+            manRope.className
+          } flex items-center w-full gap-4 text-xs bg-white hover:bg-slate-100 cursor-pointer min-w-max relative ${
             isLast && 'rounded-b-xl'
           } `}
         >

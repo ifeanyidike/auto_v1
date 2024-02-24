@@ -150,6 +150,30 @@ export const disableSave = (
       )
   );
 
+  let equalDiscounts = false;
+  if (product?.discounts?.length) {
+    equalDiscounts = product?.discounts?.every(
+      discount =>
+        data.pricing?.discounts?.some(
+          d =>
+            d.type === discount.type &&
+            d.code === discount.code &&
+            d.value === discount.value
+        )
+    );
+  } else {
+    equalDiscounts = !data.pricing?.discounts?.some(d => d.code || d.value);
+  }
+
+  let equalSubscriptions = false;
+  if (product?.subscriptionTypes?.length) {
+    equalSubscriptions = product?.subscriptionTypes?.every(
+      s => data.subscriptions?.includes(s.name)
+    );
+  } else {
+    equalSubscriptions = !data.subscriptions?.length;
+  }
+
   return (
     desc_equal &&
     hasImg &&
@@ -158,7 +182,9 @@ export const disableSave = (
     equalKp &&
     equalFAQ &&
     equalPricingMode &&
-    equalAmount
+    equalAmount &&
+    equalDiscounts &&
+    equalSubscriptions
   );
 };
 
@@ -197,11 +223,23 @@ export const getPricingNumCompleted = (
   return 1;
 };
 
+export const getDiscountNumCompleted = (
+  data: CreateMerchantServiceParamType
+) => {
+  let count = 0;
+  for (const discount of data.pricing.discounts) {
+    if (discount.code && discount.type && discount.value) {
+      count++;
+    }
+  }
+  return count;
+};
+
 export const createService = async (
   merchantId: string | undefined,
   data: CreateMerchantServiceParamType,
-  product: MerchantServiceType | null | undefined,
-  setSaving: (e: boolean) => void
+  setSaving: (e: boolean) => void,
+  product: MerchantServiceType | null | undefined = null
 ) => {
   if (!merchantId) return;
   const faqs = data.faq_keypoints?.faq.map(faq => ({
@@ -218,6 +256,7 @@ export const createService = async (
         merchantId,
         description: data.description.description,
         product_type: JSON.stringify(data.product_type),
+        subscriptions: JSON.stringify(data.subscriptions || []),
         faq_keypoints: JSON.stringify(data.faq_keypoints),
         pricing: JSON.stringify(data.pricing),
         isDraft: product?.isDraft,
@@ -257,8 +296,8 @@ export const createService = async (
 export const saveServiceAsDraft = async (
   merchantId: string | undefined,
   data: CreateMerchantServiceParamType,
-  product: MerchantServiceType | null | undefined,
-  setSavingDraft: (e: boolean) => void
+  setSavingDraft: (e: boolean) => void,
+  product: MerchantServiceType | null | undefined = null
 ) => {
   if (!merchantId) return;
   const faqs = data.faq_keypoints?.faq.map(faq => ({
@@ -278,7 +317,7 @@ export const saveServiceAsDraft = async (
         product_type: JSON.stringify(data.product_type),
         faq_keypoints: JSON.stringify(data.faq_keypoints),
         pricing: JSON.stringify(data.pricing),
-
+        subscriptions: JSON.stringify(data.subscriptions || []),
         ...(product?.imgUrl && { imageUrl: product?.imgUrl }),
         ...(product?.isDraft !== undefined && {
           isDraft: product?.isDraft,
