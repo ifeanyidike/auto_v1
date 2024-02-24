@@ -1,6 +1,6 @@
 'use client';
 import React, { type ReactNode, useState } from 'react';
-import { dmSans } from '~/font';
+import { dmSans, manRope } from '~/font';
 
 type Props = {
   paneTitle: string;
@@ -93,8 +93,8 @@ const ProductPane = (props: Props) => {
       </div>
       <div
         className={`flex flex-col py-4 px-4 gap-3 transition duration-300 ${
-          isExpanded ? 'flex h-full' : 'h-0 hidden'
-        }`}
+          manRope.className
+        } ${isExpanded ? 'flex h-full' : 'h-0 hidden'}`}
       >
         {props.children}
       </div>

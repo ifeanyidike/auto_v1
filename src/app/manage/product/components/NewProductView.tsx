@@ -11,9 +11,9 @@ import Button from '~/components/Button';
 import { type CreateMerchantServiceParamType } from '~/types/utils';
 import Spinner from '~/components/Spinner';
 import { SnackbarProvider } from 'notistack';
-import { type MerchantServiceType } from '~/app/api/merchant_service/logic';
 import {
   createService,
+  getDiscountNumCompleted,
   getFAQKeyPointsNumCompleted,
   getPricingNumCompleted,
   handleSelectMode,
@@ -29,10 +29,11 @@ import FAQList from './FAQList';
 import KeypointList from './KeypointList';
 import BookmarkIcon from '~/commons/icons/BookmarkIcon';
 import FolderIcon from '~/commons/icons/FolderIcon';
+import DiscountView from './DiscountView';
+import SubscriptionTogglerSettings from './SubscriptionTogglerSettings';
 
 type Props = {
   merchantId: string | undefined;
-  product?: MerchantServiceType | null;
 };
 
 const NewProductView = (props: Props) => {
@@ -40,7 +41,29 @@ const NewProductView = (props: Props) => {
     product_type: {} as CreateMerchantServiceParamType['product_type'],
     image: {} as CreateMerchantServiceParamType['image'],
     description: {} as CreateMerchantServiceParamType['description'],
-    pricing: {} as CreateMerchantServiceParamType['pricing'],
+    pricing: {
+      discounts: [
+        {
+          id: globalThis.crypto.randomUUID(),
+          code: '',
+          value: '',
+          type: 'monthly',
+        },
+        {
+          id: globalThis.crypto.randomUUID(),
+          code: '',
+          value: '',
+          type: 'quarterly',
+        },
+        {
+          id: globalThis.crypto.randomUUID(),
+          code: '',
+          value: '',
+          type: 'annually',
+        },
+      ],
+    } as CreateMerchantServiceParamType['pricing'],
+    subscriptions: [],
     faq_keypoints: {
       faq: [
         {
@@ -55,6 +78,7 @@ const NewProductView = (props: Props) => {
   const [saving, setSaving] = useState<boolean>(false);
   const [savingDraft, setSavingDraft] = useState<boolean>(false);
   const pricingCompleted = getPricingNumCompleted(data);
+  const discountCompleted = getDiscountNumCompleted(data);
   const faqKeyPointsCompleted = getFAQKeyPointsNumCompleted(data);
 
   return (
@@ -77,12 +101,7 @@ const NewProductView = (props: Props) => {
                 hasShadow={false}
                 bgColor="bg-content-normal/50"
                 onClick={() =>
-                  saveServiceAsDraft(
-                    props.merchantId,
-                    data,
-                    props.product,
-                    setSavingDraft
-                  )
+                  saveServiceAsDraft(props.merchantId, data, setSavingDraft)
                 }
               >
                 <div className="flex gap-2 items-center">
@@ -91,13 +110,7 @@ const NewProductView = (props: Props) => {
                   ) : (
                     <Spinner customStyle="!w-5 !h-5 !text-white" />
                   )}{' '}
-                  <span>
-                    {props.product?.isDraft
-                      ? 'Update Draft'
-                      : props.product?.isDraft === false
-                        ? 'Unpublish to Draft'
-                        : 'Save to Draft'}
-                  </span>
+                  <span>Save to Draft</span>
                 </div>
               </Button>
               <Button
@@ -109,14 +122,7 @@ const NewProductView = (props: Props) => {
                 gradientEnd="to-content-light"
                 shadowColor="shadow-content-light"
                 bgColor="bg-content-light"
-                onClick={() =>
-                  createService(
-                    props.merchantId,
-                    data,
-                    props.product,
-                    setSaving
-                  )
-                }
+                onClick={() => createService(props.merchantId, data, setSaving)}
               >
                 <div className={`flex gap-2 items-center`}>
                   {!saving ? (
@@ -124,11 +130,7 @@ const NewProductView = (props: Props) => {
                   ) : (
                     <Spinner customStyle="!w-5 !h-5 !text-white" />
                   )}
-                  <span>
-                    {!props.product?.isDraft
-                      ? 'Update Product'
-                      : 'Publish Product'}
-                  </span>
+                  <span>Publish Product</span>
                 </div>
               </Button>
             </div>
@@ -137,7 +139,7 @@ const NewProductView = (props: Props) => {
       />
 
       <div className="pt-5 mb-8 max-sm:mb-24 px-8 flex max-lg:flex-col gap-5 w-full">
-        <div className="flex sticky top-2 h-screen flex-col flex-[0.4] w-2/5 max-lg:w-full max-lg:flex-1 gap-5 order-11">
+        <div className="flex sticky top-2 flex-col flex-[0.4] w-2/5 max-lg:w-full max-lg:flex-1 gap-5 order-11">
           <div className="w-full h-72">
             <DragAndDrop
               getFiles={files => {
@@ -179,24 +181,30 @@ const NewProductView = (props: Props) => {
             </div>
 
             {data.pricing.mode === 'FIXED' ? (
-              <RenderFixedPricingView
-                product={props.product}
-                data={data}
-                setData={setData}
-              />
+              <RenderFixedPricingView data={data} setData={setData} />
             ) : data.pricing.mode === 'BRAND' ? (
-              <RenderBrandPricingView
-                product={props.product}
-                data={data}
-                setData={setData}
-              />
+              <RenderBrandPricingView data={data} setData={setData} />
             ) : data.pricing.mode === 'SUV_SEDAN' ? (
-              <RenderSuvSedanPricingView
-                product={props.product}
-                data={data}
-                setData={setData}
-              />
+              <RenderSuvSedanPricingView data={data} setData={setData} />
             ) : null}
+          </ProductPane>
+
+          <ProductPane
+            initExpanded
+            numCompleted={discountCompleted}
+            numItems={data.pricing.discounts.length}
+            paneTitle="Discounts"
+          >
+            <div className="flex flex-col gap-6">
+              {data.pricing.discounts?.map(discount => (
+                <DiscountView
+                  key={discount.id}
+                  item={discount}
+                  data={data}
+                  setData={setData}
+                />
+              ))}
+            </div>
           </ProductPane>
         </div>
         <div className="flex flex-col flex-[0.6] w-3/5 gap-5 max-lg:w-full max-lg:flex-1">
@@ -270,15 +278,20 @@ const NewProductView = (props: Props) => {
 
           <ProductPane
             initExpanded
+            numCompleted={data.subscriptions.length ? 1 : 0}
+            numItems={1}
+            paneTitle="Enable & Disable Subscriptions"
+          >
+            <SubscriptionTogglerSettings data={data} setData={setData} />
+          </ProductPane>
+
+          <ProductPane
+            initExpanded
             numCompleted={faqKeyPointsCompleted}
             numItems={2}
             paneTitle="FAQ And KeyPoints"
           >
-            <KeypointList
-              data={data}
-              setData={setData}
-              product={props.product}
-            />
+            <KeypointList data={data} setData={setData} />
 
             <FAQList data={data} setData={setData} />
           </ProductPane>

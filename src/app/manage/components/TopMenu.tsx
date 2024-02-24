@@ -37,7 +37,7 @@ const TopMenu = (props: Props) => {
   } = props;
   return (
     <div
-      className={`${customStyle} flex max-sm:justify-between gap-4 items-center text-lg px-8 py-5 font-medium w-full bg-white ${dmSans.className}`}
+      className={`${customStyle} ${dmSans.className} flex max-sm:justify-between gap-4 items-center text-lg px-8 py-5 font-medium w-full bg-white ${dmSans.className}`}
     >
       {showToggle && (
         <button

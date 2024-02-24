@@ -6,7 +6,7 @@ import BrandPricingItem from '../../components/BrandPricingItem';
 import { suv_sedan_data } from 'utilities/product';
 
 type Props = {
-  product: MerchantServiceType;
+  product?: MerchantServiceType;
   data: CreateMerchantServiceParamType;
   setData: Dispatch<SetStateAction<CreateMerchantServiceParamType>>;
 };

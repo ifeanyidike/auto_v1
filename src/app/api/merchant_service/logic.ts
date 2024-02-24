@@ -7,6 +7,8 @@ import Util from '~/server/utils';
 import FAQ from '../faq/logic';
 import ServiceKeypoint from '../service_keypoint/logic';
 import ServicePricing from '../service_pricing/logic';
+import Discount from '../discount/logic';
+import SubscriptionType from '../subscription_type/logic';
 // import Service from './service';
 
 export type MerchantServiceType = {
@@ -27,6 +29,14 @@ export type MerchantServiceType = {
         Prisma.ServicePricingDefaultArgs<DefaultArgs>
       >[]
     | null;
+  discounts:
+    | Prisma.DiscountGetPayload<Prisma.DiscountDefaultArgs<DefaultArgs>>[]
+    | null;
+  subscriptionTypes:
+    | Prisma.SubscriptionTypeGetPayload<
+        Prisma.SubscriptionTypeDefaultArgs<DefaultArgs>
+      >[]
+    | null;
   isDraft: boolean;
   updatedAt: Date;
   createdAt: Date;
@@ -44,6 +54,8 @@ export default class MerchantService extends Utility {
 
     keypoints?: string[],
     faqs?: string[],
+    discounts?: string[],
+    subscriptions?: string[],
     // faqs?: Record<'question' | 'answer', string>[],
     pricing?: CreateMerchantServiceParamType['pricing']
   ) {
@@ -75,6 +87,18 @@ export default class MerchantService extends Utility {
           ...(faqs && {
             faqs: {
               connect: faqs.map(k => ({ id: k })),
+            },
+          }),
+
+          ...(discounts && {
+            discounts: {
+              connect: discounts.map(k => ({ id: k })),
+            },
+          }),
+
+          ...(subscriptions && {
+            subscriptionTypes: {
+              connect: subscriptions.map(k => ({ id: k })),
             },
           }),
 
@@ -142,6 +166,8 @@ export default class MerchantService extends Utility {
     data: Prisma.MerchantServiceUpdateInput,
     keyPoints?: string[],
     faqs?: string[],
+    discounts?: string[],
+    subscriptions?: string[],
     pricing?: string[]
   ) {
     return this.process(async () => {
@@ -161,6 +187,19 @@ export default class MerchantService extends Utility {
               connect: faqs.map(k => ({ id: k })),
             },
           }),
+
+          ...(discounts && {
+            discounts: {
+              connect: discounts.map(k => ({ id: k })),
+            },
+          }),
+
+          ...(subscriptions && {
+            subscriptionTypes: {
+              connect: subscriptions.map(k => ({ id: k })),
+            },
+          }),
+
           ...(pricing && {
             servicePricing: {
               connect: pricing.map(k => ({ id: k })),
@@ -205,6 +244,8 @@ export default class MerchantService extends Utility {
           keyPoints: true,
           service: true,
           servicePricing: true,
+          discounts: true,
+          subscriptionTypes: true,
         },
       });
 
@@ -219,6 +260,8 @@ export default class MerchantService extends Utility {
         keyPoints: service.keyPoints,
         pricingMode: service.pricingMode,
         pricing: service.servicePricing,
+        discounts: service.discounts,
+        subscriptionTypes: service.subscriptionTypes,
         service: service.service,
         isDraft: service.isDraft,
         updatedAt: service.updatedAt,
@@ -251,6 +294,8 @@ export default class MerchantService extends Utility {
           keyPoints: true,
           service: true,
           servicePricing: true,
+          discounts: true,
+          subscriptionTypes: true,
         },
       });
 
@@ -263,6 +308,8 @@ export default class MerchantService extends Utility {
         keyPoints: service.keyPoints,
         pricingMode: service.pricingMode,
         pricing: service.servicePricing,
+        discounts: service.discounts,
+        subscriptionTypes: service.subscriptionTypes,
         service: service.service,
         isDraft: service.isDraft,
         updatedAt: service.updatedAt,
@@ -271,6 +318,27 @@ export default class MerchantService extends Utility {
 
       return { merchant: merchantData, services: formattedServices };
     });
+  }
+
+  private validateDiscounts(
+    pricing: CreateMerchantServiceParamType['pricing']
+  ) {
+    for (const discount of pricing.discounts) {
+      if (
+        (discount.value && !discount.code) ||
+        (discount.code && !discount.value)
+      ) {
+        throw new Error('Please complete the discount inputs.');
+      }
+      if (discount.value && isNaN(parseInt(discount.value))) {
+        throw new Error('The discount value must be a number');
+      }
+      if (parseInt(discount.value) < 1 || parseInt(discount.value) > 100) {
+        throw new Error(
+          'The discount value must be a positive number and between 1 and 100'
+        );
+      }
+    }
   }
 
   private validateDataBeforeSave(
@@ -320,6 +388,8 @@ export default class MerchantService extends Utility {
       }
     }
 
+    this.validateDiscounts(data.pricing);
+
     if (faqCount < 3) {
       throw new Error('At least 3 FAQs are required');
     }
@@ -331,6 +401,8 @@ export default class MerchantService extends Utility {
         'Please complete product type section before saving as draft.'
       );
     }
+
+    this.validateDiscounts(data.pricing);
   }
 
   public async handleCreate(
@@ -386,20 +458,27 @@ export default class MerchantService extends Utility {
       data.faq_keypoints.keypoints
     );
 
+    const discountArr = data.pricing.discounts?.filter(
+      d => d.code && d.type && d.value
+    );
+    let discountData;
+
+    if (discountArr.length) {
+      const discount = new Discount();
+      discountData = await discount.getOrCreateMany(discountArr);
+    }
+
+    const subscription = new SubscriptionType();
+    const subscriptionData = await subscription.getOrCreateMany(
+      data.subscriptions
+    );
+
     data_to_save = {
       ...data_to_save,
       description: data.description.description,
       isDraft: false,
       pricingMode: data.pricing.mode,
     };
-
-    // const data_to_save = {
-    //   imgUrl: uploadedImage?.url,
-    //   imageId: uploadedImage?.uploadId,
-    //   description: data.description.description,
-    //   isDraft: false,
-    //   pricingMode: data.pricing.mode,
-    // } as Prisma.MerchantServiceCreateInput;
 
     if (existingProduct) {
       let pricing: string[] = [];
@@ -416,6 +495,8 @@ export default class MerchantService extends Utility {
         data_to_save,
         keypoints,
         faqs,
+        discountData,
+        subscriptionData,
         pricing
       );
     }
@@ -426,6 +507,8 @@ export default class MerchantService extends Utility {
       data_to_save,
       keypoints,
       faqs,
+      discountData,
+      subscriptionData,
       data.pricing
     );
   }
@@ -447,12 +530,6 @@ export default class MerchantService extends Utility {
         merchantId,
       });
     }
-
-    // if (existingProduct && !existingProduct?.isDraft) {
-    //   throw new Error(
-    //     `Product "${data.product_type.service_name}" is already saved!`
-    //   );
-    // }
 
     const data_to_save = { isDraft: true } as Prisma.MerchantServiceCreateInput;
 
@@ -512,6 +589,21 @@ export default class MerchantService extends Utility {
       );
     }
 
+    let discountData;
+    const discountArr = data.pricing.discounts?.filter(
+      d => d.code && d.type && d.value
+    );
+
+    if (discountArr.length) {
+      const discount = new Discount();
+      discountData = await discount.getOrCreateMany(discountArr);
+    }
+
+    const subscription = new SubscriptionType();
+    const subscriptionData = await subscription.getOrCreateMany(
+      data.subscriptions
+    );
+
     data_to_save.description = data.description.description || '';
     data_to_save.pricingMode = data.pricing.mode || 'FIXED';
 
@@ -521,6 +613,8 @@ export default class MerchantService extends Utility {
         data_to_save,
         keypoints,
         faqs,
+        discountData,
+        subscriptionData,
         pricing
       );
     }
@@ -537,6 +631,8 @@ export default class MerchantService extends Utility {
       data_to_save,
       keypoints,
       faqs,
+      discountData,
+      subscriptionData,
       pricingData
     );
   }

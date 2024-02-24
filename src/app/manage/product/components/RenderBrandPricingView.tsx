@@ -8,7 +8,7 @@ import { brand_data } from 'utilities/product';
 import PlusIcon from '~/commons/icons/PlusIcon';
 
 type Props = {
-  product: MerchantServiceType;
+  product?: MerchantServiceType;
   data: CreateMerchantServiceParamType;
   setData: Dispatch<SetStateAction<CreateMerchantServiceParamType>>;
 };

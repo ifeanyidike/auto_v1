@@ -16,6 +16,7 @@ import {
   createService,
   disableDraftSave,
   disablePublish,
+  getDiscountNumCompleted,
   getFAQKeyPointsNumCompleted,
   getPricingNumCompleted,
   handleSelectMode,
@@ -31,6 +32,8 @@ import FAQList from './FAQList';
 import KeypointList from './KeypointList';
 import BookmarkIcon from '~/commons/icons/BookmarkIcon';
 import FolderIcon from '~/commons/icons/FolderIcon';
+import DiscountView from './DiscountView';
+import SubscriptionTogglerSettings from './SubscriptionTogglerSettings';
 
 type Props = {
   merchantId: string | undefined;
@@ -44,16 +47,9 @@ const EditProductView = (props: Props) => {
   const [saving, setSaving] = useState<boolean>(false);
   const [savingDraft, setSavingDraft] = useState<boolean>(false);
   const pricingCompleted = getPricingNumCompleted(data);
+  const discountCompleted = getDiscountNumCompleted(data);
   const faqKeyPointsCompleted = getFAQKeyPointsNumCompleted(data);
 
-  console.log(
-    'disableDraftSave(props.product, data)',
-    disableDraftSave(props.product, data)
-  );
-  console.log(
-    'disablePublish(props.product, data)',
-    disablePublish(props.product, data)
-  );
   return (
     <>
       <SnackbarProvider maxSnack={1} />
@@ -77,8 +73,8 @@ const EditProductView = (props: Props) => {
                   saveServiceAsDraft(
                     props.merchantId,
                     data,
-                    props.product,
-                    setSavingDraft
+                    setSavingDraft,
+                    props.product
                   )
                 }
                 isDisabled={disableDraftSave(props.product, data)}
@@ -111,8 +107,8 @@ const EditProductView = (props: Props) => {
                   createService(
                     props.merchantId,
                     data,
-                    props.product,
-                    setSaving
+                    setSaving,
+                    props.product
                   )
                 }
                 isDisabled={disablePublish(props.product, data)}
@@ -136,7 +132,7 @@ const EditProductView = (props: Props) => {
       />
 
       <div className="pt-5 mb-8 max-sm:mb-24 px-8 flex max-lg:flex-col gap-5 w-full">
-        <div className="flex sticky top-2 h-screen flex-col flex-[0.4] w-2/5 max-lg:w-full max-lg:flex-1 gap-5 order-11">
+        <div className="flex sticky top-2 flex-col flex-[0.4] w-2/5 max-lg:w-full max-lg:flex-1 gap-5 order-11">
           <div className="w-full h-72">
             <DragAndDrop
               defaultValue={props.product?.imgUrl}
@@ -200,6 +196,24 @@ const EditProductView = (props: Props) => {
                 setData={setData}
               />
             ) : null}
+          </ProductPane>
+
+          <ProductPane
+            initExpanded
+            numCompleted={discountCompleted}
+            numItems={data.pricing.discounts.length}
+            paneTitle="Discounts"
+          >
+            <div className="flex flex-col gap-6">
+              {data.pricing.discounts?.map(discount => (
+                <DiscountView
+                  key={discount.id}
+                  item={discount}
+                  data={data}
+                  setData={setData}
+                />
+              ))}
+            </div>
           </ProductPane>
         </div>
         <div className="flex flex-col flex-[0.6] w-3/5 gap-5 max-lg:w-full max-lg:flex-1">
@@ -275,6 +289,19 @@ const EditProductView = (props: Props) => {
                 newData.description.description = e;
                 setData(newData);
               }}
+            />
+          </ProductPane>
+
+          <ProductPane
+            initExpanded
+            numCompleted={data.subscriptions.length ? 1 : 0}
+            numItems={1}
+            paneTitle="Enable & Disable Subscriptions"
+          >
+            <SubscriptionTogglerSettings
+              product={props.product}
+              data={data}
+              setData={setData}
             />
           </ProductPane>
 
