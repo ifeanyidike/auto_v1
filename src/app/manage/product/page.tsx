@@ -70,4 +70,4 @@ const Product = async () => {
   );
 };
 
-export default Auth0.ProtectedPage(Product, { returnTo: '/manage/product' });
+export default Auth0.ProtectedPage()(Product, { returnTo: '/manage/product' });

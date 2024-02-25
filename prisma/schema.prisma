@@ -42,7 +42,7 @@ model MerchantService {
   allowOutsideWork  Boolean @default(false)
 
   pricingMode String  @default("FIXED") //Could be "BRAND" OR "SUV_SEDAN"
-  subscriptionTypes SubscriptionType[]
+  subscriptionPlans SubscriptionPlan[]
 
   keyPoints ServiceKeyPoint[]
   bookings   Booking[]
@@ -89,12 +89,14 @@ model Discount {
   updatedAt      DateTime        @updatedAt @default(now())
 }
 
-// SubscriptionType
+// SubscriptionPlan
 // Depends on MerchantService
-model SubscriptionType {
+model SubscriptionPlan {
   id                String           @id @default(cuid())
-  name              String
-  merchantService   MerchantService[]   
+  interval              String
+  code              String
+  merchantService   MerchantService[] 
+  subscription      Subscription[]  
 
   createdAt      DateTime        @default(now())
   updatedAt      DateTime        @updatedAt
@@ -141,18 +143,23 @@ model ServiceKeyPoint {
 }
 
 model Subscription {
-  id String @id @default(cuid())
+  id                String @id @default(cuid())
 
   merchantService   MerchantService @relation(fields: [merchantServiceId], references: [id])
-  merchantServiceId String        
+  merchantServiceId String    
 
-  user   User   @relation(fields: [userId], references: [id])
-  userId String @unique
+  type              SubscriptionPlan @relation(fields: [typeId], references: [id])
+  typeId            String
 
-  payment Payment?
+  user              User   @relation(fields: [userId], references: [id])
+  userId            String
+
+  payment           Payment?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  @@unique([userId, merchantServiceId])
 }
 
 model Booking {
@@ -191,7 +198,32 @@ model User {
   email     String   @unique
   imgUrl    String?
   booking   Booking?
-  subscription Subscription?
+  subscription Subscription[]
+  user         PaymentAuthorization[]
+
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt @default(now())
+}
+
+model PaymentAuthorization {
+  id                    String   @id @default(cuid())
+  userId                String   @unique
+  user                  User     @relation(fields: [userId], references: [id])
+  authorization_code    String
+  bin                   String?
+  last4                 String?
+  exp_month             String?
+  exp_year              String?
+  card_type             String?
+  channel               String?
+  bank                  String?
+  reusable              Boolean
+  brand                 String?
+  signature             String
+
+  createdAt             DateTime        @default(now())
+  updatedAt             DateTime        @updatedAt @default(now())
+
 }
 
 // enum ServiceType {

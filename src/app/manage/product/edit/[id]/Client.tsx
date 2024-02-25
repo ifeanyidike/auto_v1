@@ -39,9 +39,9 @@ const Client = (props: Props) => {
         );
       }
 
-      if (props.product?.subscriptionTypes) {
-        newData.subscriptions = props.product.subscriptionTypes.map(
-          s => s.name
+      if (props.product?.subscriptionPlans) {
+        newData.subscriptions = props.product.subscriptionPlans.map(
+          s => s.interval
         );
       }
 

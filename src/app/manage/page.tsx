@@ -92,4 +92,4 @@ const Home = async () => {
   );
 };
 
-export default Auth0.ProtectedPage(Home, { returnTo: '/manage' });
+export default Auth0.ProtectedPage()(Home, { returnTo: '/manage' });
