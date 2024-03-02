@@ -67,7 +67,9 @@ const BookingList = () => {
             <span>
               <DocumentIcon />
             </span>
-            <span>View invoice</span>
+            <Link href={`/manage/booking/bookinginvoice/${popupOpen.id}`}>
+              <span>View invoice</span>
+            </Link>
           </button>
           <button className="flex gap-2 w-full items-center p-4 hover:bg-stone-200 hover:rounded-b-xl">
             <span>
