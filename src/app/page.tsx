@@ -25,7 +25,7 @@ export default async function Home() {
         <div className="flex items-center justify-between bg-gradient-to-r from-gradient-bg-start to-gradient-bg-end px-14 py-28 max-md:flex-col">
           <div className="flex w-[50%] flex-col gap-8 max-md:w-full max-md:text-center">
             <p
-              className={`${robotoMono.className} text-8xl uppercase  text-content-light max-lg:text-6xl max-md:text-4xl `}
+              className={`${robotoMono.className} text-7xl uppercase  text-content-light max-lg:text-6xl max-md:text-4xl `}
             >
               {merchant?.caption ?? 'One-stop auto service solution.'}
             </p>

@@ -1,4 +1,3 @@
-import axios from 'axios';
 import { Utility } from './utility';
 import { type PageListResponse, type PageResponse } from '~/types/payment';
 
@@ -16,18 +15,7 @@ export class Page extends Utility {
   private endpoint = this.baseEndpoint + '/page';
 
   public async create(data: PageParam) {
-    return this.process(async () => {
-      const response = await axios.post(
-        `${this.endpoint}`,
-        { ...data },
-        {
-          headers: {
-            Authorization: `Bearer ${this.gateway_secret}`,
-          },
-        }
-      );
-      return response.data as PageResponse;
-    });
+    return (await this.post(this.endpoint, data)) as PageResponse;
   }
 
   public async update(
@@ -38,39 +26,17 @@ export class Page extends Utility {
     },
     id_or_slug: string
   ) {
-    return this.process(async () => {
-      const response = await axios.put(
-        `${this.endpoint}/${id_or_slug}`,
-        { ...data },
-        {
-          headers: {
-            Authorization: `Bearer ${this.gateway_secret}`,
-          },
-        }
-      );
-      return response.data as PageResponse;
-    });
+    return (await this.put(
+      `${this.endpoint}/${id_or_slug}`,
+      data
+    )) as PageResponse;
   }
 
   public async getOne(id_or_slug: string) {
-    return this.process(async () => {
-      const response = await axios.get(`${this.endpoint}/${id_or_slug}`, {
-        headers: {
-          Authorization: `Bearer ${this.gateway_secret}`,
-        },
-      });
-      return response.data as PageResponse;
-    });
+    return (await this.get(`${this.endpoint}/${id_or_slug}`)) as PageResponse;
   }
 
   public async list() {
-    return this.process(async () => {
-      const response = await axios.get(`${this.endpoint}`, {
-        headers: {
-          Authorization: `Bearer ${this.gateway_secret}`,
-        },
-      });
-      return response.data as PageListResponse;
-    });
+    return (await this.get(this.endpoint)) as PageListResponse;
   }
 }

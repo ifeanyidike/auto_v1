@@ -16,6 +16,6 @@ const AddNewProduct = async () => {
   );
 };
 
-export default Auth0.ProtectedPage(AddNewProduct, {
+export default Auth0.ProtectedPage()(AddNewProduct, {
   returnTo: '/manage/product/new',
 });

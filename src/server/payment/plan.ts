@@ -1,4 +1,3 @@
-import axios from 'axios';
 import {
   type PlanResponse,
   type UpdateResponse,
@@ -15,76 +14,52 @@ export class Plan extends Utility {
     name: PlanParams['name'],
     amount: PlanParams['amount']
   ) {
-    return this.process(async () => {
-      const response = await axios.post(
-        `${this.endpoint}`,
-        {
-          name,
-          amount,
-          interval,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${this.gateway_secret}`,
-          },
-        }
-      );
-      return response.data as PlanResponse;
-    });
+    return (await this.post(this.endpoint, {
+      name,
+      amount,
+      interval,
+    })) as PlanResponse;
   }
 
-  public async update(id: number, data: Partial<Omit<PlanParams, 'interval'>>) {
-    return this.process(async () => {
-      const response = await axios.put(
-        `${this.endpoint}/${id}`,
-        { ...data },
-        {
-          headers: {
-            Authorization: `Bearer ${this.gateway_secret}`,
-          },
-        }
-      );
-      return response.data as UpdateResponse;
-    });
+  public async update(
+    id_or_code: string,
+    data: Partial<Omit<PlanParams, 'interval'>>
+  ) {
+    return (await this.put(
+      `${this.endpoint}/${id_or_code}`,
+      data
+    )) as UpdateResponse;
   }
 
   public async getOne(id_or_code: string) {
-    return this.process(async () => {
-      const response = await axios.get(`${this.endpoint}/${id_or_code}`, {
-        headers: {
-          Authorization: `Bearer ${this.gateway_secret}`,
-        },
-      });
-      return response.data as PlanResponse;
-    });
+    return (await this.get(`${this.endpoint}/${id_or_code}`)) as PlanResponse;
   }
 
   public async listAll() {
-    return this.process(async () => {
-      const response = await axios.get(`${this.endpoint}`, {
-        headers: {
-          Authorization: `Bearer ${this.gateway_secret}`,
-        },
-      });
-      return response.data as PlanListResponse;
-    });
+    return (await this.get(this.endpoint)) as PlanListResponse;
   }
 
   public async createOrUpdateMany(data: PlanParams[]) {
     const plans = await this.listAll();
 
+    console.log('plans', plans, '\n');
     return await Promise.all(
       data.map(async d => {
-        const plan = plans.data.find(p => p.interval === d.interval);
+        const plan = plans.data.find(
+          p => !p.is_deleted && p.interval === d.interval && p.name === d.name
+        );
 
         if (!plan) {
           const result = await this.create(d.interval, d.name, d.amount);
-          return result.data;
+          return { ...result.data, autoBrand: d.autoBrand };
         }
         if (plan.amount !== d.amount) {
-          await this.update(plan.id, d);
+          await this.update(plan.plan_code, {
+            amount: d.amount,
+            name: d.name,
+          });
         }
-        return plan;
+        return { ...plan, autoBrand: d.autoBrand };
       })
     );
   }

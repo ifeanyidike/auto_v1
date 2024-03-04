@@ -38,7 +38,7 @@ const SubscriptionTogglerSettings = (props: Props) => {
         subscriptionData.push(k);
       }
     }
-    newData.subscriptions = subscriptionData;
+    newData.subscriptions = [...new Set(subscriptionData)];
     props.setData(newData);
   }, [states]);
 

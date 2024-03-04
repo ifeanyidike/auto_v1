@@ -21,6 +21,8 @@ export class Utility {
       return await func();
     } catch (error) {
       const errorData = error as {
+        code: string;
+        errno: number;
         message: string;
         response: {
           data: {
@@ -32,8 +34,17 @@ export class Utility {
           };
         };
       };
-      console.error('Error:', errorData.message, errorData.response.data);
-      throw new Error(errorData.response.data.message);
+      if (errorData.errno === -3008 || errorData.code === 'ENOTFOUND') {
+        throw new Error('Please connect your network and try again!');
+      }
+
+      if (
+        errorData.message?.toLowerCase()?.includes('unique constraint failed')
+      ) {
+        throw new Error('Record already added');
+      }
+
+      throw new Error(errorData.response?.data?.message);
     } finally {
     }
   }

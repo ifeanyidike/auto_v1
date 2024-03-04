@@ -4,6 +4,8 @@ import {
   type TransactionInitializationResponse,
 } from '~/types/payment';
 import PaymentAuthorization from '~/app/api/payment_authorization/logic';
+import Subscription from '~/app/api/subscription/logic';
+import SubscriptionPlan from '~/app/api/subscription_plan/logic';
 
 export class Transaction extends Utility {
   private endpoint = this.baseEndpoint + '/transaction';
@@ -41,13 +43,33 @@ export class Transaction extends Utility {
     } as TransactionDataResponse['data']['authorization'];
   }
 
-  public async verify(userId: string, reference: string) {
+  public async verify(
+    userId: string,
+    reference: string,
+    subscriptionData: Record<'merchantId' | 'serviceId', string> | null = null
+  ) {
     return await this.get(
       `${this.endpoint}/verify/${reference}`,
       async (response: TransactionDataResponse) => {
+        console.log('response', response);
         const authorization = new PaymentAuthorization();
         const authorization_data = this.formatAuthorizationData(response);
         await authorization.add(userId, authorization_data);
+
+        if (response.data.plan && subscriptionData) {
+          const subscriptionPlan = new SubscriptionPlan();
+          const plan = await subscriptionPlan.getOneByCode(response.data.plan);
+
+          if (plan) {
+            const subscription = new Subscription();
+            await subscription.create(
+              subscriptionData.serviceId,
+              subscriptionData.merchantId,
+              plan.id,
+              userId
+            );
+          }
+        }
         return response.message;
       }
     );

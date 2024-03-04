@@ -8,6 +8,7 @@ export type PlanParams = {
   interval: SubscriptionPlanDuration;
   name: string;
   amount: number;
+  autoBrand: string;
 };
 
 export type SubscriptionResponse = {
@@ -55,6 +56,8 @@ export type PlanResponseData = {
   send_invoices: boolean;
   send_sms: boolean;
   hosted_page: boolean;
+  is_deleted: boolean;
+  is_archived: boolean;
   currency: 'NGN';
   id: number;
   createdAt: Date;
@@ -153,6 +156,17 @@ export type TransactionDataResponse = {
       customer_code: string;
     };
     plan: string | null;
+    plan_object: {
+      id: number;
+      name: string;
+      plan_code: string;
+      description: string;
+      amount: number;
+      interval: 'monthly' | 'quarterly' | 'biannually' | 'annually';
+      send_invoices: boolean;
+      send_sms: boolean;
+      currency: 'NGN';
+    } | null;
     paidAt?: Date;
     createdAt?: Date;
   };

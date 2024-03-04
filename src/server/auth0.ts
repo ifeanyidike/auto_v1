@@ -4,18 +4,18 @@ import { initializeAuth0 } from '~/lib/auth0';
 import { type Auth0User } from '~/types/auth';
 
 // const { withPageAuthRequired, getSession } = auth0;
-
+type ProtectedPageType = () => (Component: any, options: any) => any;
 export default class Auth0 {
   public static async getSessionUser() {
     const headersList = headers();
     const hostname = headersList.get('host');
     const auth0 = initializeAuth0(hostname!);
 
-    const { user: auth0User } = (await auth0.getSession())!;
+    const { user: auth0User } = (await auth0.getSession()) ?? {};
     return auth0User as Auth0User;
   }
 
-  public static ProtectedPage = () => {
+  public static ProtectedPage: ProtectedPageType = () => {
     const headersList = headers();
     const hostname = headersList.get('host');
     const auth0 = initializeAuth0(hostname!);

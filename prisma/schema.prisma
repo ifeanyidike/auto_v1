@@ -7,7 +7,8 @@ generator client {
 
 datasource db {
   //   provider = "mongodb"
-  provider = "sqlite" // for production we will use "postgresql"
+  provider = "sqlite" // for production we will use "postgresql",
+  
   // NOTE: When using mysql or sqlserver, uncomment the @db.Text annotations in model Account below
   // Further reading:
   // https://next-auth.js.org/adapters/prisma#create-the-prisma-schema
@@ -25,6 +26,8 @@ model Merchant {
   caption          String // @db.VarChar(4)  // Uncomment for production
   shortDescription String // @db.VarChar(20)  //Uncomment for production
   services         MerchantService[]
+  subscriptions    Subscription[]
+  bookings         Booking[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -49,7 +52,7 @@ model MerchantService {
   subscriptions   Subscription[]
 
   service   Service? @relation(fields: [serviceId], references: [id])
-  serviceId String?  @unique
+  serviceId String?
 
   merchant   Merchant? @relation(fields: [merchantId], references: [id])
   merchantId String?
@@ -69,6 +72,7 @@ model ServicePricing {
   mode              String
   type              String?
   amount            Decimal
+  bookings          Booking[]
   
 
   createdAt      DateTime        @default(now())
@@ -83,7 +87,11 @@ model Discount {
   code              String
   value             String
   type              String
-  merchantService   MerchantService[]   
+  merchantService   MerchantService? @relation(fields: [merchantServiceId], references: [id])
+  merchantServiceId String?
+  
+  // Should be  merchantService   MerchantService? @relation(fields: [merchantServiceId], references: [id])
+  // merchantServiceId String?
 
   createdAt      DateTime        @default(now())
   updatedAt      DateTime        @updatedAt @default(now())
@@ -93,9 +101,11 @@ model Discount {
 // Depends on MerchantService
 model SubscriptionPlan {
   id                String           @id @default(cuid())
-  interval              String
+  interval          String
   code              String
-  merchantService   MerchantService[] 
+  autoBrand         String         @default("NONE")
+  merchantService   MerchantService? @relation(fields: [merchantServiceId], references: [id])
+  merchantServiceId String?
   subscription      Subscription[]  
 
   createdAt      DateTime        @default(now())
@@ -146,15 +156,18 @@ model Subscription {
   id                String @id @default(cuid())
 
   merchantService   MerchantService @relation(fields: [merchantServiceId], references: [id])
-  merchantServiceId String    
+  merchantServiceId String
 
-  type              SubscriptionPlan @relation(fields: [typeId], references: [id])
-  typeId            String
+  merchant           Merchant @relation(fields: [merchantId], references: [id])
+  merchantId         String    
 
+  plan              SubscriptionPlan @relation(fields: [planId], references: [id])
+  planId            String
+  
   user              User   @relation(fields: [userId], references: [id])
   userId            String
 
-  payment           Payment?
+  status              String
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -168,10 +181,21 @@ model Booking {
   merchantService   MerchantService @relation(fields: [merchantServiceId], references: [id])
   merchantServiceId String
 
-  user   User   @relation(fields: [userId], references: [id])
-  userId String @unique
+  merchant           Merchant @relation(fields: [merchantId], references: [id])
+  merchantId         String 
 
-  payment Payment?
+  user              User   @relation(fields: [userId], references: [id])
+  userId            String
+
+  amount            Decimal
+  items             ServicePricing[]
+  isOutsideWork     Boolean
+  location          String
+  info              String
+  paymentMethod     String
+
+  isPaid            Boolean
+  isFulfilled       Boolean @default(false)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -179,11 +203,6 @@ model Booking {
 
 model Payment {
   id             String  @id @default(cuid())
-  bookingId      String  @unique
-  booking        Booking @relation(fields: [bookingId], references: [id])
-
-  subscriptionId String  @unique
-  subscription   Subscription @relation(fields: [subscriptionId], references: [id])
 
   createdAt      DateTime @default(now())
   updatedAt      DateTime @updatedAt
@@ -197,7 +216,7 @@ model User {
   phoneNo   String?
   email     String   @unique
   imgUrl    String?
-  booking   Booking?
+  booking   Booking[]
   subscription Subscription[]
   user         PaymentAuthorization[]
 

@@ -168,7 +168,7 @@ export const disableSave = (
   let equalSubscriptions = false;
   if (product?.subscriptionPlans?.length) {
     equalSubscriptions = product?.subscriptionPlans?.every(
-      s => data.subscriptions?.includes(s.name)
+      s => data.subscriptions?.includes(s.code)
     );
   } else {
     equalSubscriptions = !data.subscriptions?.length;

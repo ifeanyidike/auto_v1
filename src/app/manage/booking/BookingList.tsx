@@ -14,8 +14,13 @@ import Calendar from '~/components/Calendar';
 import DropdownSelect from '~/components/DropdownSelect';
 import { type TablePopupData } from '../types/general';
 import Link from 'next/link';
+import { type BookingItem } from '~/app/api/booking/logic';
 
-const BookingList = () => {
+type Props = {
+  bookingList: BookingItem[];
+};
+
+const BookingList = (props: Props) => {
   const [popupOpen, togglePopup] = useState<TablePopupData | null>(null);
   const [dropdownOpen, toggleDropdown] = useState<boolean>(false);
 
@@ -29,7 +34,7 @@ const BookingList = () => {
     toggleDropdown(false);
   }) as React.MutableRefObject<HTMLDivElement | null>;
 
-  const heading = { _id: 'table_header' } as unknown as (typeof BookingData)[0];
+  const heading = { id: 'table_header' } as unknown as BookingItem;
   const renderPopup = () => {
     if (popupOpen === null) {
       return null;
@@ -116,13 +121,14 @@ const BookingList = () => {
         {dropdownOpen && renderDropdown()}
       </div>
       <div className="border-2 relative border-white rounded-xl mt-3 overflow-auto bg-white">
-        {[heading, ...BookingData].map((data, index) => (
-          <div key={data._id} className={`hover:bg-gray-100 relative`}>
+        {[heading, ...props.bookingList].map((data, index) => (
+          <div key={data.id || index} className={`hover:bg-gray-100 relative`}>
             <Bookings
-              _id={data._id}
+              placeholderId={index === 0 ? 'table_header' : index.toString()}
+              id={data.id}
               index={index}
               data={data}
-              length={BookingData.length}
+              length={props.bookingList.length}
               popupOpen={popupOpen}
               togglePopup={togglePopup}
             />

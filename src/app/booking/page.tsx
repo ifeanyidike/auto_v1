@@ -18,4 +18,4 @@ async function Booking() {
   );
 }
 
-export default Auth0.ProtectedPage(Booking, { returnTo: '/booking' });
+export default Auth0.ProtectedPage()(Booking, { returnTo: '/booking' });

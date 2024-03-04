@@ -12,6 +12,12 @@ export default class SubscriptionPlan extends Utility {
     });
   }
 
+  public async update(id: string, data: Prisma.SubscriptionPlanUpdateInput) {
+    return this.process(async () => {
+      return await this.db.subscriptionPlan.update({ where: { id }, data });
+    });
+  }
+
   public async delete(id: string) {
     return this.process(async () => {
       return await this.db.subscriptionPlan.delete({ where: { id } });
@@ -32,6 +38,12 @@ export default class SubscriptionPlan extends Utility {
     });
   }
 
+  public async getOneByCode(code: string) {
+    return this.process(async () => {
+      return await this.db.subscriptionPlan.findFirst({ where: { code } });
+    });
+  }
+
   public async getManyByData(data: Record<'code' | 'interval', string>[]) {
     return this.process(async () => {
       return await Promise.all(
@@ -44,7 +56,46 @@ export default class SubscriptionPlan extends Utility {
     });
   }
 
-  public async findItem(item: Record<'code' | 'interval', string>) {
+  public async listByMerchantService(merchantServiceId: string) {
+    return this.process(async () =>
+      this.db.subscriptionPlan.findMany({
+        where: {
+          merchantServiceId,
+        },
+        include: {
+          merchantService: {
+            include: {
+              discounts: {
+                select: {
+                  code: true,
+                  value: true,
+                  type: true,
+                },
+              },
+              servicePricing: {
+                select: {
+                  id: true,
+                  mode: true,
+                  type: true,
+                  amount: true,
+                },
+              },
+              service: {
+                select: {
+                  title: true,
+                  type: true,
+                },
+              },
+            },
+          },
+        },
+      })
+    );
+  }
+
+  public async findItem(
+    item: Record<'code' | 'interval' | 'merchantServiceId', string>
+  ) {
     return this.process(async () => {
       return await this.db.subscriptionPlan.findFirst({
         where: { ...item },
@@ -52,12 +103,32 @@ export default class SubscriptionPlan extends Utility {
     });
   }
 
-  public async getOrCreateMany(data: Record<'code' | 'interval', string>[]) {
+  public async getOrCreateMany(
+    merchantServiceId: string,
+    data: Record<'code' | 'interval' | 'autoBrand', string>[]
+  ) {
+    console.log('planList', data);
+
     return await Promise.all(
       data.map(async item => {
-        const plan = await this.findItem(item);
+        console.log({ ...item, merchantServiceId });
+        const plan = await this.findItem({
+          code: item.code,
+          interval: item.interval,
+          merchantServiceId,
+        });
+
+        if (plan) {
+          await this.update(plan.id, { autoBrand: item.autoBrand });
+        }
+
         if (plan) return plan.id;
-        const subscriptionPlan = await this.create({ ...item });
+        console.log({
+          ...item,
+          merchantServiceId,
+        });
+
+        const subscriptionPlan = await this.create(item);
         return subscriptionPlan.id;
       })
     );

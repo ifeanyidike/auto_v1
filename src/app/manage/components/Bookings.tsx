@@ -3,48 +3,69 @@ import Image from 'next/image';
 import React from 'react';
 import Table from './Table';
 import { type TablePopupData } from '../types/general';
+import { type BookingItem } from '~/app/api/booking/logic';
 
 type Props = {
-  _id: string;
+  placeholderId: string;
+  id: string;
   index: number;
   length: number;
   popupOpen: TablePopupData | null;
-  data: Record<string, string>;
+  data: BookingItem;
   togglePopup: React.Dispatch<React.SetStateAction<TablePopupData | null>>;
 };
 
 const Bookings = (props: Props) => {
+  const getBookingStatus = () => {
+    if (props.data.isPaid) return 'Fulfilled';
+
+    const targetDate = new Date().getTime();
+    const expDate =
+      new Date(props.data.createdAt).getTime() + 7 * 24 * 60 * 60 * 100;
+    if (expDate > targetDate) {
+      return 'Due';
+    }
+    return 'Overdue';
+  };
+
+  const getName = () => {
+    let name = '';
+    let firstName = props.data.user?.firstName;
+    let lastName = props.data.user?.lastName;
+
+    if (firstName) name += firstName;
+    if (!firstName && lastName) name += lastName;
+
+    if (firstName && lastName) name += ` ${lastName}`;
+
+    return name;
+  };
+
   const headers = [
     {
       _id: 'id',
       customWidth: 'w-16',
     },
     { name: 'Bookers name', grow: true },
-    { image: 'Image', customWidth: 'w-16' },
-    { title: 'Title', grow: true },
+    { title: 'Service name', grow: true },
     { category: 'Category' },
     { status: 'Status' },
     { date: 'Date', customWidth: 'w-24' },
   ];
-  const status = props.data?.status;
+  const status = getBookingStatus();
   const data = {
-    ...props.data,
-    image: (
-      <Image
-        width={25}
-        height={25}
-        src={props.data.image!}
-        alt="service image"
-      />
-    ),
+    _id: props.placeholderId,
+    name: getName(),
+    title: props.data.merchantService?.service?.title,
+    category: props.data.merchantService?.service?.type,
     status: (
       <span
         className={`flex-shrink-0 w-12px  border rounded-full px-3 py-1 ${
-          status === 'Completed'
+          status === 'Fulfilled'
             ? 'border-green-500 text-green-500'
-            : status === 'In progress'
+            : status === 'Due'
               ? 'border-red-500 text-red-500'
-              : status === 'Requested'
+              : status === 'Overdue'
                 ? 'border-purple-400 text-purple-400'
                 : 'border-pink-600 text-pink-600'
         }`}
@@ -52,10 +73,11 @@ const Bookings = (props: Props) => {
         {status}
       </span>
     ),
+    date: new Date(props.data.createdAt).toDateString(),
   };
   return (
     <Table
-      _id={props._id}
+      _id={props.id}
       index={props.index}
       data={data}
       headers={headers}

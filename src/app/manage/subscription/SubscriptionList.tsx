@@ -1,7 +1,6 @@
 'use client';
 
 import React, { useState } from 'react';
-import { useRouter, useParams } from 'next/navigation';
 import Subscription from '../components/Subscription';
 import { SubscriptionData } from '~/components/Data';
 import Link from 'next/link';
@@ -14,14 +13,14 @@ import 'react-datepicker/dist/react-datepicker.css';
 import Calendar from '~/components/Calendar';
 import DropdownSelect from '~/components/DropdownSelect';
 import { type TablePopupData } from '../types/general';
+import { type SubscriptionItem } from '~/app/api/subscription/logic';
 
-const SubscriptionList = () => {
+type Props = {
+  subscriptions: SubscriptionItem[];
+};
+const SubscriptionList = (props: Props) => {
   const [popupOpen, togglePopup] = useState<TablePopupData | null>(null);
   const [dropdownOpen, toggleDropdown] = useState<boolean>(false);
-
-  const router = useRouter();
-
-  const { id: subscriptionId } = useParams<{ id: string }>();
 
   const popupRef = useClickOutside(() => {
     togglePopup(null);
@@ -32,8 +31,8 @@ const SubscriptionList = () => {
   }) as React.MutableRefObject<HTMLDivElement | null>;
 
   const heading = {
-    _id: 'table_header',
-  } as unknown as (typeof SubscriptionData)[0];
+    id: 'table_header',
+  } as unknown as SubscriptionItem;
 
   const renderPopup = () => {
     if (popupOpen === null) {
@@ -124,16 +123,20 @@ const SubscriptionList = () => {
         {dropdownOpen && renderDropdown()}
       </div>
       <div className="border-2 relative border-white rounded-xl mt-3 overflow-auto bg-white">
-        {[heading, ...SubscriptionData].map((data, index) => (
+        {[heading, ...props.subscriptions].map((data, index) => (
           <>
-            <div key={data._id} className={`hover:bg-gray-100 relative`}>
+            <div
+              key={data.id || index}
+              className={`hover:bg-gray-100 relative`}
+            >
               <Subscription
-                _id={data._id}
+                placeholderId={index === 0 ? 'table_header' : index.toString()}
+                id={data.id}
                 index={index}
                 data={data}
                 popupOpen={popupOpen}
                 togglePopup={togglePopup}
-                length={SubscriptionData.length}
+                length={props.subscriptions.length}
               />
             </div>
           </>

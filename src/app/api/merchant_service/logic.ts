@@ -10,7 +10,10 @@ import ServicePricing from '../service_pricing/logic';
 import Discount from '../discount/logic';
 import SubscriptionPlan from '../subscription_plan/logic';
 import { Plan } from '~/server/payment/plan';
-import { type PlanParams } from '~/types/payment';
+import {
+  type SubscriptionPlanDuration,
+  type PlanParams,
+} from '~/types/payment';
 // import Service from './service';
 
 export type MerchantServiceType = {
@@ -39,6 +42,17 @@ export type MerchantServiceType = {
         Prisma.SubscriptionPlanDefaultArgs<DefaultArgs>
       >[]
     | null;
+  subscriptions?:
+    | (Prisma.SubscriptionGetPayload<
+        Prisma.SubscriptionDefaultArgs<DefaultArgs>
+      > &
+        {
+          planId: string;
+          plan: Prisma.SubscriptionPlanGetPayload<
+            Prisma.SubscriptionPlanDefaultArgs<DefaultArgs>
+          >;
+        }[])
+    | null;
   isDraft: boolean;
   updatedAt: Date;
   createdAt: Date;
@@ -56,8 +70,8 @@ export default class MerchantService extends Utility {
 
     keypoints?: string[],
     faqs?: string[],
-    discounts?: string[],
-    subscriptions?: string[],
+    discounts?: Record<'code' | 'value' | 'type', string>[],
+    planList?: { interval: SubscriptionPlanDuration; code: string }[],
     // faqs?: Record<'question' | 'answer', string>[],
     pricing?: CreateMerchantServiceParamType['pricing']
   ) {
@@ -94,14 +108,25 @@ export default class MerchantService extends Utility {
 
           ...(discounts && {
             discounts: {
-              connect: discounts.map(k => ({ id: k })),
+              create: discounts.map(({ code, value, type }) => ({
+                code,
+                value,
+                type,
+              })),
             },
           }),
 
-          ...(subscriptions && {
+          ...(planList && {
             subscriptionPlans: {
-              connect: subscriptions.map(k => ({ id: k })),
+              create: planList.map(({ code, interval }) => ({
+                code,
+                interval,
+              })),
             },
+          }),
+
+          ...(keypoints && {
+            keyPoints: { connect: keypoints.map(k => ({ id: k })) },
           }),
 
           // ...(keypoints && {
@@ -169,7 +194,8 @@ export default class MerchantService extends Utility {
     keyPoints?: string[],
     faqs?: string[],
     discounts?: string[],
-    subscriptions?: string[],
+    // subscriptions?: string[],
+    planList?: string[],
     pricing?: string[]
   ) {
     return this.process(async () => {
@@ -196,9 +222,9 @@ export default class MerchantService extends Utility {
             },
           }),
 
-          ...(subscriptions && {
+          ...(planList?.length && {
             subscriptionPlans: {
-              connect: subscriptions.map(k => ({ id: k })),
+              connect: planList.map(k => ({ id: k })),
             },
           }),
 
@@ -216,8 +242,10 @@ export default class MerchantService extends Utility {
     id?: string;
     title?: string;
     merchantId?: string;
+    userId?: string;
   }) {
     const { id, title, merchantId } = data;
+
     return this.process(async () => {
       if (!id && !title) {
         throw new Error('ID or title must be provided');
@@ -248,8 +276,19 @@ export default class MerchantService extends Utility {
           servicePricing: true,
           discounts: true,
           subscriptionPlans: true,
+          ...(data.userId && {
+            subscriptions: {
+              where: {
+                userId: data.userId,
+              },
+              include: {
+                plan: true,
+              },
+            },
+          }),
         },
       });
+      console.log('service', service);
 
       if (!service) return null;
 
@@ -264,13 +303,14 @@ export default class MerchantService extends Utility {
         pricing: service.servicePricing,
         discounts: service.discounts,
         subscriptionPlans: service.subscriptionPlans,
+        subscriptions: service.subscriptions,
         service: service.service,
         isDraft: service.isDraft,
         updatedAt: service.updatedAt,
         createdAt: service.createdAt,
       };
 
-      return formattedService as MerchantServiceType;
+      return formattedService as unknown as MerchantServiceType;
     });
   }
 
@@ -409,7 +449,6 @@ export default class MerchantService extends Utility {
 
   private formatPlanData(data: CreateMerchantServiceParamType) {
     const serviceName = data.product_type.service_name;
-
     return data.pricing.data
       .flatMap(priceData => {
         let amount = priceData.amount;
@@ -423,9 +462,13 @@ export default class MerchantService extends Utility {
 
             amount *= unit;
           }
-          const name =
-            `${serviceName} ${priceData.type} ${interval}`.toLowerCase();
-          return { interval, name, amount: Math.round(amount! * 100) };
+          const name = `${serviceName} - ${priceData.type} - ${interval}`;
+          return {
+            interval,
+            name,
+            amount: Math.round(amount! * 100),
+            autoBrand: priceData.type || 'NONE',
+          };
         });
       })
       .filter(Boolean) as PlanParams[];
@@ -468,27 +511,42 @@ export default class MerchantService extends Utility {
     return await faq.getOrCreateMany(faqData);
   }
 
-  private async handleDiscounts(data: CreateMerchantServiceParamType) {
+  private async handleDiscounts(
+    serviceId: string,
+    data: CreateMerchantServiceParamType
+  ) {
     const discountArr = data.pricing.discounts?.filter(
       d => d.code && d.type && d.value
     );
 
     if (discountArr.length) {
       const discount = new Discount();
-      return await discount.getOrCreateMany(discountArr);
+      return await discount.getOrCreateMany(serviceId, discountArr);
     }
   }
 
-  private async handleSubscriptionPlans(data: CreateMerchantServiceParamType) {
+  private async handleSubscriptionPlans(
+    data: CreateMerchantServiceParamType,
+    merchantServiceId: string | null = null
+  ) {
     const plan = new Plan();
     console.log(this.formatPlanData(data));
-    const planList = await plan.createOrUpdateMany(this.formatPlanData(data));
+
+    const planListItems = await plan.createOrUpdateMany(
+      this.formatPlanData(data)
+    );
+
+    const planList = planListItems.map(plan => ({
+      interval: plan.interval,
+      code: plan.plan_code,
+      autoBrand: plan.autoBrand,
+    }));
+
+    if (!merchantServiceId) return planList;
 
     const subscription = new SubscriptionPlan();
-    const subscriptionData = await subscription.getOrCreateMany(
-      planList.map(plan => ({ interval: plan.interval, code: plan.plan_code }))
-    );
-    return subscriptionData;
+    return await subscription.getOrCreateMany(merchantServiceId, planList);
+    // return subscriptionData;
   }
 
   public async handleCreate(
@@ -520,8 +578,10 @@ export default class MerchantService extends Utility {
       data.faq_keypoints.keypoints
     );
 
-    const discountData = await this.handleDiscounts(data);
-    const subscriptionData = await this.handleSubscriptionPlans(data);
+    const planList = await this.handleSubscriptionPlans(
+      data,
+      existingProductId
+    );
 
     data_to_save = {
       ...data_to_save,
@@ -540,13 +600,15 @@ export default class MerchantService extends Utility {
           existingProduct.id
         );
       }
+
+      const discountData = await this.handleDiscounts(existingProductId!, data);
       return await this.update(
         existingProduct.id,
         data_to_save,
         keypoints,
         faqs,
         discountData,
-        subscriptionData,
+        planList as string[],
         pricing
       );
     }
@@ -557,8 +619,8 @@ export default class MerchantService extends Utility {
       data_to_save,
       keypoints,
       faqs,
-      discountData,
-      subscriptionData,
+      data.pricing.discounts?.filter(d => d.code && d.type && d.value),
+      planList as { interval: SubscriptionPlanDuration; code: string }[],
       data.pricing
     );
   }
@@ -609,20 +671,25 @@ export default class MerchantService extends Utility {
       );
     }
 
-    const discountData = await this.handleDiscounts(data);
-    const subscriptionData = await this.handleSubscriptionPlans(data);
+    const planList = await this.handleSubscriptionPlans(
+      data,
+      existingProductId
+    );
 
     data_to_save.description = data.description.description || '';
     data_to_save.pricingMode = data.pricing.mode || 'FIXED';
 
     if (existingProduct) {
+      const discountData = await this.handleDiscounts(existingProductId!, data);
+
       return await this.update(
         existingProduct.id,
         data_to_save,
         keypoints,
         faqs,
         discountData,
-        subscriptionData,
+        planList as string[],
+        // subscriptionData,
         pricing
       );
     }
@@ -639,8 +706,8 @@ export default class MerchantService extends Utility {
       data_to_save,
       keypoints,
       faqs,
-      discountData,
-      subscriptionData,
+      data.pricing.discounts?.filter(d => d.code && d.type && d.value),
+      planList as { interval: SubscriptionPlanDuration; code: string }[],
       pricingData
     );
   }
