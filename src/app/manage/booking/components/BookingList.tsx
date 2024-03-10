@@ -16,6 +16,7 @@ import BookingDetail from './BookingDetail';
 import Button from '~/components/Button';
 import TextInput from '~/components/TextInput';
 import SearchIcon from '~/commons/icons/SearchIcon';
+import Link from 'next/link';
 
 type Props = {
   bookingList: BookingItem[];
@@ -112,7 +113,6 @@ const BookingList = (props: Props) => {
           }}
         >
           <button
-            // href={`/manage/booking/${popupOpen.id}`}
             onClick={() => {
               const item = bookingList.find(b => b.id === popupOpen.id);
               if (item) setItemDetail(item);
@@ -124,12 +124,16 @@ const BookingList = (props: Props) => {
             </span>
             <span>View details</span>
           </button>
-          <button className="flex gap-2 w-full items-center p-4 hover:bg-stone-200">
+          <Link
+            href={`/manage/booking/bookinginvoice/${popupOpen.id}`}
+            className="flex gap-2 w-full items-center p-4 hover:bg-stone-200"
+          >
             <span>
               <DocumentIcon />
             </span>
             <span>View invoice</span>
-          </button>
+          </Link>
+
           <button className="flex gap-2 w-full items-center p-4">
             <span>
               <DownloadIcon />
