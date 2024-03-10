@@ -1,5 +1,5 @@
 'use client';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import CheckIcon from '~/commons/icons/CheckIcon';
 import Button from '~/components/Button';
 import { manRope, nunitoSans } from '~/font';
@@ -8,6 +8,7 @@ import { useFormState } from 'react-dom';
 import { enqueueSnackbar } from 'notistack';
 import { SnackbarProvider } from 'notistack';
 import { useSearchParams } from 'next/navigation';
+import LoaderOne from '~/components/LoaderOne';
 
 type Props = {
   interval: string;
@@ -22,32 +23,33 @@ type Props = {
 const SubscriptionCard = (props: Props) => {
   const { focal, data } = props;
   const params = useSearchParams();
+  const [loading, setLoading] = useState<boolean>(false);
 
-  const initialState = {
-    message: '',
-    amount: props.amount,
-    planCode: props.planCode,
-    serviceId: params.get('id'),
-    authorizationUrl: '',
-  };
-  const [state, formAction] = useFormState(subscribeUserToPlan, initialState);
+  // const initialState = {
+  //   message: '',
+  //   amount: props.amount,
+  //   planCode: props.planCode,
+  //   serviceId: params.get('id'),
+  //   authorizationUrl: '',
+  // };
+  // const [state, formAction] = useFormState(subscribeUserToPlan, initialState);
 
-  useEffect(() => {
-    if (!state.authorizationUrl) return;
-    window.open(state.authorizationUrl);
-  }, [state.authorizationUrl]);
+  // useEffect(() => {
+  //   if (!state.authorizationUrl) return;
+  //   window.open(state.authorizationUrl);
+  // }, [state.authorizationUrl]);
 
-  useEffect(() => {
-    if (!state.message) return;
-    enqueueSnackbar(state.message, {
-      variant: 'error',
-    });
-  }, [state.message]);
+  // useEffect(() => {
+  //   if (!state.message) return;
+  //   enqueueSnackbar(state.message, {
+  //     variant: 'error',
+  //   });
+  // }, [state.message]);
   return (
     <>
       <SnackbarProvider maxSnack={1} />
-      <form
-        action={formAction}
+      {loading && <LoaderOne />}
+      <div
         className={`${manRope.className} rounded-xl flex flex-col ${
           focal ? 'bg-stone-200' : 'bg-slate-300'
         } w-[400px] px-6 py-8`}
@@ -91,11 +93,36 @@ const SubscriptionCard = (props: Props) => {
             width="w-full"
             radius="rounded-xl"
             bgColor={`${focal ? 'bg-neutral-800' : 'bg-indigo-900'}`}
+            onClick={async () => {
+              setLoading(true);
+              const result = await subscribeUserToPlan({
+                amount: props.amount,
+                planCode: props.planCode,
+                serviceId: params.get('id'),
+              });
+              if (result.error) {
+                enqueueSnackbar(result.error, {
+                  variant: 'error',
+                });
+              }
+
+              if (result.message) {
+                enqueueSnackbar(result.message, {
+                  variant: 'success',
+                });
+              }
+
+              if (result.authorizationUrl) {
+                window.location.href = result.authorizationUrl;
+              }
+
+              setLoading(false);
+            }}
           >
             Get started
           </Button>
         </div>
-      </form>
+      </div>
     </>
   );
 };

@@ -1,5 +1,4 @@
 'use client';
-import Image from 'next/image';
 import React from 'react';
 import Table from './Table';
 import { type TablePopupData } from '../types/general';
@@ -48,8 +47,9 @@ const Bookings = (props: Props) => {
     },
     { name: 'Bookers name', grow: true },
     { title: 'Service name', grow: true },
-    { category: 'Category' },
-    { status: 'Status' },
+    { isPaid: 'Is Paid' },
+    { isFulfilled: 'Completed' },
+    { amount: 'Amount', customWidth: 'w-28' },
     { date: 'Date', customWidth: 'w-24' },
   ];
   const status = getBookingStatus();
@@ -57,7 +57,21 @@ const Bookings = (props: Props) => {
     _id: props.placeholderId,
     name: getName(),
     title: props.data.merchantService?.service?.title,
-    category: props.data.merchantService?.service?.type,
+    amount: `₦${props.data.amount}`,
+    isPaid: (
+      <span
+        className={`flex-shrink-0 w-14px  border rounded-full px-3 py-[2px] ${
+          props.data.isPaid
+            ? 'border-green-700 text-green-700'
+            : 'border-red-500 text-red-500'
+        }`}
+      >
+        {props.data.isPaid ? 'Paid' : 'Not Paid'}
+      </span>
+    ),
+    isFulfilled: (
+      <span>{props.data.isFullfilled ? 'Completed' : 'Not Completed'}</span>
+    ),
     status: (
       <span
         className={`flex-shrink-0 w-12px  border rounded-full px-3 py-1 ${
@@ -73,7 +87,7 @@ const Bookings = (props: Props) => {
         {status}
       </span>
     ),
-    date: new Date(props.data.createdAt).toDateString(),
+    date: new Date(props.data.createdAt).toLocaleDateString(),
   };
   return (
     <Table

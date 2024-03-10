@@ -14,6 +14,12 @@ export type BookingItem = {
       | null;
     pricingMode: string;
   };
+  amount: number;
+  location: string;
+  isFullfilled: boolean;
+  isOutsideWork: boolean;
+  info: string;
+  paymentMode: string;
   user: Prisma.UserGetPayload<Prisma.UserDefaultArgs<DefaultArgs>> | null;
   isPaid: boolean;
   createdAt: Date;
@@ -23,10 +29,20 @@ export default class Booking extends Utility {
   constructor() {
     super();
   }
-  public async create(serviceId: string, merchantId: string, userId: string) {
+  public async create(
+    data: Omit<
+      Prisma.BookingCreateInput,
+      'merchant' | 'merchantService' | 'user'
+    >,
+    serviceId: string,
+    merchantId: string,
+    pricingItems: string[],
+    userId: string
+  ) {
     return this.process(async () => {
       return await this.db.booking.create({
         data: {
+          ...data,
           merchantService: {
             connect: { id: serviceId },
           },
@@ -37,20 +53,23 @@ export default class Booking extends Utility {
           user: {
             connect: { id: userId },
           },
-          isPaid: false,
+
+          items: {
+            connect: pricingItems.map(k => ({ id: k })),
+          },
         },
       });
     });
   }
 
-  public async update(id: string, isPaid: boolean) {
+  public async update(id: string, data: Prisma.BookingUpdateInput) {
     return this.process(async () => {
       return await this.db.booking.update({
         where: {
           id,
         },
         data: {
-          isPaid,
+          ...data,
         },
       });
     });
@@ -93,7 +112,13 @@ export default class Booking extends Utility {
             id: d.id,
             merchantService: d.merchantService,
             user: d.user,
+            amount: d.amount.toNumber(),
             isPaid: d.isPaid,
+            location: d.location,
+            isFullfilled: d.isFulfilled,
+            isOutsideWork: d.isOutsideWork,
+            info: d.info,
+            paymentMode: d.paymentMode,
             createdAt: d.createdAt,
             updatedAt: d.updatedAt,
           }) as BookingItem
@@ -128,9 +153,16 @@ export default class Booking extends Utility {
             merchantService: d.merchantService,
             merchant: d.merchant,
             isPaid: d.isPaid,
+            amount: d.amount.toNumber(),
+            location: d.location,
+            isFullfilled: d.isFulfilled,
+            isOutsideWork: d.isOutsideWork,
+            info: d.info,
+            user: d.user,
+            paymentMode: d.paymentMode,
             createdAt: d.createdAt,
             updatedAt: d.updatedAt,
-          }) as Omit<BookingItem, 'user'> & {
+          }) as BookingItem & {
             merchant: Prisma.MerchantGetPayload<
               Prisma.MerchantDefaultArgs<DefaultArgs>
             > | null;
@@ -168,6 +200,12 @@ export default class Booking extends Utility {
             id: d.id,
             merchantService: d.merchantService,
             isPaid: d.isPaid,
+            amount: d.amount.toNumber(),
+            location: d.location,
+            isFullfilled: d.isFulfilled,
+            isOutsideWork: d.isOutsideWork,
+            info: d.info,
+            paymentMode: d.paymentMode,
             createdAt: d.createdAt,
             updatedAt: d.updatedAt,
           }) as Omit<BookingItem, 'user'>

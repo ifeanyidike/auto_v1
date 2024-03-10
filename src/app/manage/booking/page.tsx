@@ -1,6 +1,6 @@
 import React from 'react';
 import Auth0 from '~/server/auth0';
-import BookingList from './BookingList';
+import BookingList from './components/BookingList';
 import TopMenu from '../components/TopMenu';
 import BackToPage from '../components/BackToPage';
 import Util from '~/server/utils';

@@ -1,6 +1,48 @@
 import { type Prisma } from '@prisma/client';
 import Utility from '../../../server/utility';
 
+export type PlanByMerchant = Prisma.SubscriptionPlanGetPayload<{
+  include: {
+    subscription: {
+      include: {
+        merchantService: {
+          include: {
+            service: true;
+            discounts: true;
+          };
+        };
+        plan: true;
+        fufillments: true;
+        user: true;
+      };
+    };
+    merchantService: {
+      include: {
+        discounts: {
+          select: {
+            code: true;
+            value: true;
+            type: true;
+          };
+        };
+        servicePricing: {
+          select: {
+            id: true;
+            mode: true;
+            type: true;
+            amount: true;
+          };
+        };
+        service: {
+          select: {
+            title: true;
+            type: true;
+          };
+        };
+      };
+    };
+  };
+}>;
 export default class SubscriptionPlan extends Utility {
   constructor() {
     super();
@@ -91,6 +133,58 @@ export default class SubscriptionPlan extends Utility {
         },
       })
     );
+  }
+
+  public async listByMerchant(merchantId: string) {
+    return this.process(async () => {
+      const data = await this.db.subscriptionPlan.findMany({
+        where: {
+          merchantId,
+        },
+        include: {
+          subscription: {
+            include: {
+              merchantService: {
+                include: {
+                  service: true,
+                  discounts: true,
+                },
+              },
+              user: true,
+              plan: true,
+              fufillments: true,
+            },
+          },
+          merchantService: {
+            include: {
+              discounts: {
+                select: {
+                  code: true,
+                  value: true,
+                  type: true,
+                },
+              },
+              servicePricing: {
+                select: {
+                  id: true,
+                  mode: true,
+                  type: true,
+                  amount: true,
+                },
+              },
+              service: {
+                select: {
+                  title: true,
+                  type: true,
+                },
+              },
+            },
+          },
+        },
+      });
+
+      return data;
+    });
   }
 
   public async findItem(

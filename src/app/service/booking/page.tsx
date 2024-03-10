@@ -3,6 +3,9 @@ import React from 'react';
 import MerchantService from '~/app/api/merchant_service/logic';
 import Auth0 from '~/server/auth0';
 import DataView from './components/DataView';
+import User from '~/app/api/user/logic';
+import { type Prisma } from '@prisma/client';
+import { type DefaultArgs } from '@prisma/client/runtime/library';
 
 const Booking = async ({
   searchParams,
@@ -31,12 +34,27 @@ const Booking = async ({
     );
   }
 
+  const sessionUser = await Auth0.getSessionUser();
+  const userClient = new User();
+  const user = await userClient.getOne({ email: sessionUser.email }, [
+    'authorization',
+  ]);
+
+  const authorizations = (user as any)
+    .authorization as Prisma.PaymentAuthorizationGetPayload<
+    Prisma.PaymentAuthorizationDefaultArgs<DefaultArgs>
+  >[];
+
   return (
     <div className="flex flex-col gap-2 items-center mx-auto my-8 max-w-[700px] shadow shadow-white">
       <h2 className="text-2xl font-semibold">
         Booking for {merchantService.service?.title}
       </h2>
-      <DataView merchantService={merchantService} />
+      <DataView
+        authorizations={authorizations}
+        merchantService={merchantService}
+        userId={user?.id!}
+      />
     </div>
   );
 };

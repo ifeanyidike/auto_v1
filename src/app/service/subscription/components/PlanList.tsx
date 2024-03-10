@@ -59,7 +59,7 @@ const PlanList = (props: Props) => {
   return (
     <div>
       <p
-        className={`${robotoMono.className} font-mono text-center mt-16 text-5xl`}
+        className={`${robotoMono.className} font-mono text-center mt-16 text-3xl`}
       >
         Choose the plan that works for you!
       </p>

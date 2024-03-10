@@ -73,6 +73,12 @@ export default class PaymentAuthorization extends Utility {
     });
   }
 
+  public async findByUser(userId: string) {
+    return this.process(async () => {
+      return await this.db.paymentAuthorization.findMany({ where: { userId } });
+    });
+  }
+
   public async findOneBySignature(signature: string) {
     return this.process(async () => {
       return await this.db.paymentAuthorization.findFirst({

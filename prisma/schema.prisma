@@ -28,6 +28,7 @@ model Merchant {
   services         MerchantService[]
   subscriptions    Subscription[]
   bookings         Booking[]
+  subscriptionPlans SubscriptionPlan[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -106,6 +107,9 @@ model SubscriptionPlan {
   autoBrand         String         @default("NONE")
   merchantService   MerchantService? @relation(fields: [merchantServiceId], references: [id])
   merchantServiceId String?
+
+  merchant          Merchant? @relation(fields: [merchantServiceId], references: [id])
+  merchantId        String?
   subscription      Subscription[]  
 
   createdAt      DateTime        @default(now())
@@ -167,12 +171,30 @@ model Subscription {
   user              User   @relation(fields: [userId], references: [id])
   userId            String
 
+  fufillments        SubscriptionFulfillment[]
+
   status              String
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   @@unique([userId, merchantServiceId])
+}
+
+model SubscriptionFulfillment {
+  id                String @id @default(cuid())
+  subscription      Subscription @relation(fields: [subscriptionId], references: [id])
+  subscriptionId    String
+
+  nextCycleStarts   DateTime
+  isPaid            Boolean     
+  isFulfilled       Boolean     @default(false)
+  paidOn            DateTime?
+  fulfilledOn       DateTime?
+  amountPaid        Decimal     @default(0)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt          
 }
 
 model Booking {
@@ -190,11 +212,11 @@ model Booking {
   amount            Decimal
   items             ServicePricing[]
   isOutsideWork     Boolean
-  location          String
-  info              String
-  paymentMethod     String
+  location          String?
+  info              String?
+  paymentMode       String @default("online")
 
-  isPaid            Boolean
+  isPaid            Boolean @default(false)
   isFulfilled       Boolean @default(false)
 
   createdAt DateTime @default(now())
@@ -218,7 +240,7 @@ model User {
   imgUrl    String?
   booking   Booking[]
   subscription Subscription[]
-  user         PaymentAuthorization[]
+  authorization         PaymentAuthorization[]
 
   createdAt      DateTime        @default(now())
   updatedAt      DateTime        @updatedAt @default(now())

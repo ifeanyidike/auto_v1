@@ -4,17 +4,23 @@ import { headers } from 'next/headers';
 import Auth0 from '~/server/auth0';
 import { Transaction } from '~/server/payment/transaction';
 
-export async function subscribeUserToPlan(state: any, _: FormData) {
+type Data = {
+  amount: number;
+  planCode: string;
+  serviceId: string | null;
+};
+export async function subscribeUserToPlan(state: Data) {
   const headersList = headers();
   const hostname = headersList.get('host');
   const user = await Auth0.getSessionUser();
+  console.log('state', state);
 
   const callbackUrl = `http://${hostname}/service/subscription/confirm?service=${state.serviceId}&user_email=${user.email}`;
   try {
     const transaction = new Transaction();
     const newTransaction = await transaction.initialize(
       user.email,
-      state.amount,
+      Math.round(state.amount) * 100,
       state.planCode,
       callbackUrl
     );
@@ -25,7 +31,7 @@ export async function subscribeUserToPlan(state: any, _: FormData) {
     };
   } catch (error: any) {
     return {
-      message: error.message,
+      error: error.message,
     };
   }
 }

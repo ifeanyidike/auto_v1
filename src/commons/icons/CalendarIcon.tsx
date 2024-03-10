@@ -1,23 +1,21 @@
 import React from 'react';
 type Props = {
-  width?: string;
-  height?: string;
   viewBox?: string;
   strokeColor?: string;
   fillColor?: string;
   strokeWidth?: string;
+  classNames?: string;
 };
 const CalendarIcon = (props: Props) => {
   const {
-    width = '20',
-    height = '22',
+    classNames = 'w-5 h-[22px]',
     viewBox = '0 0 20 22',
     strokeColor = '#212121',
     strokeWidth = '1.5',
     fillColor = 'none',
   } = props;
   return (
-    <svg width={width} height={height} viewBox={viewBox} fill={fillColor}>
+    <svg className={classNames} viewBox={viewBox} fill={fillColor}>
       <path
         d="M1.09253 8.40421H18.9165"
         stroke={strokeColor}

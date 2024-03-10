@@ -7,3 +7,8 @@ export enum MenuEnum {
   fund = 'Funds',
   account = 'Account',
 }
+
+export enum BookingSubMenu {
+  bookings = 'Bookings',
+  bookers = 'Bookers',
+}

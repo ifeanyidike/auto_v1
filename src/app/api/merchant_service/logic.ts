@@ -53,6 +53,9 @@ export type MerchantServiceType = {
           >;
         }[])
     | null;
+  bookings?:
+    | Prisma.BookingGetPayload<Prisma.BookingDefaultArgs<DefaultArgs>>[]
+    | null;
   isDraft: boolean;
   updatedAt: Date;
   createdAt: Date;
@@ -75,11 +78,6 @@ export default class MerchantService extends Utility {
     // faqs?: Record<'question' | 'answer', string>[],
     pricing?: CreateMerchantServiceParamType['pricing']
   ) {
-    // const serviceInstance = new Service({ title: parent_data.title });
-    // const service = await serviceInstance.getOne();
-    // if (!service) {
-    //   await serviceInstance.create(parent_data);
-    // }
     return this.process(async () => {
       return await this.db.merchantService.create({
         data: {
@@ -129,12 +127,6 @@ export default class MerchantService extends Utility {
             keyPoints: { connect: keypoints.map(k => ({ id: k })) },
           }),
 
-          // ...(keypoints && {
-          //   keyPoints: {
-          //     connect: keypoints.map(k => ({ id: k })),
-          //   },
-          // }),
-
           ...(pricing && {
             servicePricing: {
               create: pricing.data.map(({ type, amount }) => ({
@@ -144,39 +136,6 @@ export default class MerchantService extends Utility {
               })),
             },
           }),
-
-          // keyPoints: {
-          //   connectOrCreate: (keypoints ?? []).map(point => {
-          //     return {
-          //       where: { point },
-          //       create: { point },
-          //     };
-          //   }),
-          // },
-
-          // ...(faqs && {
-          //   faqs: {
-          //     connectOrCreate: faqs.map(({ question, answer }) => ({
-          //       where: { question, answer },
-          //       create: { question, answer },
-          //     })) as Prisma.FAQCreateOrConnectWithoutMerchantServiceInput[],
-          //   },
-          // }),
-          // ...(pricing && {
-          //   servicePricing: {
-          //     connectOrCreate: pricing.data.map(({ type, amount }) => ({
-          //       where: {
-          //         mode: pricing.mode,
-          //         type,
-          //       },
-          //       create: {
-          //         mode: pricing.mode,
-          //         type,
-          //         amount,
-          //       },
-          //     })) as Prisma.ServicePricingCreateOrConnectWithoutMerchantServiceInput[],
-          //   },
-          // }),
         },
       });
     });
@@ -286,9 +245,15 @@ export default class MerchantService extends Utility {
               },
             },
           }),
+          ...(data.userId && {
+            bookings: {
+              where: {
+                userId: data.userId,
+              },
+            },
+          }),
         },
       });
-      console.log('service', service);
 
       if (!service) return null;
 
@@ -304,6 +269,7 @@ export default class MerchantService extends Utility {
         discounts: service.discounts,
         subscriptionPlans: service.subscriptionPlans,
         subscriptions: service.subscriptions,
+        bookings: service.bookings,
         service: service.service,
         isDraft: service.isDraft,
         updatedAt: service.updatedAt,
@@ -451,14 +417,16 @@ export default class MerchantService extends Utility {
     const serviceName = data.product_type.service_name;
     return data.pricing.data
       .flatMap(priceData => {
-        let amount = priceData.amount;
-        if (!amount) return;
+        if (!priceData.amount) return;
         return data.subscriptions.map(interval => {
           const discount = data.pricing.discounts.find(
             d => d.type === interval
           );
-          if (discount?.value && amount) {
+          let amount = priceData.amount!;
+
+          if (discount?.value && priceData.amount) {
             const unit = 1 - parseFloat(discount.value) / 100;
+            console.log('unit =>', unit);
 
             amount *= unit;
           }

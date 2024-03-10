@@ -34,42 +34,22 @@ const Subscription = (props: Props) => {
     },
     { name: 'Subscriber', grow: true },
     { serviceName: 'Service name', grow: true },
-    { serviceType: 'Service type', grow: true },
+    { serviceType: 'Service type' },
     { interval: 'Interval', customWidth: 'w-24' },
-    { plan_code: 'Plan Code', customWidth: 'w-32' },
+    { plan_code: 'Plan Code', customWidth: 'w-40' },
     { status: 'Status', customWidth: 'w-24' },
-    { date: 'Date', customWidth: 'w-32' },
+    { date: 'Date', customWidth: 'w-24' },
   ];
-
-  const status = props.data?.status;
-  // const data = {
-  //   ...props.data,
-  //   status: (
-  //     <span
-  //       className={`flex-shrink-0 w-12px  border rounded-full px-3 py-1 ${
-  //         status === 'Completed'
-  //           ? 'bg-green-100 text-green-600'
-  //           : status === 'In Progress'
-  //             ? 'bg-pink-100 text-pink-600'
-  //             : status === 'Requested'
-  //               ? 'bg-purple-100 text-purple-600'
-  //               : 'bg-red-100 text-pink-600'
-  //       }`}
-  //     >
-  //       {status}
-  //     </span>
-  //   ),
-  // };
 
   const data = {
     _id: props.placeholderId,
     name: getName(),
     serviceName: items.merchantService?.service?.title,
     serviceType: items.merchantService?.service?.type,
-    interval: items.plan?.interval,
+    interval: <span className="uppercase text-xs">{items.plan?.interval}</span>,
     plan_code: items.plan?.code,
     status: items.status,
-    date: new Date(items.createdAt).toString(),
+    date: new Date(items.createdAt).toLocaleDateString(),
   };
 
   return (

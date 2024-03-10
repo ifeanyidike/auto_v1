@@ -3,6 +3,8 @@ import Merchant from '~/app/api/merchant/logic';
 import { v2 as cloudinary } from 'cloudinary';
 import path from 'path';
 import DatauriParser from 'datauri/parser';
+import User from '~/app/api/user/logic';
+import { Transaction } from './payment/transaction';
 
 cloudinary.config({
   cloud_name: process.env.CLOUD_NAME,
@@ -132,5 +134,38 @@ export default class Util {
       uploadId: response.public_id,
       url: response.url,
     };
+  }
+
+  public async verifyTransaction(
+    reference: string | undefined,
+    email: string | undefined,
+    serviceId: string | undefined
+  ) {
+    const { slug } = Util.getRouteType();
+    const merchant = new Merchant();
+    const merchantData = await merchant.getOne({ slug });
+    const user = new User();
+    const userData = await user.getOne({ email });
+
+    if (reference && email && serviceId && merchantData?.id) {
+      if (userData?.id) {
+        const transaction = new Transaction();
+        const subscriptionData = {
+          merchantId: merchantData.id,
+          serviceId,
+        };
+        const verification = await transaction.verify(
+          userData.id,
+          reference,
+          subscriptionData
+        );
+        return {
+          confirmation: verification.status,
+          userId: userData.id,
+        };
+      }
+    }
+
+    return { confirmation: false, userId: userData?.id };
   }
 }

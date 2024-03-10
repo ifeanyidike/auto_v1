@@ -1,6 +1,6 @@
 import React from 'react';
 import Auth0 from '~/server/auth0';
-import SubscriptionList from './SubscriptionList';
+import SubscriptionList from './components/SubscriptionList';
 import TopMenu from '../components/TopMenu';
 import BackToPage from '../components/BackToPage';
 import Subscription from '~/app/api/subscription/logic';

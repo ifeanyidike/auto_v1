@@ -2,25 +2,42 @@ import { type Prisma } from '@prisma/client';
 import Utility from '../../../server/utility';
 import { type DefaultArgs } from '@prisma/client/runtime/library';
 
-export type SubscriptionItem = {
-  id: string;
-  merchantService: {
-    service: Prisma.ServiceGetPayload<
-      Prisma.ServiceDefaultArgs<DefaultArgs>
-    > | null;
-    discounts:
-      | Prisma.DiscountGetPayload<Prisma.DiscountDefaultArgs<DefaultArgs>>[]
-      | null;
-    pricingMode: string;
+// export type SubscriptionItem = {
+//   id: string;
+//   merchantService: {
+//     service: Prisma.ServiceGetPayload<
+//       Prisma.ServiceDefaultArgs<DefaultArgs>
+//     > | null;
+//     discounts:
+//       | Prisma.DiscountGetPayload<Prisma.DiscountDefaultArgs<DefaultArgs>>[]
+//       | null;
+//     pricingMode: string;
+//   };
+//   user: Prisma.UserGetPayload<Prisma.UserDefaultArgs<DefaultArgs>> | null;
+//   plan: Prisma.SubscriptionPlanGetPayload<
+//     Prisma.SubscriptionPlanDefaultArgs<DefaultArgs>
+//   > | null;
+//   fulfillments: Prisma.SubscriptionFulfillmentGetPayload<
+//     Prisma.SubscriptionFulfillmentDefaultArgs<DefaultArgs>
+//   >[];
+//   status: string;
+//   createdAt: Date;
+//   updatedAt: Date;
+// };
+
+export type SubscriptionItem = Prisma.SubscriptionGetPayload<{
+  include: {
+    merchantService: {
+      include: {
+        service: true;
+        discounts: true;
+      };
+    };
+    plan: true;
+    user: true;
+    fufillments: true;
   };
-  user: Prisma.UserGetPayload<Prisma.UserDefaultArgs<DefaultArgs>> | null;
-  plan: Prisma.SubscriptionPlanGetPayload<
-    Prisma.SubscriptionPlanDefaultArgs<DefaultArgs>
-  > | null;
-  status: string;
-  createdAt: Date;
-  updatedAt: Date;
-};
+}>;
 export default class Subscription extends Utility {
   constructor() {
     super();
@@ -47,6 +64,19 @@ export default class Subscription extends Utility {
             connect: { id: userId },
           },
           status: 'active',
+        },
+      });
+    });
+  }
+
+  public async update(id: string, data: Prisma.SubscriptionUpdateInput) {
+    return this.process(async () => {
+      return await this.db.subscription.update({
+        where: {
+          id,
+        },
+        data: {
+          ...data,
         },
       });
     });
@@ -85,25 +115,11 @@ export default class Subscription extends Utility {
           },
           plan: true,
           user: true,
+          fufillments: true,
         },
       });
 
-      return data.map(
-        d =>
-          ({
-            id: d.id,
-            merchantService: {
-              service: d.merchantService.service,
-              discounts: d.merchantService.discounts,
-              pricingMode: d.merchantService.pricingMode,
-            },
-            user: d.user,
-            plan: d.plan,
-            status: d.status,
-            createdAt: d.createdAt,
-            updatedAt: d.updatedAt,
-          }) as SubscriptionItem
-      );
+      return data;
     });
   }
 
@@ -172,20 +188,7 @@ export default class Subscription extends Utility {
         },
       });
 
-      return data.map(
-        d =>
-          ({
-            id: d.id,
-            merchantService: {
-              service: d.merchantService.service,
-              discounts: d.merchantService.discounts,
-              pricingMode: d.merchantService.pricingMode,
-            },
-            status: d.status,
-            createdAt: d.createdAt,
-            updatedAt: d.updatedAt,
-          }) as Omit<SubscriptionItem, 'user'>
-      );
+      return data as Omit<SubscriptionItem, 'user'>[];
     });
   }
 }
