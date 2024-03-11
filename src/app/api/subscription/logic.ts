@@ -2,29 +2,6 @@ import { type Prisma } from '@prisma/client';
 import Utility from '../../../server/utility';
 import { type DefaultArgs } from '@prisma/client/runtime/library';
 
-// export type SubscriptionItem = {
-//   id: string;
-//   merchantService: {
-//     service: Prisma.ServiceGetPayload<
-//       Prisma.ServiceDefaultArgs<DefaultArgs>
-//     > | null;
-//     discounts:
-//       | Prisma.DiscountGetPayload<Prisma.DiscountDefaultArgs<DefaultArgs>>[]
-//       | null;
-//     pricingMode: string;
-//   };
-//   user: Prisma.UserGetPayload<Prisma.UserDefaultArgs<DefaultArgs>> | null;
-//   plan: Prisma.SubscriptionPlanGetPayload<
-//     Prisma.SubscriptionPlanDefaultArgs<DefaultArgs>
-//   > | null;
-//   fulfillments: Prisma.SubscriptionFulfillmentGetPayload<
-//     Prisma.SubscriptionFulfillmentDefaultArgs<DefaultArgs>
-//   >[];
-//   status: string;
-//   createdAt: Date;
-//   updatedAt: Date;
-// };
-
 export type SubscriptionItem = Prisma.SubscriptionGetPayload<{
   include: {
     merchantService: {
