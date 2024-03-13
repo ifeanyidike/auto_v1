@@ -4,12 +4,13 @@ import React from 'react';
 type Props = {
   value: boolean;
   setToggled: () => void;
+  classNames?: string;
 };
 const Toggler = (props: Props) => {
-  const { setToggled, value } = props;
+  const { setToggled, value, classNames = '' } = props;
   return (
     <button
-      className={`text-sm w-11 transition duration-300 ease-in-out relative h-[18px] ${
+      className={`text-sm w-11 transition duration-300  ease-in-out relative h-[18px] ${classNames} ${
         value ? 'bg-green-600' : 'bg-stone-400'
       } rounded-full p-[1px] cursor-pointer`}
       onClick={() => {

@@ -10,6 +10,7 @@ type Data<T> = {
 
 type Props<T> = {
   data: Data<T>[];
+  getValue?: (value: T) => void;
 };
 
 const DropdownSelect = <T,>(props: Props<T>) => {
@@ -31,12 +32,13 @@ const DropdownSelect = <T,>(props: Props<T>) => {
         </span>
       </button>
       {openDropdown && (
-        <div className="absolute top-11 border border-stone-200 shadow-md bg-white w-full rounded-xl">
+        <div className="absolute z-50 top-11 border border-stone-200 shadow-md bg-white w-full rounded-xl">
           {props.data.map((item, index) => (
             <div
               onClick={() => {
                 setSelected(item);
                 toggleDropdown(false);
+                if (props.getValue) props.getValue(item.value);
               }}
               className="flex flex-col w-full px-4 py-3 text-start hover:bg-cyanBlue"
               key={index}

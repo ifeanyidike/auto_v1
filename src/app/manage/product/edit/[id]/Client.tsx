@@ -14,7 +14,6 @@ type Props = {
 const Client = (props: Props) => {
   const [data, setData] =
     useState<CreateMerchantServiceParamType>(initProductData);
-
   useEffect(() => {
     if (!props.product) return;
     if (props.product) {
@@ -39,10 +38,10 @@ const Client = (props: Props) => {
         );
       }
 
-      if (props.product?.subscriptionTypes) {
-        newData.subscriptions = props.product.subscriptionTypes.map(
-          s => s.name
-        );
+      if (props.product?.subscriptionPlans) {
+        const intervals = props.product.subscriptionPlans.map(s => s.interval);
+
+        newData.subscriptions = [...new Set(intervals)];
       }
 
       if (props.product?.discounts) {

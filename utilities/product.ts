@@ -166,9 +166,9 @@ export const disableSave = (
   }
 
   let equalSubscriptions = false;
-  if (product?.subscriptionTypes?.length) {
-    equalSubscriptions = product?.subscriptionTypes?.every(
-      s => data.subscriptions?.includes(s.name)
+  if (product?.subscriptionPlans?.length) {
+    equalSubscriptions = product?.subscriptionPlans?.every(
+      s => data.subscriptions?.includes(s.interval)
     );
   } else {
     equalSubscriptions = !data.subscriptions?.length;

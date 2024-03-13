@@ -16,25 +16,18 @@ type Props = {
 };
 const SubscriptionTogglerSettings = (props: Props) => {
   const subscriptions =
-    props.product?.subscriptionTypes?.map(s => s.name) ?? [];
+    props.product?.subscriptionPlans?.map(s => s.interval) ?? [];
 
-  //   const all_enabled = !!(subscriptions?.length
-  //     ? subscriptions?.every(s =>
-  //         ['monthly', 'quarterly', 'annually'].includes(s)
-  //       )
-  //     : false);
-  const monthly_enabled = !!subscriptions?.includes('monthly');
-  const quarterly_enabled = !!subscriptions?.includes('quarterly');
-  const yearly_enabled = !!subscriptions?.includes('annually');
+  const monthly = !!subscriptions?.includes('monthly');
+  const quarterly = !!subscriptions?.includes('quarterly');
+  const biannually = !!subscriptions?.includes('biannually');
+  const annually = !!subscriptions?.includes('annually');
+
+  const all = monthly && quarterly && biannually && annually;
 
   const [states, setStates] = useState<
-    Record<'all' | 'monthly' | 'quarterly' | 'annually', boolean>
-  >({
-    all: monthly_enabled && quarterly_enabled && yearly_enabled,
-    monthly: monthly_enabled,
-    quarterly: quarterly_enabled,
-    annually: yearly_enabled,
-  });
+    Record<'all' | 'monthly' | 'quarterly' | 'biannually' | 'annually', boolean>
+  >({ all, monthly, quarterly, biannually, annually });
 
   useEffect(() => {
     const newData = { ...props.data };
@@ -45,7 +38,7 @@ const SubscriptionTogglerSettings = (props: Props) => {
         subscriptionData.push(k);
       }
     }
-    newData.subscriptions = subscriptionData;
+    newData.subscriptions = [...new Set(subscriptionData)];
     props.setData(newData);
   }, [states]);
 
@@ -62,12 +55,13 @@ const SubscriptionTogglerSettings = (props: Props) => {
                 all: val,
                 monthly: val,
                 quarterly: val,
+                biannually: val,
                 annually: val,
               }));
             }}
           />
           <span className="text-xs">
-            {states.all ? 'Disable' : 'Enable'} all subscriptions
+            {states.all ? 'Disable' : 'Enable'} all subscription plans
           </span>
         </div>
         <div className="flex items-center gap-4">
@@ -83,7 +77,7 @@ const SubscriptionTogglerSettings = (props: Props) => {
             }}
           />
           <span className="text-xs">
-            {states.monthly ? 'Disable' : 'Enable'} monthly subscriptions
+            {states.monthly ? 'Disable' : 'Enable'} monthly subscription plans
           </span>
         </div>
         <div className="flex items-center gap-4">
@@ -99,7 +93,25 @@ const SubscriptionTogglerSettings = (props: Props) => {
             }}
           />
           <span className="text-xs">
-            {states.quarterly ? 'Disable' : 'Enable'} quarterly subscriptions
+            {states.quarterly ? 'Disable' : 'Enable'} quarterly subscription
+            plans
+          </span>
+        </div>
+        <div className="flex items-center gap-4">
+          <Toggler
+            value={states.biannually}
+            setToggled={() => {
+              const val = !states.biannually;
+              setStates(prevStates => ({
+                ...prevStates,
+                biannually: !states.biannually,
+                ...(!val && { all: val }),
+              }));
+            }}
+          />
+          <span className="text-xs">
+            {states.biannually ? 'Disable' : 'Enable'} biannual subscription
+            plans
           </span>
         </div>
         <div className="flex items-center gap-4">
@@ -115,7 +127,7 @@ const SubscriptionTogglerSettings = (props: Props) => {
             }}
           />
           <span className="text-xs">
-            {states.annually ? 'Disable' : 'Enable'} annual subscriptions
+            {states.annually ? 'Disable' : 'Enable'} annual subscription plans
           </span>
         </div>
       </div>

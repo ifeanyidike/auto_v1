@@ -3,5 +3,8 @@
   "editor.formatOnSave": true,
   "editor.defaultFormatter": "esbenp.prettier-vscode",
   "search.useIgnoreFiles": false,
-  "WillLuke.nextjs.hasPrompted": true
+  "WillLuke.nextjs.hasPrompted": true,
+  "search.exclude": {
+    "**/*.code-search": false
+  }
 }

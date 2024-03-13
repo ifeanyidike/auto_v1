@@ -59,6 +59,12 @@ const NewProductView = (props: Props) => {
           id: globalThis.crypto.randomUUID(),
           code: '',
           value: '',
+          type: 'biannually',
+        },
+        {
+          id: globalThis.crypto.randomUUID(),
+          code: '',
+          value: '',
           type: 'annually',
         },
       ],
@@ -280,7 +286,7 @@ const NewProductView = (props: Props) => {
             initExpanded
             numCompleted={data.subscriptions.length ? 1 : 0}
             numItems={1}
-            paneTitle="Enable & Disable Subscriptions"
+            paneTitle="Set up subscription plans"
           >
             <SubscriptionTogglerSettings data={data} setData={setData} />
           </ProductPane>

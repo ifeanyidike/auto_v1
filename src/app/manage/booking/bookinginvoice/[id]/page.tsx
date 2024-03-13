@@ -2,7 +2,6 @@ import React from 'react';
 import BookingInvoice from './BookingInvoice';
 import TopMenu from '../../../components/TopMenu';
 import BackToPage from '../../../components/BackToPage';
-// import Auth0 from '~/server/auth0';
 
 const Invoice = () => {
   return (
@@ -16,7 +15,7 @@ const Invoice = () => {
             <BackToPage
               toHref="/manage/"
               prevTitle="home"
-              currTitle="Bookings List"
+              currTitle="Booking Invoice"
             />
           </div>
         }

@@ -8,7 +8,12 @@ import FAQ from '../faq/logic';
 import ServiceKeypoint from '../service_keypoint/logic';
 import ServicePricing from '../service_pricing/logic';
 import Discount from '../discount/logic';
-import SubscriptionType from '../subscription_type/logic';
+import SubscriptionPlan from '../subscription_plan/logic';
+import { Plan } from '~/server/payment/plan';
+import {
+  type SubscriptionPlanDuration,
+  type PlanParams,
+} from '~/types/payment';
 // import Service from './service';
 
 export type MerchantServiceType = {
@@ -32,10 +37,24 @@ export type MerchantServiceType = {
   discounts:
     | Prisma.DiscountGetPayload<Prisma.DiscountDefaultArgs<DefaultArgs>>[]
     | null;
-  subscriptionTypes:
-    | Prisma.SubscriptionTypeGetPayload<
-        Prisma.SubscriptionTypeDefaultArgs<DefaultArgs>
+  subscriptionPlans:
+    | Prisma.SubscriptionPlanGetPayload<
+        Prisma.SubscriptionPlanDefaultArgs<DefaultArgs>
       >[]
+    | null;
+  subscriptions?:
+    | (Prisma.SubscriptionGetPayload<
+        Prisma.SubscriptionDefaultArgs<DefaultArgs>
+      > &
+        {
+          planId: string;
+          plan: Prisma.SubscriptionPlanGetPayload<
+            Prisma.SubscriptionPlanDefaultArgs<DefaultArgs>
+          >;
+        }[])
+    | null;
+  bookings?:
+    | Prisma.BookingGetPayload<Prisma.BookingDefaultArgs<DefaultArgs>>[]
     | null;
   isDraft: boolean;
   updatedAt: Date;
@@ -54,16 +73,11 @@ export default class MerchantService extends Utility {
 
     keypoints?: string[],
     faqs?: string[],
-    discounts?: string[],
-    subscriptions?: string[],
+    discounts?: Record<'code' | 'value' | 'type', string>[],
+    planList?: { interval: SubscriptionPlanDuration; code: string }[],
     // faqs?: Record<'question' | 'answer', string>[],
     pricing?: CreateMerchantServiceParamType['pricing']
   ) {
-    // const serviceInstance = new Service({ title: parent_data.title });
-    // const service = await serviceInstance.getOne();
-    // if (!service) {
-    //   await serviceInstance.create(parent_data);
-    // }
     return this.process(async () => {
       return await this.db.merchantService.create({
         data: {
@@ -92,21 +106,26 @@ export default class MerchantService extends Utility {
 
           ...(discounts && {
             discounts: {
-              connect: discounts.map(k => ({ id: k })),
+              create: discounts.map(({ code, value, type }) => ({
+                code,
+                value,
+                type,
+              })),
             },
           }),
 
-          ...(subscriptions && {
-            subscriptionTypes: {
-              connect: subscriptions.map(k => ({ id: k })),
+          ...(planList && {
+            subscriptionPlans: {
+              create: planList.map(({ code, interval }) => ({
+                code,
+                interval,
+              })),
             },
           }),
 
-          // ...(keypoints && {
-          //   keyPoints: {
-          //     connect: keypoints.map(k => ({ id: k })),
-          //   },
-          // }),
+          ...(keypoints && {
+            keyPoints: { connect: keypoints.map(k => ({ id: k })) },
+          }),
 
           ...(pricing && {
             servicePricing: {
@@ -117,39 +136,6 @@ export default class MerchantService extends Utility {
               })),
             },
           }),
-
-          // keyPoints: {
-          //   connectOrCreate: (keypoints ?? []).map(point => {
-          //     return {
-          //       where: { point },
-          //       create: { point },
-          //     };
-          //   }),
-          // },
-
-          // ...(faqs && {
-          //   faqs: {
-          //     connectOrCreate: faqs.map(({ question, answer }) => ({
-          //       where: { question, answer },
-          //       create: { question, answer },
-          //     })) as Prisma.FAQCreateOrConnectWithoutMerchantServiceInput[],
-          //   },
-          // }),
-          // ...(pricing && {
-          //   servicePricing: {
-          //     connectOrCreate: pricing.data.map(({ type, amount }) => ({
-          //       where: {
-          //         mode: pricing.mode,
-          //         type,
-          //       },
-          //       create: {
-          //         mode: pricing.mode,
-          //         type,
-          //         amount,
-          //       },
-          //     })) as Prisma.ServicePricingCreateOrConnectWithoutMerchantServiceInput[],
-          //   },
-          // }),
         },
       });
     });
@@ -167,7 +153,8 @@ export default class MerchantService extends Utility {
     keyPoints?: string[],
     faqs?: string[],
     discounts?: string[],
-    subscriptions?: string[],
+    // subscriptions?: string[],
+    planList?: string[],
     pricing?: string[]
   ) {
     return this.process(async () => {
@@ -194,9 +181,9 @@ export default class MerchantService extends Utility {
             },
           }),
 
-          ...(subscriptions && {
-            subscriptionTypes: {
-              connect: subscriptions.map(k => ({ id: k })),
+          ...(planList?.length && {
+            subscriptionPlans: {
+              connect: planList.map(k => ({ id: k })),
             },
           }),
 
@@ -214,8 +201,10 @@ export default class MerchantService extends Utility {
     id?: string;
     title?: string;
     merchantId?: string;
+    userId?: string;
   }) {
     const { id, title, merchantId } = data;
+
     return this.process(async () => {
       if (!id && !title) {
         throw new Error('ID or title must be provided');
@@ -245,7 +234,24 @@ export default class MerchantService extends Utility {
           service: true,
           servicePricing: true,
           discounts: true,
-          subscriptionTypes: true,
+          subscriptionPlans: true,
+          ...(data.userId && {
+            subscriptions: {
+              where: {
+                userId: data.userId,
+              },
+              include: {
+                plan: true,
+              },
+            },
+          }),
+          ...(data.userId && {
+            bookings: {
+              where: {
+                userId: data.userId,
+              },
+            },
+          }),
         },
       });
 
@@ -261,14 +267,16 @@ export default class MerchantService extends Utility {
         pricingMode: service.pricingMode,
         pricing: service.servicePricing,
         discounts: service.discounts,
-        subscriptionTypes: service.subscriptionTypes,
+        subscriptionPlans: service.subscriptionPlans,
+        subscriptions: service.subscriptions,
+        bookings: service.bookings,
         service: service.service,
         isDraft: service.isDraft,
         updatedAt: service.updatedAt,
         createdAt: service.createdAt,
       };
 
-      return formattedService as MerchantServiceType;
+      return formattedService as unknown as MerchantServiceType;
     });
   }
 
@@ -295,7 +303,7 @@ export default class MerchantService extends Utility {
           service: true,
           servicePricing: true,
           discounts: true,
-          subscriptionTypes: true,
+          subscriptionPlans: true,
         },
       });
 
@@ -309,7 +317,7 @@ export default class MerchantService extends Utility {
         pricingMode: service.pricingMode,
         pricing: service.servicePricing,
         discounts: service.discounts,
-        subscriptionTypes: service.subscriptionTypes,
+        subscriptionPlans: service.subscriptionPlans,
         service: service.service,
         isDraft: service.isDraft,
         updatedAt: service.updatedAt,
@@ -405,134 +413,40 @@ export default class MerchantService extends Utility {
     this.validateDiscounts(data.pricing);
   }
 
-  public async handleCreate(
-    merchantId: string,
-    data: CreateMerchantServiceParamType,
-    existingProductId: string | null,
-    imageUrl: string | undefined
-  ) {
-    this.validateDataBeforeSave(data, imageUrl);
+  private formatPlanData(data: CreateMerchantServiceParamType) {
+    const serviceName = data.product_type.service_name;
+    return data.pricing.data
+      .flatMap(priceData => {
+        if (!priceData.amount) return;
+        return data.subscriptions.map(interval => {
+          const discount = data.pricing.discounts.find(
+            d => d.type === interval
+          );
+          let amount = priceData.amount!;
 
-    let existingProduct: MerchantServiceType | null = null;
-    if (existingProductId) {
-      existingProduct = await this.getOne({ id: existingProductId });
-    }
+          if (discount?.value && priceData.amount) {
+            const unit = 1 - parseFloat(discount.value) / 100;
+            console.log('unit =>', unit);
 
-    let data_to_save: Prisma.MerchantServiceCreateInput = {};
-
-    const util = new Util();
-    const folder = 'products';
-
-    if (data.image.file) {
-      const uploadedImage = await util.upload(data.image.file, folder);
-      if (!uploadedImage) {
-        throw new Error('An error occurred in uploading image.');
-      }
-
-      if (existingProduct?.imgUrl) {
-        const imageId = existingProduct?.imageId;
-        const imageUrl = existingProduct?.imgUrl;
-
-        const uploadId = existingProduct?.imageId
-          ? `${folder}/${imageId}`
-          : imageUrl;
-
-        await util.deleteUpload({ uploadId: uploadId, imageUrl });
-      }
-      data_to_save.imgUrl = uploadedImage?.url;
-      data_to_save.imageId = uploadedImage?.uploadId;
-    }
-
-    const parent_data = {
-      type: data.product_type.service_type,
-      title: data.product_type.service_name,
-    } as Prisma.ServiceCreateInput;
-
-    const faqData = data.faq_keypoints.faq.filter(f => f.question && f.answer);
-
-    const faq = new FAQ();
-    const faqs = await faq.getOrCreateMany(faqData);
-
-    const KeyPoint = new ServiceKeypoint();
-    const keypoints = await KeyPoint.getOrCreateMany(
-      data.faq_keypoints.keypoints
-    );
-
-    const discountArr = data.pricing.discounts?.filter(
-      d => d.code && d.type && d.value
-    );
-    let discountData;
-
-    if (discountArr.length) {
-      const discount = new Discount();
-      discountData = await discount.getOrCreateMany(discountArr);
-    }
-
-    const subscription = new SubscriptionType();
-    const subscriptionData = await subscription.getOrCreateMany(
-      data.subscriptions
-    );
-
-    data_to_save = {
-      ...data_to_save,
-      description: data.description.description,
-      isDraft: false,
-      pricingMode: data.pricing.mode,
-    };
-
-    if (existingProduct) {
-      let pricing: string[] = [];
-
-      if (data.pricing?.data?.length) {
-        const servicePricing = new ServicePricing();
-        pricing = await servicePricing.getOrCreateMany(
-          data.pricing,
-          existingProduct.id
-        );
-      }
-      return await this.update(
-        existingProduct.id,
-        data_to_save,
-        keypoints,
-        faqs,
-        discountData,
-        subscriptionData,
-        pricing
-      );
-    }
-
-    return await this.create(
-      merchantId,
-      parent_data,
-      data_to_save,
-      keypoints,
-      faqs,
-      discountData,
-      subscriptionData,
-      data.pricing
-    );
+            amount *= unit;
+          }
+          const name = `${serviceName} - ${priceData.type} - ${interval}`;
+          return {
+            interval,
+            name,
+            amount: Math.round(amount! * 100),
+            autoBrand: priceData.type || 'NONE',
+          };
+        });
+      })
+      .filter(Boolean) as PlanParams[];
   }
 
-  public async saveDraft(
-    merchantId: string,
+  private async handleImageUpload(
     data: CreateMerchantServiceParamType,
-    existingProductId: string | null
+    existingProduct: MerchantServiceType | null,
+    data_to_save: Prisma.MerchantServiceCreateInput
   ) {
-    console.log('data', data.pricing.data);
-    this.validateDataBeforeDraftSave(data);
-    let existingProduct: MerchantServiceType | null = null;
-
-    if (existingProductId) {
-      existingProduct = await this.getOne({ id: existingProductId });
-    } else {
-      existingProduct = await this.getOne({
-        title: data.product_type.service_name,
-        merchantId,
-      });
-    }
-
-    const data_to_save = { isDraft: true } as Prisma.MerchantServiceCreateInput;
-
     if (data.image.file) {
       const util = new Util();
       const folder = 'products';
@@ -556,6 +470,149 @@ export default class MerchantService extends Utility {
       data_to_save.imgUrl = uploadedImage.url;
       data_to_save.imageId = uploadedImage.uploadId;
     }
+  }
+
+  private async handleFAQs(data: CreateMerchantServiceParamType) {
+    const faqData = data.faq_keypoints.faq.filter(f => f.question && f.answer);
+
+    const faq = new FAQ();
+    return await faq.getOrCreateMany(faqData);
+  }
+
+  private async handleDiscounts(
+    serviceId: string,
+    data: CreateMerchantServiceParamType
+  ) {
+    const discountArr = data.pricing.discounts?.filter(
+      d => d.code && d.type && d.value
+    );
+
+    if (discountArr.length) {
+      const discount = new Discount();
+      return await discount.getOrCreateMany(serviceId, discountArr);
+    }
+  }
+
+  private async handleSubscriptionPlans(
+    data: CreateMerchantServiceParamType,
+    merchantServiceId: string | null = null
+  ) {
+    const plan = new Plan();
+    console.log(this.formatPlanData(data));
+
+    const planListItems = await plan.createOrUpdateMany(
+      this.formatPlanData(data)
+    );
+
+    const planList = planListItems.map(plan => ({
+      interval: plan.interval,
+      code: plan.plan_code,
+      autoBrand: plan.autoBrand,
+    }));
+
+    if (!merchantServiceId) return planList;
+
+    const subscription = new SubscriptionPlan();
+    return await subscription.getOrCreateMany(merchantServiceId, planList);
+    // return subscriptionData;
+  }
+
+  public async handleCreate(
+    merchantId: string,
+    data: CreateMerchantServiceParamType,
+    existingProductId: string | null,
+    imageUrl: string | undefined
+  ) {
+    this.validateDataBeforeSave(data, imageUrl);
+
+    let existingProduct: MerchantServiceType | null = null;
+    if (existingProductId) {
+      existingProduct = await this.getOne({ id: existingProductId });
+    }
+
+    let data_to_save: Prisma.MerchantServiceCreateInput = {};
+
+    await this.handleImageUpload(data, existingProduct, data_to_save);
+
+    const parent_data = {
+      type: data.product_type.service_type,
+      title: data.product_type.service_name,
+    } as Prisma.ServiceCreateInput;
+
+    const faqs = await this.handleFAQs(data);
+
+    const KeyPoint = new ServiceKeypoint();
+    const keypoints = await KeyPoint.getOrCreateMany(
+      data.faq_keypoints.keypoints
+    );
+
+    const planList = await this.handleSubscriptionPlans(
+      data,
+      existingProductId
+    );
+
+    data_to_save = {
+      ...data_to_save,
+      description: data.description.description,
+      isDraft: false,
+      pricingMode: data.pricing.mode,
+    };
+
+    if (existingProduct) {
+      let pricing: string[] = [];
+
+      if (data.pricing?.data?.length) {
+        const servicePricing = new ServicePricing();
+        pricing = await servicePricing.getOrCreateMany(
+          data.pricing,
+          existingProduct.id
+        );
+      }
+
+      const discountData = await this.handleDiscounts(existingProductId!, data);
+      return await this.update(
+        existingProduct.id,
+        data_to_save,
+        keypoints,
+        faqs,
+        discountData,
+        planList as string[],
+        pricing
+      );
+    }
+
+    return await this.create(
+      merchantId,
+      parent_data,
+      data_to_save,
+      keypoints,
+      faqs,
+      data.pricing.discounts?.filter(d => d.code && d.type && d.value),
+      planList as { interval: SubscriptionPlanDuration; code: string }[],
+      data.pricing
+    );
+  }
+
+  public async saveDraft(
+    merchantId: string,
+    data: CreateMerchantServiceParamType,
+    existingProductId: string | null
+  ) {
+    console.log('data', data.pricing.data);
+    this.validateDataBeforeDraftSave(data);
+    let existingProduct: MerchantServiceType | null = null;
+
+    if (existingProductId) {
+      existingProduct = await this.getOne({ id: existingProductId });
+    } else {
+      existingProduct = await this.getOne({
+        title: data.product_type.service_name,
+        merchantId,
+      });
+    }
+
+    const data_to_save = { isDraft: true } as Prisma.MerchantServiceCreateInput;
+    await this.handleImageUpload(data, existingProduct, data_to_save);
 
     const parent_data = {
       type: data.product_type.service_type,
@@ -563,18 +620,11 @@ export default class MerchantService extends Utility {
     } as Prisma.ServiceCreateInput;
 
     let faqs: string[] = [];
-
     if (data.faq_keypoints.faq.length) {
-      const faqData = data.faq_keypoints.faq.filter(
-        f => f.question && f.answer
-      );
-
-      const faq = new FAQ();
-      faqs = await faq.getOrCreateMany(faqData);
+      faqs = await this.handleFAQs(data);
     }
 
     let keypoints: string[] = [];
-
     if (data.faq_keypoints.keypoints.length) {
       const KeyPoint = new ServiceKeypoint();
       keypoints = await KeyPoint.getOrCreateMany(data.faq_keypoints.keypoints);
@@ -589,32 +639,25 @@ export default class MerchantService extends Utility {
       );
     }
 
-    let discountData;
-    const discountArr = data.pricing.discounts?.filter(
-      d => d.code && d.type && d.value
-    );
-
-    if (discountArr.length) {
-      const discount = new Discount();
-      discountData = await discount.getOrCreateMany(discountArr);
-    }
-
-    const subscription = new SubscriptionType();
-    const subscriptionData = await subscription.getOrCreateMany(
-      data.subscriptions
+    const planList = await this.handleSubscriptionPlans(
+      data,
+      existingProductId
     );
 
     data_to_save.description = data.description.description || '';
     data_to_save.pricingMode = data.pricing.mode || 'FIXED';
 
     if (existingProduct) {
+      const discountData = await this.handleDiscounts(existingProductId!, data);
+
       return await this.update(
         existingProduct.id,
         data_to_save,
         keypoints,
         faqs,
         discountData,
-        subscriptionData,
+        planList as string[],
+        // subscriptionData,
         pricing
       );
     }
@@ -631,8 +674,8 @@ export default class MerchantService extends Utility {
       data_to_save,
       keypoints,
       faqs,
-      discountData,
-      subscriptionData,
+      data.pricing.discounts?.filter(d => d.code && d.type && d.value),
+      planList as { interval: SubscriptionPlanDuration; code: string }[],
       pricingData
     );
   }

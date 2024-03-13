@@ -17,7 +17,7 @@ export type CreateMerchantServiceParamType = {
     }[];
     discounts: {
       id: string;
-      type: 'monthly' | 'quarterly' | 'annually';
+      type: 'monthly' | 'quarterly' | 'biannually' | 'annually';
       code: string;
       value: string;
     }[];

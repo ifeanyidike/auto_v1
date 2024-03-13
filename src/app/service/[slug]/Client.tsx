@@ -1,5 +1,5 @@
 'use client';
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import Link from 'next/link';
 import ArrowRight from '~/commons/icons/ArrowRight';
 import CheckIcon from '~/commons/icons/CheckIcon';
@@ -15,33 +15,15 @@ import { useRouter } from 'next/navigation';
 type Props = {
   subdomain: string;
   topServices: MerchantServiceType[] | null;
+  merchantService: MerchantServiceType | null;
 };
-const Client = ({ topServices, subdomain }: Props) => {
+const Client = ({ topServices, merchantService }: Props) => {
   const { slug } = useParams<{ slug: string }>();
-  const [merchantService, setService] = useState<MerchantServiceType | null>(
-    null
-  );
   const router = useRouter();
-
-  useEffect(() => {
-    const fetchData = async () => {
-      const data = await fetch(
-        `http://${subdomain}.localhost:3000/api/merchant_service/${slug}/`
-      );
-
-      const _service = (await data.json()) as MerchantServiceType | null;
-      setService(_service);
-    };
-
-    fetchData()
-      .then(data => console.log(data))
-      .catch(err => console.error(err));
-  }, [slug]);
 
   const otherServices = topServices?.filter(
     s => s.service?.title?.toLowerCase() !== decodeURI(slug)
   );
-  const handleAction = () => router.push('/booking');
 
   return (
     <>
@@ -52,7 +34,6 @@ const Client = ({ topServices, subdomain }: Props) => {
         <h2
           className={` ${dmSans.className} w-1/2 text-5xl capitalize max-lg:w-full max-md:text-5xl`}
         >
-          {/* Radiator & Engine Cooling */}
           {merchantService?.service?.title}
         </h2>
         <div className="max-md: grid w-1/2 grid-cols-2 gap-4 text-white max-lg:w-fit max-md:grid-cols-1 ">
@@ -65,16 +46,61 @@ const Client = ({ topServices, subdomain }: Props) => {
             </div>
           ))}
         </div>
-        <div className="sticky top-0 flex w-[300px] max-md:w-full">
-          <Button
-            hasGradient
-            hasShadow
-            shadowColor="shadow-stone-400"
-            width="w-full"
-            onClick={handleAction}
-          >
-            Book Now
-          </Button>
+        <div className="sticky top-0 flex w-[600px] max-md:w-full gap-5 max-sm:flex-col">
+          <div className="flex w-[300px]">
+            <Button
+              hasGradient
+              width="w-full"
+              height="h-12"
+              onClick={() => router.push(`booking?id=${merchantService?.id}`)}
+            >
+              Book Now
+            </Button>
+          </div>
+          <div className="flex w-[300px]">
+            {!merchantService?.subscriptions?.length ? (
+              <Button
+                textColor="text-content-normal"
+                bgColor="bg-stone-300"
+                width="w-full"
+                height="h-12"
+                onClick={() =>
+                  router.push(
+                    `subscription?service=${slug}&id=${merchantService?.id}`
+                  )
+                }
+              >
+                Subscribe Now
+              </Button>
+            ) : (
+              <div>
+                <div className="flex flex-col text-center items-center justify-center px-9 py-3 text-xs h-12 mb-2 bg-stone-500/50 rounded-full">
+                  <span>
+                    Already subscribed to{' '}
+                    {merchantService?.subscriptions?.[0]?.plan?.autoBrand} brand
+                  </span>
+                  <span>
+                    {merchantService?.subscriptions?.length > 1
+                      ? `+${merchantService?.subscriptions?.length - 1} more`
+                      : null}
+                  </span>
+                </div>
+                <div className="flex flex-col text-xs items-center mt-4 gap-1 justify-center">
+                  {merchantService?.pricing?.length! > 1 && (
+                    <Link
+                      className="hover:text-orange-500"
+                      href={`subscription?service=${slug}&id=${merchantService?.id}`}
+                    >
+                      Subscribe to another brand
+                    </Link>
+                  )}
+                  <Link className="hover:text-orange-500" href="#">
+                    Cancel subscription
+                  </Link>
+                </div>
+              </div>
+            )}
+          </div>
         </div>
       </div>
 
