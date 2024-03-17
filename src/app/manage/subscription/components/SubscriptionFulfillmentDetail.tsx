@@ -15,20 +15,20 @@ import { updateSubscriptionStatus } from '../action';
 
 type Props = {
   item: {
-    fulfillment: SubscriptionItem['fulfillments'][0];
+    fulfillment: SubscriptionItem['fufillments'][0];
     subscriptionId: string;
     plan: SubscriptionItem['plan'];
     index: number;
   };
-  fulfillmentList: SubscriptionItem['fulfillments'];
+  fulfillmentList: SubscriptionItem['fufillments'];
   setFulfillmentList: React.Dispatch<
-    React.SetStateAction<SubscriptionItem['fulfillments']>
+    React.SetStateAction<SubscriptionItem['fufillments']>
   >;
   onClose: () => void;
 };
 
 const SubscriptionFulfillmentDetail = (props: Props) => {
-  const [item, setItem] = useState<SubscriptionItem['fulfillments'][0]>(
+  const [item, setItem] = useState<SubscriptionItem['fufillments'][0]>(
     props.item.fulfillment
   );
   const [markAsPaid, setMarkAsPaid] = useState<boolean>(item.isPaid);

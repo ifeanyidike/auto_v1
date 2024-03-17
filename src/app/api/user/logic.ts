@@ -64,7 +64,11 @@ export default class User extends Utility {
       return await this.db.user.upsert({
         where: { email },
         update: {},
-        create: { ...data },
+        create: {
+          ...data,
+          firstName: data.firstName || '',
+          lastName: data.lastName || '',
+        },
       });
     });
   }

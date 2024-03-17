@@ -5,6 +5,9 @@ import path from 'path';
 import DatauriParser from 'datauri/parser';
 import User from '~/app/api/user/logic';
 import { Transaction } from './payment/transaction';
+import { type SubscriptionItem } from '~/app/api/subscription/logic';
+import { type BookingItem } from '~/app/api/booking/logic';
+import { monthNames } from 'utilities/common';
 
 cloudinary.config({
   cloud_name: process.env.CLOUD_NAME,
@@ -25,6 +28,8 @@ export default class Util {
 
   public static getRouteType() {
     const headersList = headers();
+
+    const next_url = headersList.get('next-url');
     const hostname = headersList.get('host');
     let slug = Util.getSubdomain(hostname ?? '')!;
 
@@ -34,15 +39,15 @@ export default class Util {
       slug = slugParts[1]!;
       return { isAdminLogin: true, slug };
     }
-    return { isAdminLogin: false, slug };
+    return { isAdminLogin: false, slug, next_url };
   }
 
   public static getMerchantDataBySubdomain = async () => {
-    const { isAdminLogin, slug } = Util.getRouteType();
+    const { isAdminLogin, slug, next_url } = Util.getRouteType();
 
     const merchant = new Merchant();
     const merchantData = await merchant.getOne({ slug });
-    return { isAdminLogin, merchantData, slug };
+    return { isAdminLogin, merchantData, slug, next_url };
   };
 
   public static shuffleArray<T>(array: T[]): T[] {
@@ -167,5 +172,95 @@ export default class Util {
     }
 
     return { confirmation: false, userId: userData?.id };
+  }
+  public static sortTransactionsByDate(
+    subscriptions: SubscriptionItem[],
+    bookings: BookingItem[]
+  ) {
+    const formatted_subscriptions = subscriptions.flatMap(sub => {
+      const { title, type } = sub.merchantService.service || {};
+      const { firstName, lastName, email, imgUrl } = sub.user || {};
+      return sub.fufillments.map(f => ({
+        id: f.id,
+        serviceName: title!,
+        serviceType: type!,
+        imgUrl: imgUrl!,
+        userName: firstName || '' + lastName || '',
+        email: email,
+        amount: f.amountPaid.toNumber(),
+        type: 'subscription',
+        status: f.isFulfilled
+          ? 'Fulfilled'
+          : f.isPaid
+            ? 'Paid Not Fulfilled'
+            : 'Not Paid',
+        date: f.createdAt,
+      }));
+    });
+
+    const formatted_bookings = bookings.map(b => {
+      const { title, type } = b.merchantService.service || {};
+      const { firstName, lastName, email, imgUrl } = b.user || {};
+      return {
+        id: b.id,
+        serviceName: title!,
+        serviceType: type!,
+        imgUrl: imgUrl!,
+        userName: firstName || '' + lastName || '',
+        email: email,
+        amount: b.amount,
+        type: 'boooking',
+        status: b.isFullfilled
+          ? 'Fulfilled'
+          : b.isPaid
+            ? 'Paid Not Fulfilled'
+            : 'Not Paid',
+        date: b.createdAt,
+      };
+    });
+
+    return [...formatted_subscriptions, ...formatted_bookings].sort(
+      (a, b) => +new Date(b.date) - +new Date(a.date)
+    );
+  }
+
+  public static organizeSubscriptionByMonth(subscriptions: SubscriptionItem[]) {
+    const aggr = subscriptions.reduce(
+      (acc, curr) => {
+        const date = new Date(curr.createdAt);
+        const month = monthNames[date.getMonth()]!;
+
+        if (!acc[month]) {
+          acc[month] = 0;
+        }
+        acc[month] += 1;
+        return acc;
+      },
+      {} as { [k: string]: number }
+    );
+    return Object.fromEntries(
+      Object.entries(aggr).sort(
+        ([monthA], [monthB]) =>
+          monthNames.indexOf(monthA) - monthNames.indexOf(monthB)
+      )
+    );
+  }
+
+  public static organizeSubscriptionByServiceName(
+    subscriptions: SubscriptionItem[]
+  ) {
+    const aggr = subscriptions.reduce(
+      (acc, curr) => {
+        const key = curr.merchantService.service?.title!;
+
+        if (!acc[key]) {
+          acc[key] = 0;
+        }
+        acc[key] += 1;
+        return acc;
+      },
+      {} as { [k: string]: number }
+    );
+    return aggr;
   }
 }

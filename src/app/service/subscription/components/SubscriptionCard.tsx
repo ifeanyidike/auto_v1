@@ -1,10 +1,9 @@
 'use client';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import CheckIcon from '~/commons/icons/CheckIcon';
 import Button from '~/components/Button';
 import { manRope, nunitoSans } from '~/font';
 import { subscribeUserToPlan } from './subscribeAction';
-import { useFormState } from 'react-dom';
 import { enqueueSnackbar } from 'notistack';
 import { SnackbarProvider } from 'notistack';
 import { useSearchParams } from 'next/navigation';
@@ -57,7 +56,7 @@ const SubscriptionCard = (props: Props) => {
         {props.discount && (
           <div className="flex gap-1 items-center text-stone-100 mx-auto mb-2 bg-content-normal/20 px-2 py-[2px] rounded-full">
             <span className="text-xs">★</span>{' '}
-            <span className="text-xs">Save {props.discount}</span>
+            <span className="text-xs">Save {props.discount}%</span>
           </div>
         )}
         <span className="capitalize text-center text-sm mb-2">

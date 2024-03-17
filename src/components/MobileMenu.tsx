@@ -8,10 +8,12 @@ import Link from 'next/link';
 import LoginButton from './LoginButton';
 import { useUser } from '@auth0/nextjs-auth0/client';
 import Image from 'next/image';
+import { usePathname } from 'next/navigation';
 
 const MobileMenu = () => {
   const navOpen = useHookstate(toggleNav);
   const { user } = useUser();
+  const pathname = usePathname();
   return (
     <>
       {navOpen.get() && (
@@ -46,18 +48,22 @@ const MobileMenu = () => {
               </a>
             </div>
           )}
-          <Link href="/" className="cursor-pointer">
-            Home
-          </Link>
-          <Link href="/services" className="cursor-pointer">
-            Services
-          </Link>
+          {pathname !== '/register-merchant' && (
+            <>
+              <Link href="/" className="cursor-pointer">
+                Home
+              </Link>
+              <Link href="/services" className="cursor-pointer">
+                Services
+              </Link>
 
-          <div>
-            <Button hasGradient={false} hasShadow={false} bgColor="bg-dark">
-              GET AN ESTIMATE
-            </Button>
-          </div>
+              <div>
+                <Button hasGradient={false} hasShadow={false} bgColor="bg-dark">
+                  GET AN ESTIMATE
+                </Button>
+              </div>
+            </>
+          )}
         </div>
       )}
     </>

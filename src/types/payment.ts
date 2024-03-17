@@ -171,3 +171,57 @@ export type TransactionDataResponse = {
     createdAt?: Date;
   };
 };
+
+export type TransactionTotalResponse = {
+  status: boolean;
+  message: 'Transaction totals';
+  data: {
+    total_transactions: number;
+    unique_customers: number;
+    total_volume: number;
+    total_volume_by_currency: [
+      {
+        currency: 'NGN';
+        amount: number;
+      },
+    ];
+    pending_transfers: number;
+    pending_transfers_by_currency: [
+      {
+        currency: 'NGN';
+        amount: number;
+      },
+    ];
+  };
+};
+
+export type TransactionList = {
+  status: boolean;
+  message: 'Transactions retrieved';
+  data: [
+    {
+      id: number;
+      status: 'success' | 'failed';
+      reference: string;
+      amount: number;
+      message: string | null;
+      gateway_response: string;
+      paid_at: Date;
+      created_at: Date;
+      channel: string;
+      currency: 'NGN';
+      ip_address: '102.215.57.116';
+      fees: number;
+      customer: {
+        first_name: string;
+        last_name: string;
+        email: string;
+        phone: string;
+        customer_code: string;
+      };
+      paidAt: Date;
+      createdAt: Date;
+      requested_amount: number;
+    },
+  ];
+};

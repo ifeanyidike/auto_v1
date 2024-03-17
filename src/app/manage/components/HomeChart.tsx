@@ -2,28 +2,22 @@
 import React from 'react';
 import Chart from '~/components/Chart';
 
-const labels = [
-  'Jan',
-  'Feb',
-  'Mar',
-  'Apr',
-  'May',
-  'Jun',
-  'Jul',
-  'Aug',
-  'Sep',
-  'Oct',
-  'Nov',
-  'Dec',
-];
+type Props = {
+  data: { [k: string]: number };
+};
 
-const data = [200, 401, 509, 702, 615, 506, 535, 450, 510, 627, 710, 605];
-const caption = 'Monthly Sales';
+const HomeChart = (props: Props) => {
+  const labels = Object.keys(props.data);
+  const data = Object.values(props.data);
 
-const HomeChart = () => {
   return (
     <div className="h-full max-h-96 overflow-hidden">
-      <Chart labels={labels} caption={caption} data={data} type="line" />
+      <Chart
+        labels={labels}
+        caption="Transactions by months"
+        data={data.map(d => d / 100)}
+        type="line"
+      />
     </div>
   );
 };

@@ -36,7 +36,9 @@ export class Plan extends Utility {
   }
 
   public async listAll() {
-    return (await this.get(this.endpoint)) as PlanListResponse;
+    return (await this.get(
+      this.endpoint + '?perPage=100000'
+    )) as PlanListResponse;
   }
 
   public async createOrUpdateMany(data: PlanParams[]) {
