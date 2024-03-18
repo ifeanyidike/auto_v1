@@ -12,6 +12,12 @@ export default class Discount extends Utility {
     });
   }
 
+  public async update(id: string, data: Prisma.DiscountUpdateInput) {
+    return this.process(async () => {
+      return await this.db.discount.update({ where: { id }, data });
+    });
+  }
+
   public async delete(id: string) {
     return this.process(async () => {
       return await this.db.discount.delete({ where: { id } });
@@ -46,7 +52,9 @@ export default class Discount extends Utility {
     });
   }
 
-  public async findItem(data: Record<'code' | 'value' | 'type', string>) {
+  public async findItem(
+    data: Record<'code' | 'type' | 'merchantServiceId', string>
+  ) {
     return this.process(async () => {
       return await this.db.discount.findFirst({
         where: { ...data },
@@ -55,11 +63,20 @@ export default class Discount extends Utility {
   }
 
   public async getOrCreateMany(
+    serviceId: string,
     data: Record<'code' | 'value' | 'type', string>[]
   ) {
     return await Promise.all(
       data.map(async d => {
-        const discount = await this.findItem(d);
+        const discount = await this.findItem({
+          code: d.code,
+          type: d.type,
+          merchantServiceId: serviceId,
+        });
+
+        if (discount && discount.value !== d.value) {
+          await this.update(discount.id, { value: d.value });
+        }
         if (discount) return discount.id;
         const discount_data = await this.create({ ...d });
         return discount_data.id;

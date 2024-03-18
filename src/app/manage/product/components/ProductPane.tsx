@@ -4,8 +4,8 @@ import { dmSans, manRope } from '~/font';
 
 type Props = {
   paneTitle: string;
-  numItems: number;
-  numCompleted: number;
+  numItems?: number;
+  numCompleted?: number;
   initExpanded?: boolean;
   children: ReactNode;
 };
@@ -46,7 +46,14 @@ const CheckFilledIcon = () => (
 const ProductPane = (props: Props) => {
   const { numItems, numCompleted } = props;
   const [isExpanded, setIsExpanded] = useState<boolean>(!!props.initExpanded);
-  const isIncomplete = numCompleted < numItems;
+  const calcIsIncomplete = () => {
+    if (numCompleted && numItems) {
+      return numCompleted < numItems;
+    }
+    return false;
+  };
+  const isIncomplete = calcIsIncomplete();
+
   return (
     <div className={`bg-white rounded-xl ${!isExpanded ? 'pb-14' : 'pb-3'}`}>
       <div className="border border-b-stone-200 py-3 px-3 flex justify-between rounded-t-xl">
@@ -67,7 +74,7 @@ const ProductPane = (props: Props) => {
                   <div
                     key={index}
                     className={`w-2 h-1 rounded-full ${
-                      numCompleted - 1 < item
+                      numCompleted && numCompleted - 1 < item
                         ? 'bg-content-normal/30'
                         : 'bg-content-normal'
                     }`}
@@ -77,9 +84,11 @@ const ProductPane = (props: Props) => {
             ) : (
               <CheckFilledIcon />
             )}
-            <span>
-              {numCompleted}/{numItems}
-            </span>
+            {numCompleted && numItems && (
+              <span>
+                {numCompleted}/{numItems}
+              </span>
+            )}
           </div>
           <button
             onClick={() => setIsExpanded(!isExpanded)}

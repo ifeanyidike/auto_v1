@@ -12,8 +12,44 @@ import { dmSans } from '~/font';
 import Link from 'next/link';
 import HomeTransactionList from './components/HomeTransactionList';
 import TopMenu from './components/TopMenu';
+import Booking from '../api/booking/logic';
+import Util from '~/server/utils';
+import Merchant from '../api/merchant/logic';
+import Subscription from '../api/subscription/logic';
+import { Transaction } from '~/server/payment/transaction';
+import { getShortFormattedDate } from 'utilities/common';
+import ProtectedPage from '~/server/protectedPage';
 
 const Home = async () => {
+  const { slug } = Util.getRouteType();
+  const merchantClient = new Merchant();
+  const merchant = await merchantClient.getOne({ slug });
+
+  const bookingClient = new Booking();
+  const bookings = await bookingClient.findByMerchant(merchant?.id!);
+
+  const subscriptionClient = new Subscription();
+  const subscriptions = await subscriptionClient.findByMerchant(merchant?.id!);
+
+  const transactionClient = new Transaction();
+  const earnings = await transactionClient.getTotalEarning();
+
+  const transactionList = await transactionClient.getTransactions(
+    100000,
+    getShortFormattedDate()
+  );
+  const transactionByMonth =
+    await transactionClient.getTransactionAmountByMonths(transactionList);
+
+  const transactionsByDate = Util.sortTransactionsByDate(
+    subscriptions,
+    bookings
+  );
+
+  const subscriptionByMonth = Util.organizeSubscriptionByMonth(subscriptions);
+
+  const subscriptionByService =
+    Util.organizeSubscriptionByServiceName(subscriptions);
   return (
     <div className="w-full h-full">
       <TopMenu showToggle />
@@ -22,74 +58,80 @@ const Home = async () => {
           <HomeCard
             title="Total bookings"
             Icon={<DocumentIcon />}
-            count={4289}
+            count={bookings.length}
             iconBgColor="bg-yellow"
           />
           <HomeCard
             title="Total subscriptions"
             Icon={<WalletIcon />}
-            count={840281}
+            count={subscriptions.length}
             iconBgColor="bg-green-400"
           />
           <HomeCard
             title="Total appointments"
             Icon={<CalendarIcon />}
-            count={1287371}
+            count={0}
             iconBgColor="bg-red-300"
           />
           <HomeCard
             title="Total earnings"
             Icon={<SettingsIcon />}
-            count={5287317}
+            count={earnings.data.total_volume / 100}
             iconBgColor="bg-blue-300"
           />
         </div>
         <div className="chart flex-[0.59] max-lg:flex-1 mt-4">
-          <HomeChart />
+          <HomeChart data={transactionByMonth} />
         </div>
       </div>
       <div className="py-20 mt-10 max-lg:flex-col flex gap-5 bg-gradient-to-r from-gradient-bg-start to-gradient-bg-end">
-        <LatestCustomers />
+        <LatestCustomers transactions={transactionsByDate.slice(0, 6)} />
         <div className="flex flex-col max-lg:mx-6 p-5 flex-[0.5] w-1/2 max-lg:flex-1 max-lg:w-[95%] items-center gap-4 bg-white shadow shadow-white rounded-xl">
           <span className="flex justify-between w-full">
             <h3 className="text-lg font-semibold">Subscription Overview</h3>{' '}
           </span>
-          <div className="w-full h-96 pt-4">
-            <HomePieChart />
-          </div>
-          <div className="flex flex-col w-full px-14 pt-5">
-            <div
-              className={`flex text-xs uppercase font-semibold justify-between ${dmSans.className}`}
-            >
-              <span>Services</span> <span>No. of subscriptions</span>
-            </div>
-            {[
-              { id: 1, service: 'Oil change', count: 5238 },
-              { id: 2, service: 'Engine repairs', count: 832593 },
-              { id: 3, service: 'Wheel & suspension', count: 3852 },
-              { id: 4, service: 'Car spraying & painting', count: 25831 },
-              { id: 4, service: 'Electrical repairs', count: 1849 },
-            ].map(data => (
-              <div className="flex text-xs justify-between border-b border-b-stone-200 py-4">
-                <span>{data.service}</span>{' '}
-                <div className=" flex">{data.count.toLocaleString()}</div>
-              </div>
-            ))}
 
-            <Link
-              href="#"
-              className="ml-auto mt-5 text-xs border-b border-red-1/25"
-            >
-              View All
-            </Link>
-          </div>
+          {Object.keys(subscriptionByService).length ? (
+            <>
+              <div className="w-full h-96 pt-4">
+                <HomePieChart data={subscriptionByMonth} />
+              </div>
+              <div className="flex flex-col w-full px-14 pt-5">
+                <div
+                  className={`flex text-xs uppercase font-semibold justify-between ${dmSans.className}`}
+                >
+                  <span>Services</span> <span>No. of subscriptions</span>
+                </div>
+                {Object.entries(subscriptionByService).map(
+                  ([service, count]) => (
+                    <div
+                      key={service}
+                      className="flex text-xs justify-between border-b border-b-stone-200 py-4"
+                    >
+                      <span>{service}</span>{' '}
+                      <div className=" flex">{count.toLocaleString()}</div>
+                    </div>
+                  )
+                )}
+
+                <Link
+                  href="#"
+                  className="ml-auto mt-5 text-xs border-b border-red-1/25"
+                >
+                  View All
+                </Link>
+              </div>
+            </>
+          ) : (
+            <div className="pt-10">You have no active subscriptions</div>
+          )}
         </div>
       </div>
-      <div>
-        <HomeTransactionList />
+      <div className="mb-8">
+        <HomeTransactionList transactions={transactionsByDate} />
       </div>
     </div>
   );
 };
 
-export default Auth0.ProtectedPage(Home, { returnTo: '/manage' });
+export default ProtectedPage(Home, { returnTo: '/manage' });

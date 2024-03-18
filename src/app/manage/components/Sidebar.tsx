@@ -5,9 +5,9 @@ import HomeIcon from '~/commons/icons/HomeIcon';
 import MenuItem from './SidebarMenuItem';
 import { MenuEnum } from '../types/menu';
 import BookingIcon from '~/commons/icons/BookingIcon';
-import BuyIcon from '~/commons/icons/BuyIcon';
+// import BuyIcon from '~/commons/icons/BuyIcon';
 import CalendarIcon from '~/commons/icons/CalendarIcon';
-import WalletIcon from '~/commons/icons/WalletIcon';
+// import WalletIcon from '~/commons/icons/WalletIcon';
 import ProfileIcon from '~/commons/icons/ProfileIcon';
 import ChevroLeftRoundedIcon from '~/commons/icons/ChevroLeftRoundedIcon';
 import ChevroRightRoundedIcon from '~/commons/icons/ChevroRightRoundedIcon';
@@ -19,11 +19,17 @@ import AddItemIcon from '~/commons/icons/AddItemIcon';
 import { useHookstate } from '@hookstate/core';
 import { hideAdminBar } from '~/states/utility';
 import { manRope } from '~/font';
+import { SubMenuItem } from './SubMenuItem';
+import ChevroDownIcon from '~/commons/icons/ChevroDownIcon';
+import UsersIcon from '~/commons/icons/UsersIcon';
+import DocumentIcon from '~/commons/icons/DocumentIcon';
 
 const Sidebar = () => {
   const [selected, setIsSelected] = useState<MenuEnum | null>(null);
   const [isCollapsed, setIsCollapsed] = useState<boolean>(false);
   const [openOptions, toggleOptions] = useState(false);
+  const [bookingExpanded, setBookingExpanded] = useState(false);
+  const [subscriptionExpanded, setSubscriptionExpanded] = useState(false);
   const hideBar = useHookstate(hideAdminBar);
 
   const optionsRef = useClickOutside(() => {
@@ -111,24 +117,44 @@ const Sidebar = () => {
           }
         />
 
-        <MenuItem
-          href="booking"
-          isSelected={selected === MenuEnum.booking}
-          setIsSelected={setIsSelected}
-          title={MenuEnum.booking}
-          isCollapsed={isCollapsed}
-          Icon={
-            <BookingIcon
-              strokeWidth="2"
-              //   strokeColor={
-              //     selected === MenuEnum.booking ? 'currentColor' : '#484848'
-              //   }
-              strokeColor="currentColor"
-              width="18"
-              height="18"
-            />
-          }
-        />
+        <div className="flex flex-col">
+          <MenuItem
+            href="booking"
+            isSelected={selected === MenuEnum.booking}
+            setIsSelected={setIsSelected}
+            title={MenuEnum.booking}
+            isCollapsed={isCollapsed}
+            Icon={
+              <BookingIcon
+                strokeWidth="2"
+                strokeColor="currentColor"
+                width="18"
+                height="18"
+              />
+            }
+            IconRight={
+              <div
+                onClick={e => {
+                  setBookingExpanded(!bookingExpanded);
+                  e.stopPropagation();
+                }}
+                className={`${bookingExpanded && 'rotate-180'}`}
+              >
+                <ChevroDownIcon className="w-4 h-4" />
+              </div>
+            }
+          />
+          {bookingExpanded && (
+            <div>
+              <SubMenuItem
+                text="Bookers"
+                href="booking/bookers"
+                isCollapsed={isCollapsed}
+                Icon={<UsersIcon classNames="w-4 h-4 max-md:w-5 max-md:h-5" />}
+              />
+            </div>
+          )}
+        </div>
 
         <MenuItem
           href="product"
@@ -145,22 +171,52 @@ const Sidebar = () => {
           }
         />
 
-        <MenuItem
-          href="subscription"
-          isSelected={selected === MenuEnum.subscription}
-          setIsSelected={setIsSelected}
-          title={MenuEnum.subscription}
-          isCollapsed={isCollapsed}
-          Icon={
-            <CalendarIcon
-              strokeWidth="2"
-              strokeColor="currentColor"
-              width="18"
-              height="18"
-            />
-          }
-        />
-        <MenuItem
+        <div className="flex flex-col">
+          <MenuItem
+            href="subscription"
+            isSelected={selected === MenuEnum.subscription}
+            setIsSelected={setIsSelected}
+            title={MenuEnum.subscription}
+            isCollapsed={isCollapsed}
+            Icon={
+              <CalendarIcon
+                strokeWidth="2"
+                strokeColor="currentColor"
+                classNames="w-[18px] h-[18px]"
+              />
+            }
+            IconRight={
+              <div
+                onClick={e => {
+                  setSubscriptionExpanded(!subscriptionExpanded);
+                  e.stopPropagation();
+                }}
+                className={`${subscriptionExpanded && 'rotate-180'}`}
+              >
+                <ChevroDownIcon className="w-4 h-4" />
+              </div>
+            }
+          />
+          {subscriptionExpanded && (
+            <div>
+              <SubMenuItem
+                text="Subscribers"
+                href="subscription/subscribers"
+                isCollapsed={isCollapsed}
+                Icon={<UsersIcon classNames="w-4 h-4 max-md:w-5 max-md:h-5" />}
+              />
+              <SubMenuItem
+                text="Plans"
+                href="subscription/plans"
+                isCollapsed={isCollapsed}
+                Icon={
+                  <DocumentIcon className="w-4 h-4 max-md:w-5 max-md:h-5" />
+                }
+              />
+            </div>
+          )}
+        </div>
+        {/* <MenuItem
           href="pricing"
           isSelected={selected === MenuEnum.pricing}
           setIsSelected={setIsSelected}
@@ -177,8 +233,8 @@ const Sidebar = () => {
               height="18"
             />
           }
-        />
-        <MenuItem
+        /> */}
+        {/* <MenuItem
           href="fund"
           isSelected={selected === MenuEnum.fund}
           setIsSelected={setIsSelected}
@@ -195,7 +251,7 @@ const Sidebar = () => {
               height="18"
             />
           }
-        />
+        /> */}
 
         <MenuItem
           href="account"

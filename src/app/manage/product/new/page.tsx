@@ -3,6 +3,7 @@ import Util from '~/server/utils';
 import Merchant from '~/app/api/merchant/logic';
 import Auth0 from '~/server/auth0';
 import NewProductView from '../components/NewProductView';
+import ProtectedPage from '~/server/protectedPage';
 
 const AddNewProduct = async () => {
   const { slug } = Util.getRouteType();
@@ -16,6 +17,6 @@ const AddNewProduct = async () => {
   );
 };
 
-export default Auth0.ProtectedPage(AddNewProduct, {
+export default ProtectedPage(AddNewProduct, {
   returnTo: '/manage/product/new',
 });

@@ -296,7 +296,7 @@ const EditProductView = (props: Props) => {
             initExpanded
             numCompleted={data.subscriptions.length ? 1 : 0}
             numItems={1}
-            paneTitle="Enable & Disable Subscriptions"
+            paneTitle="Set up subscription plans"
           >
             <SubscriptionTogglerSettings
               product={props.product}

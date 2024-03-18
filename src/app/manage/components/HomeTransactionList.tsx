@@ -1,6 +1,5 @@
 'use client';
 import React, { useState } from 'react';
-import { transactionList } from '~/components/Data';
 import OpenLeftIcon from '~/commons/icons/OpenLeftIcon';
 import DocumentIcon from '~/commons/icons/DocumentIcon';
 import DownloadIcon from '~/commons/icons/DownloadIcon';
@@ -11,8 +10,25 @@ import Calendar from '~/components/Calendar';
 import DropdownSelect from '~/components/DropdownSelect';
 import HomeTransactionTable from './HomeTransactionTable';
 import { type TablePopupData } from '../types/general';
+import Link from 'next/link';
 
-const HomeTransactionList = () => {
+type Transaction = {
+  id: string;
+  serviceName: string;
+  serviceType: string;
+  imgUrl: string;
+  userName: string;
+  email: string | undefined;
+  amount: number;
+  type: string;
+  status: string;
+  date: Date;
+};
+type Props = {
+  transactions: Transaction[];
+};
+
+const HomeTransactionList = (props: Props) => {
   const [popupOpen, togglePopup] = useState<TablePopupData | null>(null);
   const [dropdownOpen, toggleDropdown] = useState<boolean>(false);
 
@@ -25,13 +41,15 @@ const HomeTransactionList = () => {
   }) as React.MutableRefObject<HTMLDivElement | null>;
 
   const heading = {
-    _id: 'table_header',
-  } as unknown as (typeof transactionList)[0];
+    id: 'table_header',
+  } as unknown as Transaction;
 
   const renderPopup = () => {
     if (popupOpen === null) {
       return null;
     }
+
+    console.log('popupOpen', popupOpen);
 
     const popupHeight = 158;
     const spaceBelow = window.innerHeight - popupOpen.position;
@@ -44,6 +62,12 @@ const HomeTransactionList = () => {
       ? { bottom: spaceBelow - 32 + 'px' }
       : { top: top + 'px' };
 
+    const getRedirectUrl = () => {
+      const item = props.transactions.find(p => p.id === popupOpen.id);
+      if (item?.type === 'subscription') return `/manage/subscription`;
+      return '/manage/booking';
+    };
+
     return (
       <>
         <div
@@ -53,12 +77,15 @@ const HomeTransactionList = () => {
             ...setStyle,
           }}
         >
-          <button className="flex gap-2 w-full items-center p-4 hover:bg-stone-200 hover:rounded-t-xl">
+          <Link
+            href={getRedirectUrl()}
+            className="flex gap-2 w-full items-center p-4 hover:bg-stone-200 hover:rounded-t-xl"
+          >
             <span>
               <OpenLeftIcon />
             </span>
             <span>View details</span>
-          </button>
+          </Link>
           <button className="flex gap-2 w-full items-center p-4 hover:bg-stone-200">
             <span>
               <DocumentIcon />
@@ -112,13 +139,14 @@ const HomeTransactionList = () => {
         {dropdownOpen && renderDropdown()}
       </div>
       <div className="border-2 relative border-white rounded-xl mt-3 overflow-auto bg-white">
-        {[heading, ...transactionList].map((data, index) => (
-          <div key={data._id} className={`hover:bg-gray-100 relative`}>
+        {[heading, ...props.transactions].map((data, index) => (
+          <div key={data.id || index} className={`hover:bg-gray-100 relative`}>
             <HomeTransactionTable
-              _id={data._id}
+              placeholderId={index === 0 ? 'table_header' : index.toString()}
+              id={data.id}
               index={index}
               data={data}
-              length={transactionList.length}
+              length={props.transactions.length}
               popupOpen={popupOpen}
               togglePopup={togglePopup}
             />

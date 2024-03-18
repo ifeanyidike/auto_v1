@@ -1,10 +1,10 @@
 import React from 'react';
-import Util from '~/server/utils';
-import PageNotFound from './PageNotFound';
+// import PageNotFound from './PageNotFound';
 import { type Prisma } from '@prisma/client';
 import { type DefaultArgs } from '@prisma/client/runtime/library';
-import { redirect } from 'next/navigation';
 import { manRope } from '~/font';
+import Auth0 from '~/server/auth0';
+import ClientPage from './ClientPage';
 
 type Props = {
   children: React.ReactNode;
@@ -17,9 +17,18 @@ type Props = {
 const Page = async (props: Props) => {
   const { merchantData, slug } = props;
   //   if (isAdminLogin) redirect('/manage');
-  if (!merchantData) return PageNotFound({ slug });
 
-  return <div className={manRope.className}>{props.children}</div>;
+  await Auth0.findOrCreateAuth0User();
+
+  // if (!merchantData) return PageNotFound({ slug });
+
+  return (
+    <div className={manRope.className}>
+      <ClientPage merchantData={merchantData} slug={slug}>
+        {props.children}
+      </ClientPage>
+    </div>
+  );
 };
 
 export default Page;
