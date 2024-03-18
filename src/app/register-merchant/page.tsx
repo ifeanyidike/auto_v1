@@ -1,6 +1,7 @@
 import React from 'react';
 import Auth0 from '~/server/auth0';
 import PageClient from './PageClient';
+import ProtectedPage from '~/server/protectedPage';
 
 const RegisterMerchant = async () => {
   const userInfo = await Auth0.findOrCreateAuth0User();
@@ -12,6 +13,6 @@ const RegisterMerchant = async () => {
   );
 };
 
-export default Auth0.ProtectedPage()(RegisterMerchant, {
+export default ProtectedPage(RegisterMerchant, {
   returnTo: '/register-merchant',
 });

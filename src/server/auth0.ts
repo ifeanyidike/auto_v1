@@ -15,12 +15,12 @@ export default class Auth0 {
     return auth0User as Auth0User;
   }
 
-  public static ProtectedPage: ProtectedPageType = () => {
-    const headersList = headers();
-    const hostname = headersList.get('host');
-    const auth0 = initializeAuth0(hostname!);
-    return auth0.withPageAuthRequired;
-  };
+  // public static ProtectedPage: ProtectedPageType = () => {
+  //   const headersList = headers();
+  //   const hostname = headersList.get('host');
+  //   const auth0 = initializeAuth0(hostname!);
+  //   return auth0.withPageAuthRequired;
+  // };
 
   public static async findOrCreateAuth0User() {
     const auth0User = await Auth0.getSessionUser();

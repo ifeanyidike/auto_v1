@@ -2,11 +2,10 @@ import React from 'react';
 import Auth0 from '~/server/auth0';
 import TopMenu from '../components/TopMenu';
 import BackToPage from '../components/BackToPage';
-import Menu from './components/Menu';
-import GeneralSettings from './components/GeneralSettings';
 import Merchant from '~/app/api/merchant/logic';
 import Util from '~/server/utils';
 import PageClient from './components/PageClient';
+import ProtectedPage from '~/server/protectedPage';
 
 const Account = async () => {
   const { slug } = Util.getRouteType();
@@ -38,4 +37,4 @@ const Account = async () => {
   );
 };
 
-export default Auth0.ProtectedPage()(Account, { returnTo: '/account' });
+export default await ProtectedPage(Account, { returnTo: '/account' });

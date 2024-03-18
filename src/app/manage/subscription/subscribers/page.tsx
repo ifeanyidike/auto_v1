@@ -7,6 +7,7 @@ import Merchant from '~/app/api/merchant/logic';
 import Image from 'next/image';
 import Subscription from '~/app/api/subscription/logic';
 import SubscribersList from '../components/SubscribersList';
+import ProtectedPage from '~/server/protectedPage';
 
 const Subscribers = async () => {
   const { slug } = Util.getRouteType();
@@ -58,6 +59,6 @@ const Subscribers = async () => {
   );
 };
 
-export default Auth0.ProtectedPage()(Subscribers, {
+export default ProtectedPage(Subscribers, {
   returnTo: '/manage/subscription/subscribers',
 });

@@ -6,6 +6,7 @@ import DataView from './components/DataView';
 import User from '~/app/api/user/logic';
 import { type Prisma } from '@prisma/client';
 import { type DefaultArgs } from '@prisma/client/runtime/library';
+import ProtectedPage from '~/server/protectedPage';
 
 const Booking = async ({
   searchParams,
@@ -59,6 +60,6 @@ const Booking = async ({
   );
 };
 
-export default Auth0.ProtectedPage()(Booking, {
+export default ProtectedPage(Booking, {
   returnTo: '/service/booking',
 });

@@ -10,6 +10,7 @@ import Util from '~/server/utils';
 import ProductList from './components/ProductList';
 import { type NewMerchantServiceType } from '~/types/utils';
 import { manRope } from '~/font';
+import ProtectedPage from '~/server/protectedPage';
 
 const Product = async () => {
   const { slug } = Util.getRouteType();
@@ -70,4 +71,4 @@ const Product = async () => {
   );
 };
 
-export default Auth0.ProtectedPage()(Product, { returnTo: '/manage/product' });
+export default ProtectedPage(Product, { returnTo: '/manage/product' });

@@ -6,6 +6,7 @@ import DisplayPlanComponent from './components/DisplayPlanComponent';
 import MerchantService from '~/app/api/merchant_service/logic';
 import User from '~/app/api/user/logic';
 import Link from 'next/link';
+import ProtectedPage from '~/server/protectedPage';
 
 const Subscription = async ({
   searchParams,
@@ -99,6 +100,6 @@ const Subscription = async ({
   return <DisplayPlanComponent service={service} />;
 };
 
-export default Auth0.ProtectedPage()(Subscription, {
+export default ProtectedPage(Subscription, {
   returnTo: '/service/subscription',
 });
