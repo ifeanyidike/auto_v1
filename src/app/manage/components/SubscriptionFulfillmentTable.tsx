@@ -9,7 +9,7 @@ type Props = {
   index: number;
   length: number;
   popupOpen: TablePopupData | null;
-  data: SubscriptionItem['fulfillments'][0];
+  data: SubscriptionItem['fufillments'][0];
   togglePopup: React.Dispatch<React.SetStateAction<TablePopupData | null>>;
 };
 
