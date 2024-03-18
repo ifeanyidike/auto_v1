@@ -12,6 +12,7 @@ type Props = {
   suffixSign?: React.ReactNode;
   defaultValue?: string;
   isDisabled?: boolean;
+  value?: string;
   type?: string;
   max?: number;
   min?: number;
@@ -43,6 +44,7 @@ const TextInput = (props: Props) => {
         max={props.max}
         min={props.min}
         defaultValue={defaultValue}
+        value={props.value}
         disabled={isDisabled}
         className={`text-sm border box-border border-stone-200 flex-1 ${
           prefixSign && suffixSign

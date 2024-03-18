@@ -1,6 +1,7 @@
 import React from 'react';
 import { dmSans } from '~/font';
 import Button from './Button';
+import Link from 'next/link';
 
 type Props = {
   slug?: string;
@@ -19,23 +20,21 @@ const PageNotFound = (props: Props) => {
       <h3 className={`text-5xl max-md:text-3xl font-sans font-semibold`}>
         Oops... Something Went Wrong
       </h3>
-      <div className="font-normal text-sm text-white/90 leading-6 w-[600px] flex flex-wrap max-md:w-auto">
+      <div className="justify-center font-normal text-lg text-white/90 leading-6 w-[600px] flex flex-wrap max-md:w-auto">
         {slug ? (
           <p>
             There is no merchant associated with the domain -{' '}
-            <span>{slug}</span>. Please visit another merchant or return to the
-            home page.
+            <span>{slug}</span>.
           </p>
         ) : (
-          <p>
-            The page you requested does not exist. Please check another page or
-            return to the home page.
-          </p>
+          <p>The page you requested does not exist.</p>
         )}
       </div>
-      <Button bgColor="bg-red-700" hasGradient hasShadow>
-        Back to Homepage
-      </Button>
+      <Link href="http://localhost:3000/register-merchant">
+        <Button bgColor="bg-red-700" hasGradient hasShadow>
+          Back to Homepage
+        </Button>
+      </Link>
     </div>
   );
 };

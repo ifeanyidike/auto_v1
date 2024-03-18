@@ -46,7 +46,7 @@ const Subscribers = async () => {
             />
             <div className="flex flex-col items-center gap-4">
               <p className="w-[600px] max-md:w-full text-center max-sm:text-sm">
-                You have no bookings for your services.
+                You have no subscribers for your services.
               </p>
             </div>
           </div>

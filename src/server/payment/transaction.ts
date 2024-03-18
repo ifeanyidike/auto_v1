@@ -1,12 +1,15 @@
 import { Utility } from './utility';
 import {
+  type TransactionTotalResponse,
   type TransactionDataResponse,
   type TransactionInitializationResponse,
+  type TransactionList,
 } from '~/types/payment';
 import PaymentAuthorization from '~/app/api/payment_authorization/logic';
 import Subscription from '~/app/api/subscription/logic';
 import SubscriptionPlan from '~/app/api/subscription_plan/logic';
 import SubscriptionFulfillment from '~/app/api/subscription_fulfillment/logic';
+import { monthNames } from 'utilities/common';
 
 export class Transaction extends Utility {
   private endpoint = this.baseEndpoint + '/transaction';
@@ -126,5 +129,46 @@ export class Transaction extends Utility {
         return response;
       }
     )) as TransactionDataResponse;
+  }
+
+  public async getTotalEarning() {
+    return (await this.get(
+      `${this.endpoint}/totals`
+    )) as TransactionTotalResponse;
+  }
+
+  public async getTransactions(perPage: number, from: string) {
+    const query = [];
+    if (from) {
+      query.push(`from=${from}`);
+    }
+    if (perPage) {
+      query.push(`perPage=${perPage}`);
+    }
+    const queryStr = query.join('&');
+
+    return (await this.get(`${this.endpoint}?${queryStr}`)) as TransactionList;
+  }
+
+  public async getTransactionAmountByMonths(transactions: TransactionList) {
+    const aggr = transactions.data.reduce(
+      (acc, curr) => {
+        const date = new Date(curr.paid_at);
+        const month = monthNames[date.getMonth()]!;
+
+        if (!acc[month]) {
+          acc[month] = 0;
+        }
+        acc[month] += curr.amount;
+        return acc;
+      },
+      {} as { [k: string]: number }
+    );
+    return Object.fromEntries(
+      Object.entries(aggr).sort(
+        ([monthA], [monthB]) =>
+          monthNames.indexOf(monthA) - monthNames.indexOf(monthB)
+      )
+    );
   }
 }

@@ -44,3 +44,27 @@ export const initProductData: CreateMerchantServiceParamType = {
     keypoints: [],
   } as CreateMerchantServiceParamType['faq_keypoints'],
 };
+
+export const ALLOWED_URLs = ['register-merchant'];
+
+export const getShortFormattedDate = () => {
+  const firstDayOfYear = new Date(new Date().getFullYear(), 0, 1);
+  return `${firstDayOfYear.getFullYear()}-${(firstDayOfYear.getMonth() + 1)
+    .toString()
+    .padStart(2, '0')}-${firstDayOfYear.getDate().toString().padStart(2, '0')}`;
+};
+
+export const monthNames = [
+  'Jan',
+  'Feb',
+  'Mar',
+  'Apr',
+  'May',
+  'Jun',
+  'Jul',
+  'Aug',
+  'Sep',
+  'Oct',
+  'Nov',
+  'Dec',
+];

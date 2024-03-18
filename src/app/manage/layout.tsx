@@ -2,6 +2,9 @@ import { notFound } from 'next/navigation';
 import Util from '~/server/utils';
 import '~/styles/globals.css';
 import Sidebar from './components/Sidebar';
+import Merchant from '../api/merchant/logic';
+import Auth0 from '~/server/auth0';
+import MerchantUnauthorizedPage from '~/components/MerchantUnauthorizedPage';
 
 export const metadata = {
   title: 'Admin Page',
@@ -9,13 +12,18 @@ export const metadata = {
   icons: [{ rel: 'icon', url: '/favicon.ico' }],
 };
 
-export default async function Layout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
-  const { isAdminLogin } = Util.getRouteType();
+async function Layout({ children }: { children: React.ReactNode }) {
+  const { isAdminLogin, slug } = Util.getRouteType();
   if (!isAdminLogin) return notFound();
+
+  const merchantClient = new Merchant();
+  const merchant = await merchantClient.getOne({ slug });
+
+  const sessionUser = await Auth0.getSessionUser();
+
+  if (merchant?.email !== sessionUser?.email) {
+    return <MerchantUnauthorizedPage />;
+  }
 
   return (
     <div className="relative flex bg-cyanBlue/40">
@@ -24,3 +32,5 @@ export default async function Layout({
     </div>
   );
 }
+
+export default Auth0.ProtectedPage()(Layout, { returnTo: '/manage/' });

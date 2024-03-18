@@ -32,6 +32,10 @@ export default {
         protocol: 'http',
         hostname: 'res.cloudinary.com',
       },
+      {
+        protocol: 'https',
+        hostname: 's.gravatar.com',
+      },
     ],
   },
 };

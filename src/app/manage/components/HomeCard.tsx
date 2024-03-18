@@ -14,7 +14,7 @@ const HomeCard = (props: Props) => {
       <div className={`w-fit ${props.iconBgColor} p-3 box-border rounded-full`}>
         {props.Icon}
       </div>
-      <span className={`${dmSans.className} font-extrabold text-xl`}>
+      <span className={`${dmSans.className} font-extrabold text-2xl`}>
         {props.count.toLocaleString('en-US')}
       </span>
       <span className="text-xs">{props.title}</span>

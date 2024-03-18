@@ -12,8 +12,11 @@ export default class Utility {
   protected async process<T>(func: () => Promise<T>): Promise<T> {
     try {
       return await func();
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error:', error);
+      if (error.message?.toLowerCase()?.includes('unique constraint failed')) {
+        throw new Error('unique_constraint_failed');
+      }
       throw error;
     } finally {
       await this.db.$disconnect();

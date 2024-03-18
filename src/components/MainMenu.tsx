@@ -9,17 +9,19 @@ import Link from 'next/link';
 import { useUser } from '@auth0/nextjs-auth0/client';
 import DropdownUserMenu from './DropdownUserMenu';
 import LoginButton from './LoginButton';
+import { usePathname } from 'next/navigation';
 
 type Props = {
   formattedPhoneNo: string | undefined;
   rawPhoneNo: string | undefined;
 };
 const MainMenu = (props: Props) => {
+  const pathname = usePathname();
   const navOpen = useHookstate(toggleNav);
   const { user } = useUser();
+  const domain = getSubdomain();
 
   useEffect(() => {
-    const domain = getSubdomain();
     subdomainFunc.set(domain);
   }, []);
 
@@ -31,29 +33,40 @@ const MainMenu = (props: Props) => {
       <div
         className={`text-content-light flex flex-initial gap-14 text-sm font-normal max-lg:hidden`}
       >
-        <Link
-          href="/"
-          className={`hover:text-accent-1 hover:border-content-normal cursor-pointer hover:border-b hover:font-semibold`}
-        >
-          Home
-        </Link>
-        <Link
-          href="/services"
-          className={`hover:text-accent-1 hover:border-content-normal cursor-pointer hover:border-b hover:font-semibold`}
-        >
-          Services
-        </Link>
+        {pathname !== '/register-merchant' && (
+          <>
+            <Link
+              href="/"
+              className={`hover:text-accent-1 hover:border-content-normal cursor-pointer hover:border-b hover:font-semibold`}
+            >
+              Home
+            </Link>
+            <Link
+              href="/services"
+              className={`hover:text-accent-1 hover:border-content-normal cursor-pointer hover:border-b hover:font-semibold`}
+            >
+              Services
+            </Link>
+          </>
+        )}
       </div>
+
       <div className="ml-auto flex gap-3 max-lg:hidden">
-        <div className="flex flex-col gap-0">
-          <span className="text-[0.7rem]">Call us for a free estimate</span>
-          <span className="text-content-light text-lg font-bold">
-            <a href={`tel:${props.rawPhoneNo}`}>{props.formattedPhoneNo} </a>
-          </span>
-        </div>
-        <Button hasGradient={false} hasShadow={false} bgColor="bg-dark">
-          GET AN ESTIMATE
-        </Button>
+        {pathname !== '/register-merchant' && (
+          <>
+            <div className="flex flex-col gap-0">
+              <span className="text-[0.7rem]">Call us for a free estimate</span>
+              <span className="text-content-light text-lg font-bold">
+                <a href={`tel:${props.rawPhoneNo}`}>
+                  {props.formattedPhoneNo}{' '}
+                </a>
+              </span>
+            </div>
+            <Button hasGradient={false} hasShadow={false} bgColor="bg-dark">
+              GET AN ESTIMATE
+            </Button>
+          </>
+        )}
 
         {!user ? <LoginButton /> : <DropdownUserMenu user={user} />}
       </div>

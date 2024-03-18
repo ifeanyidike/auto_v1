@@ -5,9 +5,9 @@ import HomeIcon from '~/commons/icons/HomeIcon';
 import MenuItem from './SidebarMenuItem';
 import { MenuEnum } from '../types/menu';
 import BookingIcon from '~/commons/icons/BookingIcon';
-import BuyIcon from '~/commons/icons/BuyIcon';
+// import BuyIcon from '~/commons/icons/BuyIcon';
 import CalendarIcon from '~/commons/icons/CalendarIcon';
-import WalletIcon from '~/commons/icons/WalletIcon';
+// import WalletIcon from '~/commons/icons/WalletIcon';
 import ProfileIcon from '~/commons/icons/ProfileIcon';
 import ChevroLeftRoundedIcon from '~/commons/icons/ChevroLeftRoundedIcon';
 import ChevroRightRoundedIcon from '~/commons/icons/ChevroRightRoundedIcon';
@@ -216,7 +216,7 @@ const Sidebar = () => {
             </div>
           )}
         </div>
-        <MenuItem
+        {/* <MenuItem
           href="pricing"
           isSelected={selected === MenuEnum.pricing}
           setIsSelected={setIsSelected}
@@ -233,8 +233,8 @@ const Sidebar = () => {
               height="18"
             />
           }
-        />
-        <MenuItem
+        /> */}
+        {/* <MenuItem
           href="fund"
           isSelected={selected === MenuEnum.fund}
           setIsSelected={setIsSelected}
@@ -251,7 +251,7 @@ const Sidebar = () => {
               height="18"
             />
           }
-        />
+        /> */}
 
         <MenuItem
           href="account"
