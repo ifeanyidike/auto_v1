@@ -7,6 +7,7 @@ import Util from '~/server/utils';
 import Booking from '~/app/api/booking/logic';
 import Merchant from '~/app/api/merchant/logic';
 import Image from 'next/image';
+import ProtectedPage from '~/server/protectedPage';
 
 const BookingPage = async () => {
   const { slug } = Util.getRouteType();
@@ -58,6 +59,6 @@ const BookingPage = async () => {
   );
 };
 
-export default Auth0.ProtectedPage()(BookingPage, {
+export default ProtectedPage(BookingPage, {
   returnTo: '/manage/booking',
 });

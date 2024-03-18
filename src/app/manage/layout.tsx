@@ -5,6 +5,7 @@ import Sidebar from './components/Sidebar';
 import Merchant from '../api/merchant/logic';
 import Auth0 from '~/server/auth0';
 import MerchantUnauthorizedPage from '~/components/MerchantUnauthorizedPage';
+import ProtectedPage from '~/server/protectedPage';
 
 export const metadata = {
   title: 'Admin Page',
@@ -33,4 +34,4 @@ async function Layout({ children }: { children: React.ReactNode }) {
   );
 }
 
-export default Auth0.ProtectedPage()(Layout, { returnTo: '/manage/' });
+export default ProtectedPage(Layout, { returnTo: '/manage/' });

@@ -7,6 +7,7 @@ import Booking from '~/app/api/booking/logic';
 import Merchant from '~/app/api/merchant/logic';
 import Image from 'next/image';
 import BookersList from '../components/BookersList';
+import ProtectedPage from '~/server/protectedPage';
 
 const Bookers = async () => {
   const { slug } = Util.getRouteType();
@@ -58,6 +59,6 @@ const Bookers = async () => {
   );
 };
 
-export default Auth0.ProtectedPage()(Bookers, {
+export default ProtectedPage(Bookers, {
   returnTo: '/manage/booking/bookers',
 });

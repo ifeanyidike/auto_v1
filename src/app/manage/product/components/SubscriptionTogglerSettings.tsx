@@ -10,7 +10,7 @@ import Toggler from '~/components/Toggler';
 import { type CreateMerchantServiceParamType } from '~/types/utils';
 
 type Props = {
-  product?: MerchantServiceType;
+  product?: MerchantServiceType | null;
   data: CreateMerchantServiceParamType;
   setData: Dispatch<SetStateAction<CreateMerchantServiceParamType>>;
 };

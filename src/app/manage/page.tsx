@@ -18,6 +18,7 @@ import Merchant from '../api/merchant/logic';
 import Subscription from '../api/subscription/logic';
 import { Transaction } from '~/server/payment/transaction';
 import { getShortFormattedDate } from 'utilities/common';
+import ProtectedPage from '~/server/protectedPage';
 
 const Home = async () => {
   const { slug } = Util.getRouteType();
@@ -133,4 +134,4 @@ const Home = async () => {
   );
 };
 
-export default Auth0.ProtectedPage()(Home, { returnTo: '/manage' });
+export default ProtectedPage(Home, { returnTo: '/manage' });

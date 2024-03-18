@@ -8,6 +8,7 @@ import Image from 'next/image';
 import Subscription from '~/app/api/subscription/logic';
 import PlanList from '../components/PlanList';
 import SubscriptionPlan from '~/app/api/subscription_plan/logic';
+import ProtectedPage from '~/server/protectedPage';
 
 const Plans = async () => {
   const { slug } = Util.getRouteType();
@@ -62,6 +63,6 @@ const Plans = async () => {
   );
 };
 
-export default Auth0.ProtectedPage()(Plans, {
+export default ProtectedPage(Plans, {
   returnTo: '/manage/subscription/plans',
 });
