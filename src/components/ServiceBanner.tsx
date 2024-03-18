@@ -1,22 +1,22 @@
-import React, { type CSSProperties } from "react";
-import LeftDashText from "~/components/LeftDashText";
-import { dmSans } from "~/font";
-import SearchIcon from "~/commons/icons/SearchIcon";
+import React, { type CSSProperties } from 'react';
+import LeftDashText from '~/components/LeftDashText';
+import { dmSans } from '~/font';
+import SearchIcon from '~/commons/icons/SearchIcon';
 
 const ServiceBanner = () => {
   const bannerStyle: CSSProperties = {
     backgroundImage: `url(/images/servicebannerimage.jpg)`,
-    backgroundSize: "cover",
-    backgroundPosition: "center",
+    backgroundSize: 'cover',
+    backgroundPosition: 'center',
   };
 
   const overlayStyle: CSSProperties = {
-    position: "absolute",
+    position: 'absolute',
     top: 0,
     left: 0,
-    width: "100%",
-    height: "100%",
-    backgroundColor: "rgba(0, 0, 0, 0.815)",
+    width: '100%',
+    height: '100%',
+    backgroundColor: 'rgba(0, 0, 0, 0.815)',
     zIndex: -10,
   };
   return (
@@ -28,13 +28,13 @@ const ServiceBanner = () => {
         <div style={overlayStyle}></div>
       </div>
       <div className="align-center flex justify-center">
-        <LeftDashText text="Our Services" textColor="white" />
+        <LeftDashText text="Our Services" lineColor="white" />
       </div>
 
       <div className="flex items-center justify-center max-lg:flex-col max-lg:gap-5">
         <span
           className={`text-center text-3xl font-semibold max-md:text-2xl ${dmSans.className}`}
-          style={{ maxWidth: "500px" }}
+          style={{ maxWidth: '500px' }}
         >
           FIX Fast: Quick And Reliable Auto Repair Services
         </span>
@@ -45,12 +45,12 @@ const ServiceBanner = () => {
             type="text"
             className="focus:border-white-500 w-full max-w-md rounded-full border border-gray-200 bg-transparent px-4 py-2 text-white focus:outline-none"
             placeholder="Search..."
-            style={{ color: "white" }}
+            style={{ color: 'white' }}
           />
           <span className="absolute right-3 top-2 text-white">
             <SearchIcon />
           </span>
-        </div>{" "}
+        </div>{' '}
       </div>
     </div>
   );
