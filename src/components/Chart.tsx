@@ -63,7 +63,7 @@ const Chart = (props: Props) => {
   };
 
   // Configuration options for the chart
-  const options = {
+  const options: any = {
     animations: {
       radius: {
         duration: 400,
@@ -93,7 +93,7 @@ const Chart = (props: Props) => {
       },
     },
   };
-  const pieOptions = {
+  const pieOptions: any = {
     animations: {
       radius: {
         duration: 400,
