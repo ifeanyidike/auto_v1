@@ -7,7 +7,7 @@ import { keypoints_data } from 'utilities/product';
 import { type MultiValue } from 'react-select';
 
 type Props = {
-  product?: MerchantServiceType;
+  product?: MerchantServiceType | null;
   data: CreateMerchantServiceParamType;
   setData: Dispatch<SetStateAction<CreateMerchantServiceParamType>>;
 };
