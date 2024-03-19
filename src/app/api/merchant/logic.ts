@@ -34,7 +34,6 @@ export default class Merchant extends Utility {
     const { id, slug } = data || {};
     return this.process(async () => {
       if (!id && !slug) throw new Error('Either id or slug must be provided');
-
       return await this.db.merchant.findFirst({
         where: { ...(slug ? { slug } : { id }) },
       });

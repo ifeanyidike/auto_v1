@@ -35,8 +35,8 @@ export default class Util {
 
     const adminSlug = process.env.ADMIN_SLUG ?? '';
     const slugParts = slug.split('.');
-    if (slugParts.length === 2 && slugParts[0] === adminSlug) {
-      slug = slugParts[1]!;
+    if (slugParts.length === 2 && slugParts[1] === adminSlug) {
+      slug = slugParts[0]!;
       return { isAdminLogin: true, slug };
     }
     return { isAdminLogin: false, slug, next_url };
