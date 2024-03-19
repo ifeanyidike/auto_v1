@@ -1,5 +1,4 @@
 import React from 'react';
-import Auth0 from '~/server/auth0';
 import TopMenu from '../components/TopMenu';
 import BackToPage from '../components/BackToPage';
 import Merchant from '~/app/api/merchant/logic';
