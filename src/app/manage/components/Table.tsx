@@ -93,13 +93,6 @@ const Table = (props: Props) => {
             <button
               onClick={e => {
                 const rect = e.currentTarget.getBoundingClientRect();
-                // console.log(
-                //   'client rect',
-                //   window.innerHeight,
-                //   window.outerHeight,
-                //   window.screen.height,
-                //   document.documentElement.clientHeight
-                // );
                 if (props.popupOpen) {
                   props.togglePopup(null);
                 } else {

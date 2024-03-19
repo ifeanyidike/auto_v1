@@ -89,7 +89,7 @@ export default async function Home() {
                 />
               ))}
 
-            {merchant?.email === sessionUser.email && (
+            {merchant?.email === sessionUser?.email && (
               <>
                 {Boolean(services?.length) ? (
                   <div className="flex col-span-3 justify-center mt-4">
