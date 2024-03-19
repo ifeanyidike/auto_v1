@@ -50,7 +50,7 @@ const PageClient = (props: Props) => {
       enqueueSnackbar('Merchant sucessfully created', {
         variant: 'success',
       });
-      window.location.href = `http://admin.${data.slug}.moxxil.com/manage`;
+      window.location.href = `http://${data.slug}.admin.moxxil.com/manage`;
     } catch (error: any) {
       let message = error.message;
       if (message === 'unique_constraint_failed') {
@@ -65,7 +65,7 @@ const PageClient = (props: Props) => {
   }
   return (
     <div
-      className={`${dmSans.className} w-[500px] h-fit my-14 mx-auto bg-orange-100 rounded-xl px-8 py-5 flex flex-col gap-10`}
+      className={`${dmSans.className} w-[500px] h-fit my-14 mx-auto bg-orange-100 rounded-xl px-8 py-5 flex flex-col gap-10 max-md:w-96 max-sm:w-80`}
     >
       <SnackbarProvider maxSnack={1} />
       {loading && <LoaderOne />}

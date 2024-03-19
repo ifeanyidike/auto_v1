@@ -10,10 +10,12 @@ import AllFAQs from '~/components/AllFAQs';
 import Util from '~/server/utils';
 import { redirect } from 'next/navigation';
 import MerchantService from './api/merchant_service/logic';
+import Auth0 from '~/server/auth0';
 
 export default async function Home() {
   const { isAdminLogin, slug } = Util.getRouteType();
   if (isAdminLogin) redirect('/manage');
+  const sessionUser = await Auth0.getSessionUser();
 
   const merchantService = new MerchantService();
   const { merchant, services } = await merchantService.getAllByMerchant(slug);
@@ -22,10 +24,10 @@ export default async function Home() {
   return (
     <>
       <main>
-        <div className="flex items-center justify-between bg-gradient-to-r from-gradient-bg-start to-gradient-bg-end px-14 py-28 max-md:flex-col">
+        <div className="flex items-center justify-between bg-gradient-to-r from-gradient-bg-start to-gradient-bg-end px-14 py-16 max-md:flex-col">
           <div className="flex w-[50%] flex-col gap-8 max-md:w-full max-md:text-center">
             <p
-              className={`${robotoMono.className} text-7xl uppercase  text-content-light max-lg:text-6xl max-md:text-4xl `}
+              className={`${robotoMono.className} text-6xl uppercase  text-content-light max-lg:text-6xl max-md:text-4xl `}
             >
               {merchant?.caption ?? 'One-stop auto service solution.'}
             </p>
@@ -51,7 +53,7 @@ export default async function Home() {
             ></Image>
           </div>
         </div>
-        <div className="flex flex-col gap-12 px-14 pb-28 pt-20">
+        <div className="flex flex-col gap-12 px-14 py-16">
           <div className="ml-4 flex flex-col justify-center gap-5 max-md:items-center">
             <LeftDashText text="Our Services" />
             <div className="flex items-end justify-between max-lg:flex-col max-lg:gap-5 max-md:items-center max-md:justify-center max-md:text-center">
@@ -60,12 +62,14 @@ export default async function Home() {
               >
                 Your One-Stop Auto Repairs Solutions
               </span>
-              <Link className="flex gap-2" href="/services">
-                <span className="inset-x-0 bottom-0 w-fit border-b border-transparent transition-all duration-1000 ease-in-out hover:border-content-normal">
-                  View All
-                </span>
-                <ArrowRight />
-              </Link>
+              {Boolean(services?.length) && (
+                <Link className="flex gap-2" href="/services">
+                  <span className="inset-x-0 bottom-0 w-fit border-b border-transparent transition-all duration-1000 ease-in-out hover:border-content-normal">
+                    View All
+                  </span>
+                  <ArrowRight />
+                </Link>
+              )}
             </div>
           </div>
           <div className="grid grid-cols-3 gap-x-3 gap-y-12 max-xl:grid-cols-2 max-lg:grid-cols-2 max-md:grid-cols-1">
@@ -84,10 +88,48 @@ export default async function Home() {
                   href={`/service/${s.service?.title?.toLowerCase() ?? ''}`}
                 />
               ))}
+
+            {merchant?.email === sessionUser.email && (
+              <>
+                {Boolean(services?.length) ? (
+                  <div className="flex col-span-3 justify-center mt-4">
+                    <Link
+                      href={`http://${slug}.admin.moxxil.com/manage/product`}
+                    >
+                      <Button
+                        bgColor="bg-stone-800"
+                        width="full"
+                        hasShadow={true}
+                      >
+                        Add a new service
+                      </Button>
+                    </Link>
+                  </div>
+                ) : (
+                  <div className="flex flex-col items-center justify-center w-full col-span-3 gap-8">
+                    <p className="text-lg">
+                      Want your users to book or subscribe to your auto
+                      servicing/repairs?
+                    </p>
+                    <Link
+                      href={`http://${slug}.admin.moxxil.com/manage/product`}
+                    >
+                      <Button
+                        bgColor="bg-stone-800"
+                        width="full"
+                        hasShadow={true}
+                      >
+                        Add a new service
+                      </Button>
+                    </Link>
+                  </div>
+                )}
+              </>
+            )}
           </div>
         </div>
 
-        <div className="flex items-start justify-between bg-gradient-to-r from-gradient-bg-start to-gradient-bg-end px-14 py-28 max-md:flex-col max-md:gap-20 max-md:px-7 max-md:text-center">
+        <div className="flex items-start justify-between bg-gradient-to-r from-gradient-bg-start to-gradient-bg-end px-14 py-16 max-md:flex-col max-md:gap-20 max-md:px-7 max-md:text-center">
           <div className="w-[50%] items-center justify-center gap-8 max-md:w-full">
             <Image
               src="/images/auto_wheel.webp"
@@ -122,7 +164,7 @@ export default async function Home() {
           </div>
         </div>
 
-        <div className="flex flex-col gap-12 px-14 pb-28 pt-20 max-md:text-center">
+        <div className="flex flex-col gap-12 px-14 py-16 max-md:text-center">
           <div className="ml-4 flex flex-col justify-center gap-5 max-md:ml-0 max-md:items-center">
             <LeftDashText text="FAQ" />
             <div className="flex items-end justify-between max-lg:flex-col max-lg:gap-5 max-md:items-center">

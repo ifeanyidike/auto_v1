@@ -1,14 +1,14 @@
-import Link from "next/link";
-import React from "react";
-import FacebookIcon from "~/commons/icons/FacebookIcon";
-import InstagramIcon from "~/commons/icons/InstagramIcon";
-import LinkedInIcon from "~/commons/icons/LinkedInIcon";
-import Logo from "~/commons/icons/Logo";
-import XIcon from "~/commons/icons/XIcon";
+import Link from 'next/link';
+import React from 'react';
+import FacebookIcon from '~/commons/icons/FacebookIcon';
+import InstagramIcon from '~/commons/icons/InstagramIcon';
+import LinkedInIcon from '~/commons/icons/LinkedInIcon';
+import Logo from '~/commons/icons/Logo';
+import XIcon from '~/commons/icons/XIcon';
 
 const Footer = () => {
   return (
-    <div className="from-gradient-bg-start to-gradient-bg-end flex flex-col items-start justify-between gap-1 bg-gradient-to-r px-14 py-3 ">
+    <div className="from-gradient-bg-start to-gradient-bg-end flex flex-col items-start justify-between gap-1 bg-gradient-to-r px-14 ">
       <div className="flex w-full items-center justify-between border-b-2 border-slate-300 max-md:flex-col max-md:pb-7">
         <Logo />
         <div className="flex h-fit w-fit gap-4">
