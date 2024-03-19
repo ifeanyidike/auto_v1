@@ -50,7 +50,7 @@ const PageClient = (props: Props) => {
       enqueueSnackbar('Merchant sucessfully created', {
         variant: 'success',
       });
-      window.location.href = `http://admin.${data.slug}.localhost:3000/manage`;
+      window.location.href = `http://admin.${data.slug}.moxxil.com/manage`;
     } catch (error: any) {
       let message = error.message;
       if (message === 'unique_constraint_failed') {

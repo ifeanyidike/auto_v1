@@ -19,7 +19,7 @@ const MerchantUnauthorizedPage = () => {
       <div className="font-normal text-lg text-white/90 leading-6 w-[600px] flex flex-wrap max-md:w-auto justify-center">
         <p>You are not authorized to visit this page</p>
       </div>
-      <Link href="http://localhost:3000/register-merchant">
+      <Link href="https://moxxil.com/register-merchant">
         <Button bgColor="bg-red-700" hasGradient hasShadow>
           Back to Homepage
         </Button>
