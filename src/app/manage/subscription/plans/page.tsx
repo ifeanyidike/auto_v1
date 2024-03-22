@@ -1,5 +1,4 @@
 import React from 'react';
-import Auth0 from '~/server/auth0';
 import TopMenu from '../../components/TopMenu';
 import BackToPage from '../../components/BackToPage';
 import Util from '~/server/utils';
@@ -9,6 +8,7 @@ import Subscription from '~/app/api/subscription/logic';
 import PlanList from '../components/PlanList';
 import SubscriptionPlan from '~/app/api/subscription_plan/logic';
 import ProtectedPage from '~/server/protectedPage';
+import { manRope } from '~/font';
 
 const Plans = async () => {
   const { slug } = Util.getRouteType();
@@ -24,7 +24,7 @@ const Plans = async () => {
 
   return (
     <div
-      className={`h-[300px] w-full flex-1 flex flex-col text-inherit rounded-xl`}
+      className={`h-screen ${manRope.className} w-full flex-1 text-inherit rounded-xl items-center max-sm:justify-center`}
     >
       <TopMenu
         showToggle
@@ -41,15 +41,15 @@ const Plans = async () => {
 
       <div className="px-8">
         {!subscriptionList.length ? (
-          <div className="text-base font-normal px-8 flex flex-col gap-10 mt-20 max-sm:mt-0 mb-10 items-center">
+          <div className="text-base font-normal px-8 flex flex-col gap-10 mt-20 mb-10 items-center box-border">
             <Image
               src="/images/auto_wheel.webp"
               width={400}
               height={400}
-              className="w-[400px] h-[400px] max-md:w-[200px] max-md:h-[200px] max-sm:w-[100px] max-sm:h-[100px]"
+              className="w-[400px] h-[400px] max-md:w-[300px] max-md:h-[300px] max-sm:w-[280px] max-sm:h-[280px]"
               alt=""
             />
-            <div className="flex flex-col items-center gap-4">
+            <div className="flex flex-col items-center gap-4 max-md:gap-8">
               <p className="w-[600px] max-md:w-full text-center max-sm:text-sm">
                 You have no subscription plans for your services.
               </p>

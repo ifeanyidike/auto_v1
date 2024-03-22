@@ -158,7 +158,7 @@ const SubscriptionFulfillmentList = (props: Props) => {
     <>
       <div
         ref={dropdownRef}
-        className={`bg-white absolute bottom-32 right-0 w-64 z-50 text-content-normal text-xs flex-flex-col items-center rounded-xl border border-stone-200`}
+        className={`bg-white absolute bottom-10 right-0 w-64 z-50 text-content-normal text-xs flex-flex-col items-center rounded-xl border border-stone-200`}
       >
         <button className="flex flex-col gap-1 mb-2 w-full px-3 pt-4">
           <span>Next cycle starts</span>
@@ -246,7 +246,7 @@ const SubscriptionFulfillmentList = (props: Props) => {
   );
   return (
     <div className="relative mt-8">
-      <div>
+      <div className="relative">
         <button
           onClick={() => toggleDropdown(true)}
           className="text-xs ml-auto flex gap-2 border border-stone-300 bg-white rounded-full px-3 py-2"

@@ -4,7 +4,7 @@ import { initializeAuth0 } from '~/lib/auth0';
 import { type Auth0User } from '~/types/auth';
 
 // const { withPageAuthRequired, getSession } = auth0;
-type ProtectedPageType = () => (Component: any, options: any) => any;
+// type ProtectedPageType = () => (Component: any, options: any) => any;
 export default class Auth0 {
   public static async getSessionUser() {
     const headersList = headers();

@@ -31,6 +31,9 @@ dependencies:
   cloudinary-react:
     specifier: ^1.8.1
     version: 1.8.1(lodash@4.17.21)(react@18.2.0)
+  crypto-js:
+    specifier: ^4.2.0
+    version: 4.2.0
   datauri:
     specifier: ^4.1.0
     version: 4.1.0
@@ -78,6 +81,9 @@ devDependencies:
   '@next/eslint-plugin-next':
     specifier: ^14.0.3
     version: 14.0.3
+  '@types/crypto-js':
+    specifier: ^4.2.2
+    version: 4.2.2
   '@types/eslint':
     specifier: ^8.44.7
     version: 8.44.7
@@ -897,6 +903,10 @@ packages:
       '@types/node': 18.17.0
     dev: false
 
+  /@types/crypto-js@4.2.2:
+    resolution: {integrity: sha512-sDOLlVbHhXpAUAL0YHDUUwDZf3iN4Bwi4W6a0W0b+QcAezUbRtH4FVb+9J4h+XFPW7l/gQ9F8qC7P+Ec4k8QVQ==}
+    dev: true
+
   /@types/debug@4.1.7:
     resolution: {integrity: sha512-9AonUzyTjXXhEOa0DnqpzZi6VHlqKMswga9EXjpXnnqxwLtdvPPtlO8evrI5D9S6asFRCQ6v+wpiUKbw+vKqyg==}
     dependencies:
@@ -1616,6 +1626,10 @@ packages:
       path-key: 3.1.1
       shebang-command: 2.0.0
       which: 2.0.2
+
+  /crypto-js@4.2.0:
+    resolution: {integrity: sha512-KALDyEYgpY+Rlob/iriUtjV6d5Eq+Y191A5g4UqLAi8CyGP9N1+FdVbkc1SxKc2r4YAYqG8JzO2KGL+AizD70Q==}
+    dev: false
 
   /crypto-random-string@2.0.0:
     resolution: {integrity: sha512-v1plID3y9r/lPhviJ1wrXpLeyUIGAZ2SHNYTEapm7/8A9nLPoyvVp3RK/EPFqn5kEznyWgYZNsRtYYIWbuG8KA==}

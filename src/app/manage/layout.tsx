@@ -27,7 +27,7 @@ async function Layout({ children }: { children: React.ReactNode }) {
   }
 
   return (
-    <div className="relative flex bg-cyanBlue/40">
+    <div className="relative flex bg-cyanBlue/40 min-h-screen">
       <Sidebar />
       <div className="flex flex-col flex-1 overflow-hidden">{children}</div>
     </div>

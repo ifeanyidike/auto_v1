@@ -108,7 +108,7 @@ const HomeTransactionList = (props: Props) => {
     <>
       <div
         ref={dropdownRef}
-        className={`bg-white absolute top-9 right-0 w-64 z-50 text-content-normal text-xs flex-flex-col items-center rounded-xl border border-stone-200`}
+        className={`bg-white absolute bottom-9 right-0 w-64 z-50 text-content-normal text-xs flex-flex-col items-center rounded-xl border border-stone-200`}
       >
         <button className="flex gap-2 w-full items-center p-4 hover:bg-stone-200 hover:rounded-t-xl">
           <Calendar getSelectedDate={date => console.log('date', date)} />
@@ -129,7 +129,7 @@ const HomeTransactionList = (props: Props) => {
   );
   return (
     <div className="relative mt-8 mx-5 mb-5">
-      <div>
+      <div className="relative">
         <button
           onClick={() => toggleDropdown(true)}
           className="text-xs ml-auto flex gap-2 border border-stone-300 bg-white rounded-full px-3 py-2"

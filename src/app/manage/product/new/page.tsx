@@ -1,7 +1,6 @@
 import React from 'react';
 import Util from '~/server/utils';
 import Merchant from '~/app/api/merchant/logic';
-import Auth0 from '~/server/auth0';
 import NewProductView from '../components/NewProductView';
 import ProtectedPage from '~/server/protectedPage';
 

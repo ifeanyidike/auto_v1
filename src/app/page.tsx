@@ -19,7 +19,7 @@ export default async function Home() {
 
   const merchantService = new MerchantService();
   const { merchant, services } = await merchantService.getAllByMerchant(slug);
-  const unshuffledFaqs = services?.map(s => s.faqs).flat();
+  const unshuffledFaqs = services?.flatMap(s => s.faqs);
   const faqs = Util.shuffleArray(unshuffledFaqs ?? []).slice(0, 7);
   return (
     <>
@@ -89,7 +89,7 @@ export default async function Home() {
                 />
               ))}
 
-            {merchant?.email === sessionUser?.email && (
+            {merchant?.email === sessionUser?.email ? (
               <>
                 {Boolean(services?.length) ? (
                   <div className="flex col-span-3 justify-center mt-4">
@@ -125,6 +125,11 @@ export default async function Home() {
                   </div>
                 )}
               </>
+            ) : (
+              <div className="px-8 col-span-3 text-sm">
+                There is currently no service in this store please check back
+                later!
+              </div>
             )}
           </div>
         </div>

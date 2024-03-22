@@ -1,5 +1,4 @@
 import React from 'react';
-import Auth0 from '~/server/auth0';
 import HomeCard from './components/HomeCard';
 import DocumentIcon from '~/commons/icons/DocumentIcon';
 import HomeChart from './components/HomeChart';
@@ -54,7 +53,7 @@ const Home = async () => {
     <div className="w-full h-full">
       <TopMenu showToggle />
       <div className="flex max-lg:flex-col gap-4 px-4 py-6 pr-2">
-        <div className="flex flex-[0.4] max-lg:flex-1 gap-3 mt-4 flex-wrap ">
+        <div className="flex flex-[0.4] max-lg:flex-1 gap-3 mt-4 justify-center flex-wrap ">
           <HomeCard
             title="Total bookings"
             Icon={<DocumentIcon />}
@@ -86,7 +85,7 @@ const Home = async () => {
       </div>
       <div className="py-20 mt-10 max-lg:flex-col flex gap-5 bg-gradient-to-r from-gradient-bg-start to-gradient-bg-end">
         <LatestCustomers transactions={transactionsByDate.slice(0, 6)} />
-        <div className="flex flex-col max-lg:mx-6 p-5 flex-[0.5] w-1/2 max-lg:flex-1 max-lg:w-[95%] items-center gap-4 bg-white shadow shadow-white rounded-xl">
+        <div className="flex flex-col max-lg:mx-6 p-5 flex-[0.5] w-1/2 max-lg:flex-1 max-lg:w-[96%] items-center gap-4 max-md:mx-auto bg-white shadow shadow-white rounded-xl">
           <span className="flex justify-between w-full">
             <h3 className="text-lg font-semibold">Subscription Overview</h3>{' '}
           </span>
