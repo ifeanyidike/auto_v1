@@ -2,15 +2,15 @@
 import React, { useState } from 'react';
 import Menu from './Menu';
 import GeneralSettings from './GeneralSettings';
-import { type Prisma } from '@prisma/client';
-import { type DefaultArgs } from '@prisma/client/runtime/library';
 import { Tabs } from './types';
 import { SnackbarProvider } from 'notistack';
 import LoaderOne from '~/components/LoaderOne';
 import ServiceSettings from './ServiceSettings';
+import APIKeySettings from './APIKeySettings';
+import { type MerchantType } from '~/app/api/merchant/logic';
 
 type Props = {
-  merchant: Prisma.MerchantGetPayload<Prisma.MerchantDefaultArgs<DefaultArgs>>;
+  merchant: MerchantType;
 };
 const PageClient = (props: Props) => {
   const [tab, setTab] = useState<Tabs>(Tabs.general);
@@ -24,6 +24,8 @@ const PageClient = (props: Props) => {
         <GeneralSettings setLoading={setLoading} merchant={props.merchant!} />
       ) : tab === Tabs.serviceSettings ? (
         <ServiceSettings setLoading={setLoading} merchant={props.merchant!} />
+      ) : tab === Tabs.apiKeys ? (
+        <APIKeySettings setLoading={setLoading} merchant={props.merchant!} />
       ) : null}
     </>
   );

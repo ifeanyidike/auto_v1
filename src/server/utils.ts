@@ -8,6 +8,7 @@ import { Transaction } from './payment/transaction';
 import { type SubscriptionItem } from '~/app/api/subscription/logic';
 import { type BookingItem } from '~/app/api/booking/logic';
 import { monthNames } from 'utilities/common';
+import CryptoJs from 'crypto-js';
 
 cloudinary.config({
   cloud_name: process.env.CLOUD_NAME,
@@ -262,5 +263,15 @@ export default class Util {
       {} as { [k: string]: number }
     );
     return aggr;
+  }
+
+  public encryptSecret(secret: string) {
+    const key = process.env.SECRET_ENCRYPTION_KEY ?? '';
+    return CryptoJs.AES.encrypt(secret, key).toString();
+  }
+
+  public decryptSecret(encryptedSecret: string) {
+    const key = process.env.SECRET_ENCRYPTION_KEY ?? '';
+    return CryptoJs.AES.decrypt(encryptedSecret, key).toString();
   }
 }

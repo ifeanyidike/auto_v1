@@ -4,7 +4,8 @@ import { hookstate } from '@hookstate/core';
 export const toggleNav = hookstate<boolean>(false);
 export const subdomainFunc = hookstate<string | null | undefined>(null);
 
-export const getSubdomain = (url = window.location.host) => {
+export const getSubdomain = (addr: string | null = null) => {
+  const url = addr || window.location.host;
   const strToCompare = url
     .replace('www.', '')
     .replace('https://', '')

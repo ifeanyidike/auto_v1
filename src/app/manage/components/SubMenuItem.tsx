@@ -6,7 +6,7 @@ import React from 'react';
 type Props = {
   text: string;
   href: string;
-  isCollapsed: boolean;
+  // isCollapsed: boolean;
   Icon?: React.ReactNode;
 };
 export const SubMenuItem = (props: Props) => {
@@ -15,16 +15,16 @@ export const SubMenuItem = (props: Props) => {
   const isSelected = href === pathname;
   return (
     <Link
-      className={`text-sm rounded-xl w-fit px-4 mx-6 max-md:ml-3 py-2 flex gap-2 items-center justify-center ${
+      className={`text-sm rounded-xl w-[90%] px-4 mx-1 py-2 mb-1 flex gap-2 items-center justify-center ${
         isSelected && 'bg-gray-300'
       }`}
       href={`/manage/${props.href}`}
     >
       {props.Icon}
 
-      {!props.isCollapsed && (
-        <span className="text-sm max-md:hidden">{props.text}</span>
-      )}
+      {/* {!props.isCollapsed && ( */}
+      <span className="text-sm max-md:hidden">{props.text}</span>
+      {/* )} */}
     </Link>
   );
 };

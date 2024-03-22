@@ -3,8 +3,6 @@ import React, { useState } from 'react';
 import ProductListListView from './ProductListListView';
 import ProductListCardView from './ProductListCardView';
 import { type NewMerchantServiceType } from '~/types/utils';
-import TopMenu from '../../components/TopMenu';
-import BackToPage from '../../components/BackToPage';
 
 enum ViewType {
   card,
@@ -51,18 +49,6 @@ const ProductList = (props: Props) => {
 
   return (
     <div>
-      <TopMenu
-        showToggle
-        component={
-          <div className="flex justify-between items-center w-full">
-            <BackToPage
-              toHref="/manage/"
-              prevTitle="home"
-              currTitle="List Product Items"
-            />
-          </div>
-        }
-      />
       <div className="ml-auto w-fit mr-8 mt-8 mb-16 flex gap-3">
         <button
           onClick={() => setViewType(ViewType.list)}

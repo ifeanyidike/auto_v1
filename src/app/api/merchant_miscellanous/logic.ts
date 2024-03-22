@@ -23,11 +23,37 @@ export default class MerchantMiscellanous extends Utility {
   }
 
   public async createMany(
-    data: Record<'location' | 'cost' | 'merchantId', string>[]
+    merchantId: string,
+    data: {
+      allowOutsideWork: boolean;
+      locationData: Record<'location' | 'cost', string>[];
+    }
   ) {
     return this.process(async () => {
-      return await this.db.merchantMiscellanous.createMany({
-        data,
+      const locData = await Promise.all(
+        data.locationData.map(async d => {
+          const misc = await this.db.merchantMiscellanous.findFirst({
+            where: { location: d.location },
+          });
+          if (!misc) {
+            const newMisc = await this.db.merchantMiscellanous.create({
+              data: d,
+            });
+            return newMisc.id;
+          }
+          const updatedMisc = await this.update(misc.id, d);
+          return updatedMisc.id;
+        })
+      );
+
+      await this.db.merchant.update({
+        where: { id: merchantId },
+        data: {
+          allowOutsideWork: data.allowOutsideWork,
+          miscellanous: {
+            connect: locData.map(id => ({ id })),
+          },
+        },
       });
     });
   }
