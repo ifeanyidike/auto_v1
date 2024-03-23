@@ -26,17 +26,25 @@ export default class MerchantApiKey extends Utility {
 
   public async createOrUpdate(
     merchantId: string,
-    data: Prisma.MerchantApiKeysUpdateInput
+    paystack: string,
+    calendlyLink: string
   ) {
     return this.process(async () => {
-      const keys = await this.getOneByMerchantId(merchantId);
-      if (keys) {
-        return await this.update(keys.id, { ...data });
-      }
-      return await this.create(
-        merchantId,
-        data as Omit<Prisma.MerchantApiKeysCreateInput, 'merchant'>
-      );
+      await this.db.merchantApiKeys.upsert({
+        where: { merchantId },
+        update: { paystack },
+        create: {
+          paystack,
+          merchant: {
+            connect: { id: merchantId },
+          },
+        },
+      });
+
+      await this.db.merchant.update({
+        where: { id: merchantId },
+        data: { calendlyLink },
+      });
     });
   }
 

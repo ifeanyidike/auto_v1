@@ -10,6 +10,11 @@ const Account = async () => {
   const { slug } = Util.getRouteType();
   const merchantClient = new Merchant();
   const merchant = await merchantClient.getOne({ slug });
+
+  const util = new Util();
+
+  const apiKeys = merchant?.apiKeys;
+  const paystack = util.decryptSecret(apiKeys?.paystack);
   return (
     <div
       className={`h-[300px] w-full flex-1 flex flex-col text-inherit rounded-xl`}
@@ -30,7 +35,7 @@ const Account = async () => {
       <div className="px-10 bg-white w-full h-full">
         <h2 className="text-xl font-semibold pt-5 pb-8">Account Settings</h2>
 
-        <PageClient merchant={merchant!} />
+        <PageClient merchant={merchant!} decryptedSecrets={{ paystack }} />
       </div>
     </div>
   );

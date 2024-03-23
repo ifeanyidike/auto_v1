@@ -10,7 +10,7 @@ import BackToPage from '../../components/BackToPage';
 import Button from '~/components/Button';
 import { type CreateMerchantServiceParamType } from '~/types/utils';
 import Spinner from '~/components/Spinner';
-import { SnackbarProvider } from 'notistack';
+import { SnackbarProvider, enqueueSnackbar } from 'notistack';
 import {
   createService,
   getDiscountNumCompleted,
@@ -31,9 +31,11 @@ import BookmarkIcon from '~/commons/icons/BookmarkIcon';
 import FolderIcon from '~/commons/icons/FolderIcon';
 import DiscountView from './DiscountView';
 import SubscriptionTogglerSettings from './SubscriptionTogglerSettings';
+import Link from 'next/link';
 
 type Props = {
   merchantId: string | undefined;
+  hasApiKey: boolean;
 };
 
 const NewProductView = (props: Props) => {
@@ -106,9 +108,15 @@ const NewProductView = (props: Props) => {
                 hasGradient={false}
                 hasShadow={false}
                 bgColor="bg-content-normal/50"
-                onClick={() =>
-                  saveServiceAsDraft(props.merchantId, data, setSavingDraft)
-                }
+                onClick={() => {
+                  if (!props.hasApiKey) {
+                    return enqueueSnackbar(
+                      'You need to set paystack api key to proceed',
+                      { variant: 'error' }
+                    );
+                  }
+                  saveServiceAsDraft(props.merchantId, data, setSavingDraft);
+                }}
               >
                 <div className="flex gap-2 items-center">
                   {!savingDraft ? (
@@ -128,7 +136,15 @@ const NewProductView = (props: Props) => {
                 gradientEnd="to-content-light"
                 shadowColor="shadow-content-light"
                 bgColor="bg-content-light"
-                onClick={() => createService(props.merchantId, data, setSaving)}
+                onClick={() => {
+                  if (!props.hasApiKey) {
+                    return enqueueSnackbar(
+                      'You need to set paystack api key to proceed',
+                      { variant: 'error' }
+                    );
+                  }
+                  createService(props.merchantId, data, setSaving);
+                }}
               >
                 <div className={`flex gap-2 items-center`}>
                   {!saving ? (
@@ -143,7 +159,15 @@ const NewProductView = (props: Props) => {
           </div>
         }
       />
-
+      <small className="flex items-center justify-center pt-5 gap-2 max-md:w-full max-md:flex-col px-4">
+        <span className="text-center max-md:w-full">
+          *You need to configure paystack online payment to successfully add a
+          product.{'  '}
+        </span>
+        <Link className="text-red-1" href="/manage/account?path=apiKeys">
+          Configure now
+        </Link>
+      </small>
       <div className="pt-5 mb-8 max-sm:mb-24 px-8 flex max-lg:flex-col gap-5 w-full">
         <div className="flex sticky top-2 flex-col flex-[0.4] w-2/5 max-lg:w-full max-lg:flex-1 gap-5 order-11">
           <div className="w-full h-72">

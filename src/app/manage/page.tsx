@@ -75,7 +75,7 @@ const Home = async () => {
           <HomeCard
             title="Total earnings"
             Icon={<SettingsIcon />}
-            count={earnings.data.total_volume / 100}
+            count={earnings?.data?.total_volume / 100 || 0}
             iconBgColor="bg-blue-300"
           />
         </div>

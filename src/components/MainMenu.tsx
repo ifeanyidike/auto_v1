@@ -10,10 +10,13 @@ import { useUser } from '@auth0/nextjs-auth0/client';
 import DropdownUserMenu from './DropdownUserMenu';
 import LoginButton from './LoginButton';
 import { usePathname } from 'next/navigation';
+import Image from 'next/image';
+import { type MerchantType } from '~/app/api/merchant/logic';
 
 type Props = {
   formattedPhoneNo: string | undefined;
   rawPhoneNo: string | undefined;
+  merchant: MerchantType | null;
 };
 const MainMenu = (props: Props) => {
   const pathname = usePathname();
@@ -28,7 +31,17 @@ const MainMenu = (props: Props) => {
   return (
     <div className="relative flex h-20 items-center gap-10 px-14 max-lg:justify-between max-lg:pr-14 max-md:px-7">
       <Link href="/">
-        <Logo />
+        {props.merchant?.logo ? (
+          <Image
+            className="cursor-pointer  mx-auto"
+            src={props.merchant?.logo ?? '/images/logo.png'}
+            alt="logo"
+            width={50}
+            height={50}
+          />
+        ) : (
+          <Logo />
+        )}
       </Link>
       <div
         className={`text-content-light flex flex-initial gap-14 text-sm font-normal max-lg:hidden`}
@@ -54,14 +67,18 @@ const MainMenu = (props: Props) => {
       <div className="ml-auto flex gap-3 max-lg:hidden">
         {pathname !== '/register-merchant' && (
           <>
-            <div className="flex flex-col gap-0">
-              <span className="text-[0.7rem]">Call us for a free estimate</span>
-              <span className="text-content-light text-lg font-bold">
-                <a href={`tel:${props.rawPhoneNo}`}>
-                  {props.formattedPhoneNo}{' '}
-                </a>
-              </span>
-            </div>
+            {props.merchant?.phoneNo && (
+              <div className="flex flex-col gap-0">
+                <span className="text-[0.7rem]">
+                  Call us for a free estimate
+                </span>
+                <span className="text-content-light text-lg font-bold">
+                  <a href={`tel:${props.rawPhoneNo}`}>
+                    {props.formattedPhoneNo}{' '}
+                  </a>
+                </span>
+              </div>
+            )}
             <Button hasGradient={false} hasShadow={false} bgColor="bg-dark">
               GET AN ESTIMATE
             </Button>

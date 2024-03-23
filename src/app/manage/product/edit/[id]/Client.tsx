@@ -9,6 +9,7 @@ import { handleSelectMode } from 'utilities/product';
 type Props = {
   merchantId: string | undefined;
   product?: MerchantServiceType | null;
+  hasApiKey: boolean;
 };
 
 const Client = (props: Props) => {
@@ -82,6 +83,7 @@ const Client = (props: Props) => {
       merchantId={props.merchantId}
       data={data}
       setData={setData}
+      hasApiKey={props.hasApiKey}
     />
   );
 };

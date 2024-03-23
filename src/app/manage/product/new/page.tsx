@@ -8,10 +8,11 @@ const AddNewProduct = async () => {
   const { slug } = Util.getRouteType();
   const merchant = new Merchant();
   const merchantData = await merchant.getOne({ slug });
+  const hasApiKey = !!merchantData?.apiKeys?.paystack;
 
   return (
     <div className={`gap-5`}>
-      <NewProductView merchantId={merchantData?.id} />
+      <NewProductView merchantId={merchantData?.id} hasApiKey={hasApiKey} />
     </div>
   );
 };

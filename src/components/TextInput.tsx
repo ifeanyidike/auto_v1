@@ -2,6 +2,7 @@
 import React from 'react';
 
 type Props = {
+  hasUnstyledSuffix?: boolean;
   placeholder?: string;
   name?: string;
   customStyle?: string;

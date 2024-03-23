@@ -1,8 +1,8 @@
-import Image from "next/image";
-import React from "react";
-import ArrowRight from "~/commons/icons/ArrowRight";
-import Link from "next/link";
-import { dmSans } from "~/font";
+import Image from 'next/image';
+import React from 'react';
+import ArrowRight from '~/commons/icons/ArrowRight';
+import Link from 'next/link';
+import { dmSans } from '~/font';
 
 type Props = {
   imgSrc: string;
@@ -33,7 +33,7 @@ const ServicesCard = (props: Props) => {
         >
           {props.title}
         </span>
-        <p className="text-content-normal text-sm font-normal">
+        <p className="text-content-normal text-sm font-normal line-clamp-2">
           {props.details}
         </p>
         <div className="flex cursor-pointer gap-2">

@@ -126,7 +126,7 @@ export default async function Home() {
                 )}
               </>
             ) : (
-              <div className="px-8 col-span-3 text-sm">
+              <div className="px-8 col-span-3 text-sm text-center">
                 There is currently no service in this store please check back
                 later!
               </div>

@@ -15,7 +15,7 @@ type GeneralSettingsData = {
 
 type ApiKeySettingsData = {
   paystackSecretKey: string;
-  calendlySecretKey: string;
+  calendlyLink: string;
 };
 
 type ServiceSettingsData = {
@@ -57,14 +57,6 @@ const apiKeySettingsSchema = z.object({
     })
     .length(48, {
       message: 'Your paystack secret key must be 48 characters long',
-    }),
-  calendlySecretKey: z
-    .string({
-      required_error: 'The calendly secret key is required',
-      invalid_type_error: 'The calendly secret key must be a string',
-    })
-    .length(48, {
-      message: 'Your calendly secret key must be 48 characters long',
     }),
 });
 
@@ -112,7 +104,7 @@ export async function updateMerchantApiKeySettings(
   data: ApiKeySettingsData | null
 ) {
   const validatedFields = apiKeySettingsSchema.safeParse({
-    ...(data || {}),
+    paystackSecretKey: data?.paystackSecretKey || '',
   });
 
   if (!validatedFields.success) {
@@ -126,14 +118,102 @@ export async function updateMerchantApiKeySettings(
   }
 
   const util = new Util();
-  const paystack = util.encryptSecret(data!.paystackSecretKey);
-  const calendly = util.encryptSecret(data!.calendlySecretKey);
+  const paystackSecret = util.encryptSecret(data!.paystackSecretKey);
 
   const apiKeyClient = new MerchantApiKey();
-  await apiKeyClient.createOrUpdate(merchantId, {
-    paystack,
-    calendly,
-  });
+  try {
+    await apiKeyClient.createOrUpdate(
+      merchantId,
+      paystackSecret,
+      data!.calendlyLink
+    );
+  } catch (error: any) {
+    return { error: error.message };
+  }
 
   return { success: true };
+}
+
+type FormState = {
+  merchantId: string;
+  success: boolean;
+  error: string | null;
+};
+
+type PlainFieldState = {
+  facebook: string;
+  twitter: string;
+  instagram: string;
+  youtube: string;
+  linkedin: string;
+  tiktok: string;
+};
+
+type FormFieldState = Partial<
+  {
+    file: File;
+  } & PlainFieldState
+>;
+
+export async function updateMerchantSocialSettings(
+  prevState: FormState,
+  formData: FormData
+) {
+  const plainData = {} as PlainFieldState;
+  let logo: File | null = null;
+
+  const entries = formData.entries();
+  let done = false;
+  let isEmpty = true;
+
+  while (!done) {
+    const { value, done: doneLooping } = entries.next();
+    if (doneLooping) break;
+    const [key, val] = value as [keyof FormFieldState, string | File];
+
+    if (key === 'file' && (val as File).size) {
+      isEmpty = false;
+      logo = val as File;
+    }
+
+    if (key !== 'file' && val) {
+      isEmpty = false;
+      plainData[key] = val as string;
+    }
+
+    done = doneLooping!;
+  }
+
+  if (isEmpty) {
+    return {
+      merchantId: prevState.merchantId,
+      success: false,
+      error: 'No input was provided. Please provide some input!',
+    };
+  }
+  const merchantClient = new Merchant();
+  let uploadedImage: Record<'uploadId' | 'url', string> | undefined = undefined;
+
+  if (logo) {
+    const merchantData = await merchantClient.getOne({
+      id: prevState.merchantId,
+    });
+    const existingImage = { id: merchantData?.logoId, url: merchantData?.logo };
+    const util = new Util();
+    uploadedImage = await util.uploadOrUpdate(logo, 'logo', existingImage);
+  }
+
+  await merchantClient.update(prevState.merchantId, {
+    ...plainData,
+    ...(uploadedImage && {
+      logoId: uploadedImage.uploadId,
+      logo: uploadedImage.url,
+    }),
+  });
+
+  return {
+    merchantId: prevState.merchantId,
+    success: true,
+    error: null,
+  };
 }
