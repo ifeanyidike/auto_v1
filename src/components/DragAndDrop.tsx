@@ -19,8 +19,10 @@ interface ExtendedFile extends File {
 
 type Props = {
   isMultiple?: boolean;
-  getFiles: (files: File[]) => void;
+  getFiles?: (files: File[]) => void;
   defaultValue?: string | null;
+  isLogo?: boolean;
+  name?: string;
 };
 
 const UploadIcon = () => (
@@ -56,7 +58,7 @@ const AlterIcon = () => (
 );
 
 const DragAndDrop = (props: Props) => {
-  const { isMultiple = false, defaultValue = '' } = props;
+  const { isMultiple = false, defaultValue = '', isLogo = false } = props;
   const [files, setFiles] = useState<ExtendedFile[]>([]);
   // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call
   const {
@@ -84,7 +86,7 @@ const DragAndDrop = (props: Props) => {
       console.log('fileRejected', fileRejections, event);
     },
     onDrop: useCallback<(_: File[]) => void>(acceptedFiles => {
-      props.getFiles(acceptedFiles);
+      props.getFiles && props.getFiles(acceptedFiles);
       const files = acceptedFiles.map(file =>
         Object.assign(file, {
           preview: URL.createObjectURL(file),
@@ -94,6 +96,13 @@ const DragAndDrop = (props: Props) => {
         setFiles(files);
       } else {
         setFiles(prevFiles => [...prevFiles, ...files]);
+      }
+      const input = document.getElementById('file') as HTMLInputElement;
+      if (input && acceptedFiles.length) {
+        const fileList = new DataTransfer();
+        let file = acceptedFiles[0] as File;
+        fileList.items.add(file);
+        input.files = fileList.files;
       }
     }, []),
   });
@@ -125,7 +134,11 @@ const DragAndDrop = (props: Props) => {
           width={100}
           height={100}
           alt="Image"
-          className="block w-full h-full rounded-xl object-cover object-top"
+          className={`block rounded-xl ${
+            isLogo
+              ? 'object-contain w-auto h-auto mx-auto'
+              : 'object-cover  w-full h-full'
+          } object-top`}
           onLoad={() => {
             URL.revokeObjectURL(preview);
           }}
@@ -178,6 +191,8 @@ const DragAndDrop = (props: Props) => {
           </span>
         </div>
       )}
+
+      <input type="file" id="file" name={props.name} className="hidden" />
     </section>
   );
 };

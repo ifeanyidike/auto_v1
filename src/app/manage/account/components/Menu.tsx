@@ -5,13 +5,17 @@ import MenuToggle from '~/commons/icons/MenuToggle';
 import { useHookstate } from '@hookstate/core';
 import { hideAdminBar } from '~/states/utility';
 import { useClickOutside } from '~/hooks/useClickOutside';
+import { useSearchParams } from 'next/navigation';
 
 type Props = {
   getActiveTab: (t: Tabs) => void;
 };
 
 const Menu = (props: Props) => {
-  const [activeTab, setActiveTab] = React.useState<Tabs>(Tabs.general);
+  const queryParam = useSearchParams();
+  const [activeTab, setActiveTab] = React.useState<Tabs>(
+    queryParam.get('path') === 'apiKeys' ? Tabs.apiKeys : Tabs.general
+  );
   const hideBar = useHookstate(hideAdminBar);
   const [dropdown, toggleDropdown] = useState(false);
 
@@ -23,8 +27,8 @@ const Menu = (props: Props) => {
     <>
       {/* Large screen */}
       <div
-        className={`menu flex bg-gray-200 px-[3px] py-1 rounded-full w-full gap-10 ${
-          hideBar.get() ? 'max-sm:hidden' : 'max-md:hidden'
+        className={`menu flex bg-gray-200 px-[3px] py-1 rounded-full w-full gap-4 ${
+          hideBar.get() ? 'max-md:hidden' : 'max-lg:hidden'
         }`}
       >
         {Object.entries(Tabs).map(([k, v]) => {
@@ -50,7 +54,7 @@ const Menu = (props: Props) => {
       <div
         ref={dropdownRef}
         className={` flex-col hidden relative ${
-          hideBar.get() ? 'max-sm:flex' : 'max-md:flex'
+          hideBar.get() ? 'max-md:flex' : 'max-lg:flex'
         }`}
       >
         <div

@@ -8,7 +8,7 @@ import { Transaction } from './payment/transaction';
 import { type SubscriptionItem } from '~/app/api/subscription/logic';
 import { type BookingItem } from '~/app/api/booking/logic';
 import { monthNames } from 'utilities/common';
-import CryptoJs from 'crypto-js';
+import CryptoJS from 'crypto-js';
 
 cloudinary.config({
   cloud_name: process.env.CLOUD_NAME,
@@ -142,6 +142,27 @@ export default class Util {
     };
   }
 
+  public async uploadOrUpdate(
+    file: File,
+    folder = '',
+    existingImage: Record<'id' | 'url', string | null | undefined> | null
+  ) {
+    const uploadedImage = await this.upload(file, folder);
+    if (!uploadedImage) {
+      throw new Error('An error occurred in uploading image.');
+    }
+
+    if (existingImage?.url) {
+      const imageId = existingImage?.id;
+      const imageUrl = existingImage?.url;
+
+      const uploadId = existingImage?.id ? `${folder}/${imageId}` : imageUrl;
+
+      await this.deleteUpload({ uploadId: uploadId, imageUrl });
+    }
+    return uploadedImage;
+  }
+
   public async verifyTransaction(
     reference: string | undefined,
     email: string | undefined,
@@ -267,11 +288,13 @@ export default class Util {
 
   public encryptSecret(secret: string) {
     const key = process.env.SECRET_ENCRYPTION_KEY ?? '';
-    return CryptoJs.AES.encrypt(secret, key).toString();
+    return CryptoJS.AES.encrypt(secret, key).toString();
   }
 
-  public decryptSecret(encryptedSecret: string) {
+  public decryptSecret(encryptedSecret: string | null | undefined) {
+    if (!encryptedSecret) return '';
     const key = process.env.SECRET_ENCRYPTION_KEY ?? '';
-    return CryptoJs.AES.decrypt(encryptedSecret, key).toString();
+    var bytes = CryptoJS.AES.decrypt(encryptedSecret, key);
+    return bytes.toString(CryptoJS.enc.Utf8);
   }
 }

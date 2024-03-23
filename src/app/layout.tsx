@@ -41,6 +41,7 @@ export default async function RootLayout({
               <MainMenu
                 formattedPhoneNo={formattedPhoneNo}
                 rawPhoneNo={rawPhoneNo}
+                merchant={merchantData}
               />
               <MobileMenu />
             </>
@@ -54,7 +55,7 @@ export default async function RootLayout({
               {children}
             </Page>
           </Suspense>
-          {!isAdminLogin && <Footer />}
+          {!isAdminLogin && <Footer merchantData={merchantData} />}
         </body>
       </UserProvider>
     </html>

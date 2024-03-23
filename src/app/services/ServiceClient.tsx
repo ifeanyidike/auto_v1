@@ -35,8 +35,8 @@ const ServiceClient = (props: Props) => {
           <animated.div key={s.id} style={{ opacity: isInView ? 1 : 0 }}>
             <ServicesPageCard
               category={s.service?.type ?? ''}
-              details={s.service?.description ?? ''}
-              imgSrc={s.imgUrl ?? s.service?.imgUrl ?? ''}
+              details={s.description ?? ''}
+              imgSrc={s.imgUrl ?? s.imgUrl ?? ''}
               title={s.service?.title ?? ''}
               href={`/service/${s.service?.title ?? ''}`}
             />

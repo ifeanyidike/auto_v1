@@ -10,7 +10,7 @@ import BackToPage from '../../components/BackToPage';
 import Button from '~/components/Button';
 import { type CreateMerchantServiceParamType } from '~/types/utils';
 import Spinner from '~/components/Spinner';
-import { SnackbarProvider } from 'notistack';
+import { SnackbarProvider, enqueueSnackbar } from 'notistack';
 import { type MerchantServiceType } from '~/app/api/merchant_service/logic';
 import {
   createService,
@@ -37,6 +37,7 @@ import SubscriptionTogglerSettings from './SubscriptionTogglerSettings';
 
 type Props = {
   merchantId: string | undefined;
+  hasApiKey: boolean;
   product?: MerchantServiceType | null;
   data: CreateMerchantServiceParamType;
   setData: React.Dispatch<React.SetStateAction<CreateMerchantServiceParamType>>;
@@ -69,14 +70,20 @@ const EditProductView = (props: Props) => {
                 hasGradient={false}
                 hasShadow={false}
                 bgColor="bg-content-normal/50"
-                onClick={() =>
+                onClick={() => {
+                  if (!props.hasApiKey) {
+                    return enqueueSnackbar(
+                      'You need to set paystack api key to proceed',
+                      { variant: 'error' }
+                    );
+                  }
                   saveServiceAsDraft(
                     props.merchantId,
                     data,
                     setSavingDraft,
                     props.product
-                  )
-                }
+                  );
+                }}
                 isDisabled={disableDraftSave(props.product, data)}
               >
                 <div className="flex gap-2 items-center">
@@ -103,14 +110,20 @@ const EditProductView = (props: Props) => {
                 gradientEnd="to-content-light"
                 shadowColor="shadow-content-light"
                 bgColor="bg-content-light"
-                onClick={() =>
+                onClick={() => {
+                  if (!props.hasApiKey) {
+                    return enqueueSnackbar(
+                      'You need to set paystack api key to proceed',
+                      { variant: 'error' }
+                    );
+                  }
                   createService(
                     props.merchantId,
                     data,
                     setSaving,
                     props.product
-                  )
-                }
+                  );
+                }}
                 isDisabled={disablePublish(props.product, data)}
               >
                 <div className={`flex gap-2 items-center`}>

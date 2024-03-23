@@ -1,17 +1,14 @@
 import React from 'react';
 // import PageNotFound from './PageNotFound';
-import { type Prisma } from '@prisma/client';
-import { type DefaultArgs } from '@prisma/client/runtime/library';
 import { manRope } from '~/font';
 import Auth0 from '~/server/auth0';
 import ClientPage from './ClientPage';
+import { type MerchantType } from '~/app/api/merchant/logic';
 
 type Props = {
   children: React.ReactNode;
   slug: string | undefined;
-  merchantData: Prisma.MerchantGetPayload<
-    Prisma.MerchantDefaultArgs<DefaultArgs>
-  > | null;
+  merchantData: MerchantType | null;
   isAdminLogin: boolean;
 };
 const Page = async (props: Props) => {

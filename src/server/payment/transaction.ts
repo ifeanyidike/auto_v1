@@ -151,7 +151,7 @@ export class Transaction extends Utility {
   }
 
   public async getTransactionAmountByMonths(transactions: TransactionList) {
-    const aggr = transactions.data.reduce(
+    const aggr = transactions?.data?.reduce(
       (acc, curr) => {
         const date = new Date(curr.paid_at);
         const month = monthNames[date.getMonth()]!;
@@ -164,6 +164,8 @@ export class Transaction extends Utility {
       },
       {} as { [k: string]: number }
     );
+    if (!aggr) return {};
+
     return Object.fromEntries(
       Object.entries(aggr).sort(
         ([monthA], [monthB]) =>

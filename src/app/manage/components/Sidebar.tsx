@@ -19,7 +19,10 @@ import { manRope } from '~/font';
 import UsersIcon from '~/commons/icons/UsersIcon';
 import DocumentIcon from '~/commons/icons/DocumentIcon';
 
-const Sidebar = () => {
+type Props = {
+  logo: string | null;
+};
+const Sidebar = (props: Props) => {
   const [selected, setIsSelected] = useState<MenuEnum | null>(null);
   const [openOptions, toggleOptions] = useState(false);
   const hideBar = useHookstate(hideAdminBar);
@@ -62,7 +65,7 @@ const Sidebar = () => {
         <div className={`flex w-full mr-auto`}>
           <Image
             className="cursor-pointer  mx-auto"
-            src="/images/logo.png"
+            src={props.logo ?? '/images/logo.png'}
             alt="logo"
             width={100}
             height={50}
