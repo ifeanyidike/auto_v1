@@ -11,7 +11,6 @@ import Button from '~/components/Button';
 import { type CreateMerchantServiceParamType } from '~/types/utils';
 import { SnackbarProvider, enqueueSnackbar } from 'notistack';
 import {
-  getDiscountNumCompleted,
   getFAQKeyPointsNumCompleted,
   getPricingNumCompleted,
   handleSelectMode,
@@ -82,12 +81,9 @@ const NewProductView = (props: Props) => {
   });
   const [actionCount, setActionCount] = useState(0);
   const [saving, setSaving] = useState<boolean>(false);
-  const [savingDraft, setSavingDraft] = useState<boolean>(false);
   const pricingCompleted = getPricingNumCompleted(data);
-  const discountCompleted = getDiscountNumCompleted(data);
   const faqKeyPointsCompleted = getFAQKeyPointsNumCompleted(data);
 
-  // const [state, formAction] = useFormState(save, { success: false });
   const [state, formAction] = useFormState(save, {
     success: false,
     error: null,

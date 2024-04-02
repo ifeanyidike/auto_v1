@@ -86,41 +86,41 @@ export default class Discount extends Utility {
     return result.filter(Boolean);
   }
 
-  public async findItem(
-    data: Record<'code' | 'type' | 'merchantServiceId', string>[]
-  ) {
-    return await Promise.all(
-      data.map(d =>
-        this.process(async () => {
-          return await this.db.discount.findFirst({
-            where: { ...d },
-          });
-        })
-      )
-    );
-  }
+  // public async findItem(
+  //   data: Record<'code' | 'type' | 'merchantServiceId', string>[]
+  // ) {
+  //   return await Promise.all(
+  //     data.map(d =>
+  //       this.process(async () => {
+  //         return await this.db.discount.findFirst({
+  //           where: { ...d },
+  //         });
+  //       })
+  //     )
+  //   );
+  // }
 
-  public async getOrCreateMany(
-    serviceId: string,
-    data: Record<'code' | 'value' | 'type', string>[]
-  ) {
-    return await Promise.all(
-      data.map(async d => {
-        const discount = await this.findItem({
-          code: d.code,
-          type: d.type,
-          merchantServiceId: serviceId,
-        });
+  // public async getOrCreateMany(
+  //   serviceId: string,
+  //   data: Record<'code' | 'value' | 'type', string>[]
+  // ) {
+  //   return await Promise.all(
+  //     data.map(async d => {
+  //       const discount = await this.findItem({
+  //         code: d.code,
+  //         type: d.type,
+  //         merchantServiceId: serviceId,
+  //       });
 
-        if (discount && discount.value !== d.value) {
-          await this.update(discount.id, { value: d.value });
-        }
-        if (discount) return discount.id;
-        const discount_data = await this.create({ ...d });
-        return discount_data.id;
-      })
-    );
-  }
+  //       if (discount && discount.value !== d.value) {
+  //         await this.update(discount.id, { value: d.value });
+  //       }
+  //       if (discount) return discount.id;
+  //       const discount_data = await this.create({ ...d });
+  //       return discount_data.id;
+  //     })
+  //   );
+  // }
 
   public async getExpiredDiscounts() {
     return this.process(async () => {
