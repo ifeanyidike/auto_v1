@@ -1,7 +1,7 @@
 import React from 'react';
-import Util from '~/server/utils';
 import RedirectLinks from '../../components/RedirectLinks';
 import SuccessIcon from '~/commons/icons/SuccessIcon';
+import { Transaction } from '~/server/payment/transaction';
 
 const SubscriptionConfirmation = async ({
   searchParams,
@@ -13,8 +13,12 @@ const SubscriptionConfirmation = async ({
     string,
     string
   >;
-  const util = new Util();
-  const data = await util.verifyTransaction(reference, user_email, service);
+  const transaction = new Transaction();
+  const data = await transaction.verifyTransaction(
+    reference,
+    user_email,
+    service
+  );
 
   return (
     <div className="flex flex-col items-center justify-center my-14 gap-10">

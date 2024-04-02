@@ -2,6 +2,7 @@ import { headers } from 'next/headers';
 import User from '~/app/api/user/logic';
 import { initializeAuth0 } from '~/lib/auth0';
 import { type Auth0User } from '~/types/auth';
+import { Mailer } from './mail';
 
 // const { withPageAuthRequired, getSession } = auth0;
 // type ProtectedPageType = () => (Component: any, options: any) => any;
@@ -27,12 +28,20 @@ export default class Auth0 {
     if (!auth0User) return null;
 
     const UserLogic = new User();
+    const userExists = (await UserLogic.numUser(auth0User.email)) === 1;
 
-    return await UserLogic.findOrCreate(auth0User.email, {
+    const userData = await UserLogic.findOrCreate(auth0User.email, {
       firstName: auth0User.given_name,
       lastName: auth0User.family_name,
       imgUrl: auth0User.picture,
       email: auth0User.email,
     });
+
+    if (!userExists) {
+      const mailer = new Mailer();
+      await mailer.sendWelcomeUserEmail();
+    }
+
+    return userData;
   }
 }

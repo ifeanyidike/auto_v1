@@ -78,7 +78,7 @@ const ServiceSettings = (props: Props) => {
 
   return (
     <div>
-      <div className="flex max-lg:flex-col gap-4 px-2 py-8">
+      <div className="flex max-lg:flex-col gap-8 px-2 py-8">
         <div className="flex flex-col w-1/2 max-lg:w-full gap-10">
           <div className="flex items-center text-sm gap-2">
             <Toggler
@@ -202,22 +202,7 @@ const ServiceSettings = (props: Props) => {
           </div>
         </div>
 
-        <div className="flex flex-col w-1/2 max-lg:w-full gap-10">
-          {/* <div className="flex flex-col gap-1">
-            <label
-              htmlFor="slug"
-              className="text-[10px] uppercase font-semibold"
-            >
-              Merchant Slug
-            </label>
-            <TextInput
-              name="slug"
-              placeholder=""
-              isDisabled
-              value={props.merchant.slug}
-            />
-          </div> */}
-        </div>
+        <div className="flex flex-col w-1/2 max-lg:w-full gap-10"></div>
       </div>
       <div className="mb-4 px-2">
         <Button

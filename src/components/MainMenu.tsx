@@ -12,12 +12,21 @@ import LoginButton from './LoginButton';
 import { usePathname } from 'next/navigation';
 import Image from 'next/image';
 import { type MerchantType } from '~/app/api/merchant/logic';
+import NotificationDropdown from './NotificationDropdown';
 
+type Notification = {
+  id: string;
+  isRead: boolean;
+  message: string;
+  createdAt: Date;
+};
 type Props = {
   formattedPhoneNo: string | undefined;
   rawPhoneNo: string | undefined;
   merchant: MerchantType | null;
+  notifications: Notification[];
 };
+
 const MainMenu = (props: Props) => {
   const pathname = usePathname();
   const navOpen = useHookstate(toggleNav);
@@ -64,29 +73,42 @@ const MainMenu = (props: Props) => {
         )}
       </div>
 
-      <div className="ml-auto flex gap-3 max-lg:hidden">
-        {pathname !== '/register-merchant' && (
-          <>
-            {props.merchant?.phoneNo && (
-              <div className="flex flex-col gap-0">
-                <span className="text-[0.7rem]">
-                  Call us for a free estimate
-                </span>
-                <span className="text-content-light text-lg font-bold">
-                  <a href={`tel:${props.rawPhoneNo}`}>
-                    {props.formattedPhoneNo}{' '}
-                  </a>
-                </span>
-              </div>
-            )}
-            <Button hasGradient={false} hasShadow={false} bgColor="bg-dark">
-              GET AN ESTIMATE
-            </Button>
-          </>
-        )}
+      <div className="ml-auto flex gap-6 items-center">
+        <NotificationDropdown notifications={props.notifications} />
 
-        {!user ? <LoginButton /> : <DropdownUserMenu user={user} />}
+        <div className="flex gap-3 max-lg:hidden">
+          {pathname !== '/register-merchant' && (
+            <>
+              {props.merchant?.phoneNo && (
+                <>
+                  <div className="flex flex-col gap-0">
+                    <span className="text-[0.7rem]">
+                      Call us for a free estimate
+                    </span>
+                    <span className="text-content-light text-lg font-bold">
+                      <a href={`tel:${props.rawPhoneNo}`}>
+                        {props.formattedPhoneNo}{' '}
+                      </a>
+                    </span>
+                  </div>
+                  <a href={`tel:${props.rawPhoneNo}`}>
+                    <Button
+                      hasGradient={false}
+                      hasShadow={false}
+                      bgColor="bg-dark"
+                    >
+                      GET AN ESTIMATE
+                    </Button>
+                  </a>
+                </>
+              )}
+            </>
+          )}
+
+          {!user ? <LoginButton /> : <DropdownUserMenu user={user} />}
+        </div>
       </div>
+
       <div
         className="hidden cursor-pointer max-lg:flex"
         onClick={() => toggleNav.set(!navOpen.get())}

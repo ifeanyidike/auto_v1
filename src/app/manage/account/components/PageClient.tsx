@@ -10,6 +10,7 @@ import APIKeySettings from './APIKeySettings';
 import { type MerchantType } from '~/app/api/merchant/logic';
 import { useSearchParams } from 'next/navigation';
 import SocialSettings from './SocialSettings';
+import DiscountSettings from './DiscountSettings';
 
 type Props = {
   merchant: MerchantType;
@@ -30,7 +31,7 @@ const PageClient = (props: Props) => {
       <Menu getActiveTab={tab => setTab(tab)} />
       {tab === Tabs.general ? (
         <GeneralSettings setLoading={setLoading} merchant={props.merchant!} />
-      ) : tab === Tabs.serviceSettings ? (
+      ) : tab === Tabs.service ? (
         <ServiceSettings setLoading={setLoading} merchant={props.merchant!} />
       ) : tab === Tabs.apiKeys ? (
         <APIKeySettings
@@ -38,8 +39,10 @@ const PageClient = (props: Props) => {
           merchant={props.merchant!}
           decryptedSecrets={props.decryptedSecrets}
         />
-      ) : tab === Tabs.socialSettings ? (
+      ) : tab === Tabs.social ? (
         <SocialSettings setLoading={setLoading} merchant={props.merchant!} />
+      ) : tab === Tabs.discount ? (
+        <DiscountSettings setLoading={setLoading} merchant={props.merchant!} />
       ) : null}
     </>
   );

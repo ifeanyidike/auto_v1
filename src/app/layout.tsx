@@ -10,6 +10,9 @@ import Page from '~/components/Page';
 import Util from '~/server/utils';
 import { Suspense } from 'react';
 import Loading from './loading';
+import Notification from './api/notification/logic';
+import Auth0 from '~/server/auth0';
+import User from './api/user/logic';
 
 // const inter = Inter({
 //   subsets: ["latin"],
@@ -32,6 +35,13 @@ export default async function RootLayout({
   const rawPhoneNo = merchantData?.phoneNo;
   const formattedPhoneNo = Util.formatPhoneNo(rawPhoneNo!);
 
+  const sessionUser = await Auth0.getSessionUser();
+  const userClient = new User();
+  const user = await userClient.getOne({ email: sessionUser?.email });
+
+  const notificationClient = new Notification();
+  const notifications = await notificationClient.getManyByUser(user?.id, slug);
+
   return (
     <html lang="en" className={manRope.className}>
       <UserProvider loginUrl="/api/auth/login">
@@ -42,6 +52,7 @@ export default async function RootLayout({
                 formattedPhoneNo={formattedPhoneNo}
                 rawPhoneNo={rawPhoneNo}
                 merchant={merchantData}
+                notifications={notifications}
               />
               <MobileMenu />
             </>

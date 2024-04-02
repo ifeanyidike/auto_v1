@@ -12,7 +12,7 @@ const AddNewProduct = async () => {
 
   return (
     <div className={`gap-5`}>
-      <NewProductView merchantId={merchantData?.id} hasApiKey={hasApiKey} />
+      <NewProductView merchant={merchantData!} hasApiKey={hasApiKey} />
     </div>
   );
 };

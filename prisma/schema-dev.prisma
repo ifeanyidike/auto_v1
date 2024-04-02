@@ -1,3 +1,4 @@
+
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
@@ -29,10 +30,13 @@ model Merchant {
   subscriptions     Subscription[]
   bookings          Booking[]
   subscriptionPlans SubscriptionPlan[]
+  reviews           Review[]
+  discounts         Discount[]
   allowOutsideWork  Boolean   @default(false)
   miscellanous      MerchantMiscellanous[] 
   apiKeys           MerchantApiKeys?
   calendlyLink      String?
+  notification      Notification[]
 
   logo              String?
   logoId            String?
@@ -123,14 +127,19 @@ model Discount {
   code              String
   value             String
   type              String
-  merchantService   MerchantService? @relation(fields: [merchantServiceId], references: [id])
-  merchantServiceId String?
-  
-  // Should be  merchantService   MerchantService? @relation(fields: [merchantServiceId], references: [id])
-  // merchantServiceId String?
+  services          MerchantService[]
+
+  merchant          Merchant? @relation(fields: [merchantId], references: [id])
+  merchantId        String?
+
+  plans             SubscriptionPlan[]
+
+  expiresOn         DateTime?
 
   createdAt      DateTime        @default(now())
   updatedAt      DateTime        @updatedAt @default(now())
+
+  @@unique([code, merchantId])
 }
 
 // SubscriptionPlan
@@ -139,13 +148,16 @@ model SubscriptionPlan {
   id                String           @id @default(cuid())
   interval          String
   code              String
-  autoBrand         String         @default("NONE")
+  autoBrand         String         @default("FIXED")
   merchantService   MerchantService? @relation(fields: [merchantServiceId], references: [id])
   merchantServiceId String?
 
   merchant          Merchant? @relation(fields: [merchantId], references: [id])
   merchantId        String?
   subscription      Subscription[]  
+
+  discount          Discount? @relation(fields: [discountId], references: [id])
+  discountId        String?
 
   createdAt      DateTime        @default(now())
   updatedAt      DateTime        @updatedAt
@@ -227,6 +239,7 @@ model SubscriptionFulfillment {
   paidOn            DateTime?
   fulfilledOn       DateTime?
   amountPaid        Decimal     @default(0)
+  review           Review?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt          
@@ -250,12 +263,33 @@ model Booking {
   location          String?
   info              String?
   paymentMode       String @default("online")
+  review           Review?
 
   isPaid            Boolean @default(false)
   isFulfilled       Boolean @default(false)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+model Review {
+  id                            String    @id @default(cuid())
+  rating                        Int
+  description                   String?
+  booking                       Booking? @relation(fields: [bookingId], references: [id])
+  bookingId                     String?  @unique
+  subscriptionFulfillment       SubscriptionFulfillment? @relation(fields: [subscriptionFulfillmentId], references: [id])
+  subscriptionFulfillmentId     String?  @unique
+
+  user                          User @relation(fields: [userId], references: [id])
+  userId                        String
+
+  merchant                      Merchant @relation(fields: [merchantId], references: [id])
+  merchantId                    String 
+
+  
+  createdAt                     DateTime @default(now())
+  updatedAt                     DateTime @updatedAt
 }
 
 model Payment {
@@ -275,7 +309,9 @@ model User {
   imgUrl    String?
   booking   Booking[]
   subscription Subscription[]
+  reviews       Review[]
   authorization         PaymentAuthorization[]
+  notification  Notification[]
 
   createdAt      DateTime        @default(now())
   updatedAt      DateTime        @updatedAt @default(now())
@@ -301,6 +337,24 @@ model PaymentAuthorization {
   updatedAt             DateTime        @updatedAt @default(now())
 
   @@unique([userId, signature])
+}
+
+model Notification {
+  id                    String   @id @default(cuid())
+  isRead                Boolean   @default(false)
+  message               String
+  subdomain             String
+  
+  receiver              User? @relation(fields: [receiverId], references: [id])
+  receiverId            String? 
+
+  merchant              Merchant? @relation(fields: [merchantId], references: [id])
+  merchantId            String? 
+
+  createdAt             DateTime        @default(now())
+  updatedAt             DateTime        @updatedAt @default(now())
+
+  @@index([id])
 }
 
 // enum ServiceType {

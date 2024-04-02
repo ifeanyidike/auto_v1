@@ -5,6 +5,7 @@ import MerchantService from '~/app/api/merchant_service/logic';
 import Booking from '~/app/api/booking/logic';
 import BookingTicket from '../../components/BookingTicket';
 import User from '~/app/api/user/logic';
+import { Mailer } from '~/server/mail';
 
 const BookingExistingCardConfirmPage = async ({
   searchParams,
@@ -33,6 +34,8 @@ const BookingExistingCardConfirmPage = async ({
   if (bookingId && !booking?.isPaid) {
     const bookingClient = new Booking();
     await bookingClient.update(bookingId, { isPaid: true });
+    const mailer = new Mailer();
+    await mailer.sendEmailForBookedService('booking', bookingId);
   }
 
   return (

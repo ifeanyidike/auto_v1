@@ -14,13 +14,18 @@ type Props = {
 
 const KeypointList = (props: Props) => {
   const { data, setData } = props;
+
   return (
     <div className="w-full mb-3">
+      <input
+        type="hidden"
+        name="keypoints"
+        value={JSON.stringify(data.faq_keypoints.keypoints)}
+      />
       <label className="text-sm mb-2 font-semibold" htmlFor="service">
         Key points
       </label>
       <Select
-        name="keypoints"
         placeholder="Service keypoints"
         isMulti
         isCreateable

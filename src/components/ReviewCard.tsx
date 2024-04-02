@@ -1,12 +1,27 @@
-import Image from "next/image";
-import React from "react";
-import { dmSans } from "~/font";
+import Image from 'next/image';
+import React from 'react';
+import { dmSans } from '~/font';
+
+type Review = {
+  id: string;
+  rating: number;
+  description: string | null;
+  createdAt: Date;
+  user: {
+    id: string;
+    firstName: string;
+    lastName: string;
+    email: string;
+    imgUrl: string | null;
+  };
+};
 
 type Props = {
   isActive: boolean;
-  reviewer: string;
-  content: string;
-  role: string;
+  // reviewer: string;
+  // content: string;
+  // role: string;
+  item: Review;
 };
 const ReviewCard = (props: Props) => {
   return (
@@ -16,22 +31,32 @@ const ReviewCard = (props: Props) => {
     >
       <div className="flex gap-3 max-sm:flex-col max-sm:items-center max-sm:justify-center max-sm:text-center">
         <Image
-          src="/images/avatar.webp"
+          src={props.item.user.imgUrl || '/images/avatar.webp'}
           alt="avatar"
           width={50}
           height={50}
-        ></Image>
+          className="rounded-full"
+        />
         <div className="flex flex-col">
           <span className={`${dmSans.className} text-lg font-medium`}>
-            {props.reviewer}
+            {props.item.user.firstName + ' ' + props.item.user.lastName}
           </span>
-          <span className="text-xs font-light">{props.role}</span>
+          <span className="text-xs font-light">User</span>
         </div>
-        <div className="ml-auto flex text-yellow max-sm:mr-auto">★ ★ ★ ★ ★</div>
+        <div className="ml-auto flex max-sm:mr-auto gap-2">
+          {[1, 2, 3, 4, 5].map(r => {
+            const isFilled = r <= props.item.rating;
+            return (
+              <span className={`${isFilled ? 'text-yellow' : 'text-gray-300'}`}>
+                ★
+              </span>
+            );
+          })}
+        </div>
       </div>
 
       <p className="text-medium mt-5 font-normal leading-7 text-content-normal max-sm:text-sm">
-        {props.content}
+        {props.item.description}
       </p>
     </div>
   );

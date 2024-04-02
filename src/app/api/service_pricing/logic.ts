@@ -68,7 +68,13 @@ export default class ServicePricing extends Utility {
   }
 
   public async getOrCreateMany(
-    item: CreateMerchantServiceParamType['pricing'],
+    item: {
+      mode: 'FIXED' | 'BRAND' | 'SUV_SEDAN';
+      data: {
+        type?: string;
+        amount: number;
+      }[];
+    },
     serviceId: string
   ) {
     return await Promise.all(

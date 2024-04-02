@@ -14,7 +14,7 @@ const DisplayPlanComponent = (props: Props) => {
   >();
 
   const pricingList =
-    props.service?.pricing?.filter(
+    props.service?.servicePricing?.filter(
       p =>
         !props.service?.subscriptions?.some(
           sub => p.type === sub.plan?.autoBrand

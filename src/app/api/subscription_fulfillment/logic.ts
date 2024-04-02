@@ -41,7 +41,13 @@ export default class SubscriptionFulfillment extends Utility {
 
   public async getOne(id: string) {
     return this.process(async () => {
-      return await this.db.subscriptionFulfillment.findFirst({ where: { id } });
+      return await this.db.subscriptionFulfillment.findFirst({
+        where: { id },
+        include: {
+          subscription: true,
+          review: true,
+        },
+      });
     });
   }
 

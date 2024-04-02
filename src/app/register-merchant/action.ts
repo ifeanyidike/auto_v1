@@ -1,6 +1,7 @@
 'use server';
 import { z } from 'zod';
 import Merchant from '../api/merchant/logic';
+import { Mailer } from '~/server/mail';
 type Data = {
   email: string;
   name?: string;
@@ -53,6 +54,11 @@ export async function createMerchant(data: Data) {
     slug: data.slug!,
     phoneNo: data.phoneNo!,
   });
+
+  try {
+    const mailer = new Mailer();
+    await mailer.sendWelcomeMerchantEmail(data.slug!, data.name!);
+  } catch (error) {}
 
   return { success: true };
 }

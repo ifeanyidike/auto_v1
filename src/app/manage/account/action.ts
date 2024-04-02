@@ -1,9 +1,11 @@
 'use server';
 import { z } from 'zod';
+import Discount from '~/app/api/discount/logic';
 import Merchant from '~/app/api/merchant/logic';
 import MerchantApiKey from '~/app/api/merchant_apikey/logic';
 import MerchantMiscellanous from '~/app/api/merchant_miscellanous/logic';
 import Util from '~/server/utils';
+import { Plan } from '~/server/payment/plan';
 
 type GeneralSettingsData = {
   name: string;
@@ -21,6 +23,13 @@ type ApiKeySettingsData = {
 type ServiceSettingsData = {
   allowOutsideWork: boolean;
   locationData: Record<'location' | 'cost', string>[];
+};
+
+type DiscountSettingsData = {
+  type: 'percentage' | 'fixed';
+  code: string;
+  value: string;
+  expiresOn: Date;
 };
 
 const generalSettingsSchema = z.object({
@@ -58,6 +67,25 @@ const apiKeySettingsSchema = z.object({
     .length(48, {
       message: 'Your paystack secret key must be 48 characters long',
     }),
+});
+
+const discountSettingsSchema = z.object({
+  type: z.string({
+    required_error: 'type is required',
+    invalid_type_error: 'type must be a string',
+  }),
+  code: z.string({
+    required_error: 'Discount code is required',
+    invalid_type_error: 'Discount code must be a string',
+  }),
+  value: z
+    .number({
+      required_error: 'Value is required',
+      invalid_type_error: 'Value must be a number',
+    })
+    .nonnegative()
+    .safe()
+    .finite(),
 });
 
 export async function updateMerchantGeneralSettings(
@@ -216,4 +244,106 @@ export async function updateMerchantSocialSettings(
     success: true,
     error: null,
   };
+}
+
+export async function updateDiscountSettings(
+  merchantId: string,
+  data: DiscountSettingsData | null
+) {
+  const validatedFields = discountSettingsSchema.safeParse({
+    ...data,
+    value: data?.value ? parseInt(data.value) : '',
+  });
+
+  if (!validatedFields.success) {
+    const errors = validatedFields.error.flatten().fieldErrors;
+    const errorValues = Object.values(errors);
+    if (errorValues[0]?.length) {
+      return {
+        error: errorValues[0][0],
+      };
+    }
+  }
+
+  const discountClient = new Discount();
+  try {
+    await discountClient.create({
+      ...data,
+      code: data?.code!,
+      value: data?.value!,
+      type: data?.type!,
+      merchant: {
+        connect: {
+          id: merchantId,
+        },
+      },
+    });
+    const discounts = await discountClient.getManyByMerchant(merchantId);
+    return { success: true, discounts };
+  } catch (error: any) {
+    const err_message =
+      error.message === 'unique_constraint_failed'
+        ? 'You have already created a discount with the same code. Please try another code'
+        : error.message;
+    return { success: false, error: err_message };
+  }
+}
+
+export async function linkOrUnlinkServicesToDiscount(
+  merchantId: string,
+  id: string,
+  servicesToConnect: string[],
+  servicesToDisconnect: string[]
+) {
+  console.log('services', servicesToConnect, servicesToDisconnect);
+  try {
+    const discountClient = new Discount();
+    await discountClient.update(id, {
+      services: {
+        disconnect: servicesToDisconnect.map(s => ({ id: s })),
+        connect: servicesToConnect.map(s => ({ id: s })),
+      },
+    });
+    const discounts = await discountClient.getManyByMerchant(merchantId);
+    return { success: true, discounts };
+  } catch (error: any) {
+    const err_message =
+      error.message === 'unique_constraint_failed'
+        ? 'You have already created a discount with the same code. Please try another code'
+        : error.message;
+    return { success: false, error: err_message };
+  }
+}
+
+export async function linkOrUnlinkPlansToDiscount(
+  merchantId: string,
+  id: string,
+  plansToConnect: { id: string; code: string; amount: number }[],
+  plansToDisconnect: { id: string; code: string; amount: number }[]
+) {
+  try {
+    const discountClient = new Discount();
+    await discountClient.update(id, {
+      plans: {
+        disconnect: plansToDisconnect?.map(p => ({ id: p.id })),
+        connect: plansToConnect?.map(p => ({ id: p.id })),
+      },
+    });
+
+    const plansToUpdate = [...plansToConnect, ...plansToDisconnect];
+    console.log('plansToUpdate', plansToUpdate);
+    if (plansToUpdate.length) {
+      const planClient = new Plan();
+      await planClient.updatePlansAmount(plansToUpdate);
+    }
+
+    const discounts = await discountClient.getManyByMerchant(merchantId);
+    return { success: true, discounts };
+  } catch (error: any) {
+    const err_message =
+      error.message === 'unique_constraint_failed'
+        ? 'You have already created a discount with the same code. Please try another code'
+        : error.message;
+    return { success: false, error: err_message };
+  }
 }

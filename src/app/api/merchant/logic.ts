@@ -5,6 +5,25 @@ export type MerchantType = Prisma.MerchantGetPayload<{
   include: {
     miscellanous: true;
     apiKeys: true;
+    services: {
+      include: {
+        service: true;
+        subscriptionPlans: true;
+        servicePricing: true;
+      };
+    };
+    discounts: {
+      include: {
+        services: {
+          include: {
+            service: true;
+            subscriptionPlans: true;
+            servicePricing: true;
+          };
+        };
+        plans: true;
+      };
+    };
   };
 }>;
 export default class Merchant extends Utility {
@@ -41,7 +60,26 @@ export default class Merchant extends Utility {
         where: { ...(slug ? { slug } : { id }) },
         include: {
           miscellanous: true,
+          services: {
+            include: {
+              service: true,
+              subscriptionPlans: true,
+              servicePricing: true,
+            },
+          },
           apiKeys: true,
+          discounts: {
+            include: {
+              services: {
+                include: {
+                  service: true,
+                  subscriptionPlans: true,
+                  servicePricing: true,
+                },
+              },
+              plans: true,
+            },
+          },
         },
       });
     });

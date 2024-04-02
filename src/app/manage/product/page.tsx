@@ -19,7 +19,7 @@ const Product = async () => {
   const merchantService = new MerchantService();
   const all_products = await merchantService.getAllByMerchant(slug);
   const formatted_products = (all_products.services ?? [])?.map(p => {
-    const formatted_pricing = p.pricing?.map(pricing => ({
+    const formatted_pricing = p.servicePricing?.map(pricing => ({
       ...pricing,
       amount: Number(pricing.amount),
     }));

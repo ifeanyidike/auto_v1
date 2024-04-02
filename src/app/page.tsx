@@ -11,6 +11,7 @@ import Util from '~/server/utils';
 import { redirect } from 'next/navigation';
 import MerchantService from './api/merchant_service/logic';
 import Auth0 from '~/server/auth0';
+import Review from './api/review/logic';
 
 export default async function Home() {
   const { isAdminLogin, slug } = Util.getRouteType();
@@ -21,6 +22,10 @@ export default async function Home() {
   const { merchant, services } = await merchantService.getAllByMerchant(slug);
   const unshuffledFaqs = services?.flatMap(s => s.faqs);
   const faqs = Util.shuffleArray(unshuffledFaqs ?? []).slice(0, 7);
+
+  const reviewClient = new Review();
+  const reviews = await reviewClient.findByMerchant(merchant!.id);
+
   return (
     <>
       <main>
@@ -36,12 +41,23 @@ export default async function Home() {
                 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Aliquam provident placeat doloremque id laborum aliquid.'}
             </p>
             <div className="flex justify-between max-md:flex-col max-md:gap-3">
-              <Button hasGradient={true} hasShadow={true}>
-                REQUEST APPOINTMENT
-              </Button>
-              <Button hasGradient={false} hasShadow={false} bgColor="bg-dark">
-                GET AN ESTIMATE
-              </Button>
+              <a
+                href={
+                  !merchant.calendlyLink
+                    ? `tel:${merchant.phoneNo}`
+                    : merchant.calendlyLink
+                }
+                target={merchant.calendlyLink ? '_blank' : '_self'}
+              >
+                <Button hasGradient={true} hasShadow={true}>
+                  REQUEST APPOINTMENT
+                </Button>
+              </a>
+              <a href={`tel:${merchant.phoneNo}`}>
+                <Button hasGradient={false} hasShadow={false} bgColor="bg-dark">
+                  GET AN ESTIMATE
+                </Button>
+              </a>
             </div>
           </div>
           <div className="ml-auto">
@@ -72,6 +88,7 @@ export default async function Home() {
               )}
             </div>
           </div>
+
           <div className="grid grid-cols-3 gap-x-3 gap-y-12 max-xl:grid-cols-2 max-lg:grid-cols-2 max-md:grid-cols-1">
             {services
               ?.slice(0, 5)
@@ -79,10 +96,7 @@ export default async function Home() {
                 <HomeServicesCard
                   key={s.id}
                   category={s.service?.type ?? 'Repair'}
-                  details={
-                    s.service?.description ??
-                    'Lorem ipsum dolor sit amet consectetur adipisicing elit. Iusto quos recusandae earum itaque quis iste quibusdam amet magni nobis labore.'
-                  }
+                  details={s.description || ''}
                   imgSrc={s.imgUrl ?? s.service?.imgUrl ?? ''}
                   title={s.service?.title ?? ''}
                   href={`/service/${s.service?.title?.toLowerCase() ?? ''}`}
@@ -126,10 +140,12 @@ export default async function Home() {
                 )}
               </>
             ) : (
-              <div className="px-8 col-span-3 text-sm text-center">
-                There is currently no service in this store please check back
-                later!
-              </div>
+              Boolean(services.length === 0) && (
+                <div className="px-8 col-span-3 text-sm text-center">
+                  There is currently no service in this store please check back
+                  later!
+                </div>
+              )
             )}
           </div>
         </div>
@@ -150,22 +166,30 @@ export default async function Home() {
             <p
               className={`ml-10 text-5xl font-semibold  max-md:text-4xl ${dmSans.className} capitalize`}
             >
-              Approved by{' '}
-              <span
-                style={{
-                  backgroundImage:
-                    'linear-gradient(92deg, #929FAE 49.36%, #807782 88.79%)',
-                  backgroundClip: 'text',
-                  WebkitTextFillColor: 'transparent',
-                  WebkitBackgroundClip: 'text',
-                }}
-              >
-                10+
-              </span>{' '}
-              clients
+              {reviews.length ? (
+                <>
+                  Approved by{' '}
+                  <span
+                    style={{
+                      backgroundImage:
+                        'linear-gradient(92deg, #929FAE 49.36%, #807782 88.79%)',
+                      backgroundClip: 'text',
+                      WebkitTextFillColor: 'transparent',
+                      WebkitBackgroundClip: 'text',
+                    }}
+                  >
+                    {reviews.length > 10 ? '10+' : reviews.length}
+                  </span>{' '}
+                  {reviews.length > 1 ? 'clients' : 'client'}
+                </>
+              ) : (
+                <span className="text-3xl max-md:text-2xl font-medium">
+                  Not yet approved by a client!
+                </span>
+              )}
             </p>
 
-            <ReviewCards />
+            <ReviewCards reviews={reviews} />
           </div>
         </div>
 

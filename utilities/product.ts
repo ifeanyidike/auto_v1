@@ -143,27 +143,27 @@ export const disableSave = (
     );
 
   const equalPricingMode = product?.pricingMode === data.pricing?.mode;
-  const equalAmount = product?.pricing?.every(
+  const equalAmount = product?.servicePricing?.every(
     price =>
       data.pricing?.data?.some(
         p => Number(p.amount) === Number(price.amount) && p.type === price.type
       )
   );
 
-  let equalDiscounts = false;
-  if (product?.discounts?.length) {
-    equalDiscounts = product?.discounts?.every(
-      discount =>
-        data.pricing?.discounts?.some(
-          d =>
-            d.type === discount.type &&
-            d.code === discount.code &&
-            d.value === discount.value
-        )
-    );
-  } else {
-    equalDiscounts = !data.pricing?.discounts?.some(d => d.code || d.value);
-  }
+  // let equalDiscounts = false;
+  // if (product?.discounts?.length) {
+  //   equalDiscounts = product?.discounts?.every(
+  //     discount =>
+  //       data.pricing?.discounts?.some(
+  //         d =>
+  //           d.type === discount.type &&
+  //           d.code === discount.code &&
+  //           d.value === discount.value
+  //       )
+  //   );
+  // } else {
+  //   equalDiscounts = !data.pricing?.discounts?.some(d => d.code || d.value);
+  // }
 
   let equalSubscriptions = false;
   if (product?.subscriptionPlans?.length) {
@@ -183,7 +183,7 @@ export const disableSave = (
     equalFAQ &&
     equalPricingMode &&
     equalAmount &&
-    equalDiscounts &&
+    // equalDiscounts &&
     equalSubscriptions
   );
 };
@@ -223,17 +223,17 @@ export const getPricingNumCompleted = (
   return 1;
 };
 
-export const getDiscountNumCompleted = (
-  data: CreateMerchantServiceParamType
-) => {
-  let count = 0;
-  for (const discount of data.pricing.discounts) {
-    if (discount.code && discount.type && discount.value) {
-      count++;
-    }
-  }
-  return count;
-};
+// export const getDiscountNumCompleted = (
+//   data: CreateMerchantServiceParamType
+// ) => {
+//   let count = 0;
+//   for (const discount of data.pricing.discounts) {
+//     if (discount.code && discount.type && discount.value) {
+//       count++;
+//     }
+//   }
+//   return count;
+// };
 
 export const createService = async (
   merchantId: string | undefined,
@@ -358,7 +358,7 @@ export const handleSelectMode = (
   state_data: CreateMerchantServiceParamType,
   setData: (e: CreateMerchantServiceParamType) => void,
   value: string,
-  pricingData: MerchantServiceType['pricing'] | null = null
+  pricingData: MerchantServiceType['servicePricing'] | null = null
 ) => {
   const newData = { ...state_data };
   newData.pricing.mode = value as 'FIXED' | 'BRAND' | 'SUV_SEDAN';
@@ -383,7 +383,7 @@ export const handleSelectMode = (
         ];
     newData.pricing.data =
       data as CreateMerchantServiceParamType['pricing']['data'];
-  } else if (value === 'BRAND') {
+  } else {
     const data = pricingData?.length
       ? pricingData.map(({ id, type, amount }) => ({ id, type, amount }))
       : [{ id: globalThis.crypto.randomUUID() }];

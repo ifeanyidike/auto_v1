@@ -2,8 +2,6 @@
 import React, { useState } from 'react';
 import { Tabs } from './types';
 import MenuToggle from '~/commons/icons/MenuToggle';
-import { useHookstate } from '@hookstate/core';
-import { hideAdminBar } from '~/states/utility';
 import { useClickOutside } from '~/hooks/useClickOutside';
 import { useSearchParams } from 'next/navigation';
 
@@ -16,7 +14,6 @@ const Menu = (props: Props) => {
   const [activeTab, setActiveTab] = React.useState<Tabs>(
     queryParam.get('path') === 'apiKeys' ? Tabs.apiKeys : Tabs.general
   );
-  const hideBar = useHookstate(hideAdminBar);
   const [dropdown, toggleDropdown] = useState(false);
 
   const dropdownRef = useClickOutside(() => {
@@ -27,9 +24,7 @@ const Menu = (props: Props) => {
     <>
       {/* Large screen */}
       <div
-        className={`menu flex bg-gray-200 px-[3px] py-1 rounded-full w-full gap-4 ${
-          hideBar.get() ? 'max-md:hidden' : 'max-lg:hidden'
-        }`}
+        className={`menu flex bg-gray-200 pl-[3px] pr-2 py-1 rounded-full w-full gap-4 max-lg:hidden`}
       >
         {Object.entries(Tabs).map(([k, v]) => {
           const isActive = activeTab === v;
@@ -39,7 +34,7 @@ const Menu = (props: Props) => {
                 setActiveTab(v);
                 props.getActiveTab(v);
               }}
-              className={`text-base font-medium w-48 h-10 ${
+              className={`text-base font-medium w-40 h-10 ${
                 isActive && 'shadow shadow-gray-400 bg-white rounded-full'
               }`}
               key={k}
@@ -53,9 +48,7 @@ const Menu = (props: Props) => {
       {/* Small screens */}
       <div
         ref={dropdownRef}
-        className={` flex-col hidden relative ${
-          hideBar.get() ? 'max-md:flex' : 'max-lg:flex'
-        }`}
+        className={` flex-col hidden relative max-lg:flex`}
       >
         <div
           onClick={() => toggleDropdown(!dropdown)}

@@ -18,7 +18,7 @@ const MobileMenu = () => {
     <>
       {navOpen.get() && (
         <div
-          className={`absolute right-0 top-0 hidden h-screen w-4/5 flex-col gap-6 bg-white px-7 py-8 text-lg transition-all duration-300 ease-in-out max-lg:flex`}
+          className={`absolute right-0 top-0 hidden h-screen w-[300px] max-[300px]:w-full flex-col gap-6 bg-white z-50 px-7 py-8 text-lg transition-all duration-300 ease-in-out max-lg:flex`}
         >
           <button
             onClick={() => toggleNav.set(false)}

@@ -97,6 +97,7 @@ export class Utility {
     func?: (data: any) => Promise<T>
   ) {
     const gateway_secret = await this.getGatewaySecret();
+    console.log('gateway_secret', gateway_secret);
     if (!gateway_secret) return null;
 
     return this.process(async () => {

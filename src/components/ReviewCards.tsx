@@ -1,63 +1,43 @@
-"use client";
-import React, { useState, useRef } from "react";
-import ReviewCard from "./ReviewCard";
-import ArrowLeftAlt from "~/commons/icons/ArrowLeftAlt";
-import ArrowRightAlt from "~/commons/icons/ArrowRightAlt";
-import OutlineDot from "~/commons/icons/OutlineDot";
-import SolidDot from "~/commons/icons/SolidDot";
+'use client';
+import React, { useState, useRef } from 'react';
+import ReviewCard from './ReviewCard';
+import ArrowLeftAlt from '~/commons/icons/ArrowLeftAlt';
+import ArrowRightAlt from '~/commons/icons/ArrowRightAlt';
+import OutlineDot from '~/commons/icons/OutlineDot';
+import SolidDot from '~/commons/icons/SolidDot';
 
-const data = [
-  {
-    id: 1,
-    reviewer: "Ifeanyi Dike",
-    role: "Customer",
-    content:
-      "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Facilis, temporibus dolorum? Iste aliquid asperiores voluptate iusto accusantium, magni voluptates quam assumenda quidem et dolorum consequuntur voluptatibus, eos nisi! Quae, veniam.",
-  },
-  {
-    id: 2,
-    reviewer: "Aja Edward",
-    role: "Manager",
-    content:
-      "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Facilis, temporibus dolorum? Iste aliquid asperiores voluptate iusto accusantium, magni voluptates quam assumenda quidem et dolorum consequuntur voluptatibus, eos nisi! Quae, veniam.",
-  },
-  {
-    id: 3,
-    reviewer: "Lorem Ipsum",
-    role: "Customer",
-    content:
-      "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Facilis, temporibus dolorum? Iste aliquid asperiores voluptate iusto accusantium, magni voluptates quam assumenda quidem et dolorum consequuntur voluptatibus, eos nisi! Quae, veniam.",
-  },
-  {
-    id: 4,
-    reviewer: "Mendez Kumer",
-    role: "IT",
-    content:
-      "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Facilis, temporibus dolorum? Iste aliquid asperiores voluptate iusto accusantium, magni voluptates quam assumenda quidem et dolorum consequuntur voluptatibus, eos nisi! Quae, veniam.",
-  },
-  {
-    id: 5,
-    reviewer: "Manoj Sandeep",
-    role: "Indian",
-    content:
-      "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Facilis, temporibus dolorum? Iste aliquid asperiores voluptate iusto accusantium, magni voluptates quam assumenda quidem et dolorum consequuntur voluptatibus, eos nisi! Quae, veniam.",
-  },
-];
+type Review = {
+  id: string;
+  rating: number;
+  description: string | null;
+  createdAt: Date;
+  user: {
+    id: string;
+    firstName: string;
+    lastName: string;
+    email: string;
+    imgUrl: string | null;
+  };
+};
 
-const ReviewCards = () => {
+type Props = {
+  reviews: Review[];
+};
+
+const ReviewCards = (props: Props) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const containerRef = useRef<HTMLDivElement>(null);
   const startXRef = useRef<number | null>(null);
 
   const handlePrev = () => {
-    setCurrentIndex((prevIndex) =>
-      prevIndex === 0 ? data.length - 1 : prevIndex - 1,
+    setCurrentIndex(prevIndex =>
+      prevIndex === 0 ? props.reviews.length - 1 : prevIndex - 1
     );
   };
 
   const handleNext = () => {
-    setCurrentIndex((prevIndex) =>
-      prevIndex === data.length - 1 ? 0 : prevIndex + 1,
+    setCurrentIndex(prevIndex =>
+      prevIndex === props.reviews.length - 1 ? 0 : prevIndex + 1
     );
   };
 
@@ -98,9 +78,9 @@ const ReviewCards = () => {
           onTouchMove={handleSwipeMove}
           onTouchEnd={handleSwipeEnd}
         >
-          {data.map((item, index) => (
+          {props.reviews.map((item, index) => (
             <div key={item.id} className={`h-full w-full flex-shrink-0`}>
-              <ReviewCard {...item} isActive={index === currentIndex} />
+              <ReviewCard item={item} isActive={index === currentIndex} />
             </div>
           ))}
         </div>
@@ -112,7 +92,7 @@ const ReviewCards = () => {
         </button>
       </div>
       <div className="flex items-center gap-2">
-        {data.map((item, index) => {
+        {props.reviews.map((item, index) => {
           if (currentIndex === index) {
             return (
               <button key={item.id}>
