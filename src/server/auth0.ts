@@ -30,7 +30,7 @@ export default class Auth0 {
     const UserLogic = new User();
     const userExists = (await UserLogic.numUser(auth0User.email)) === 1;
 
-    await UserLogic.findOrCreate(auth0User.email, {
+    const userData = await UserLogic.findOrCreate(auth0User.email, {
       firstName: auth0User.given_name,
       lastName: auth0User.family_name,
       imgUrl: auth0User.picture,
@@ -41,5 +41,7 @@ export default class Auth0 {
       const mailer = new Mailer();
       await mailer.sendWelcomeUserEmail();
     }
+
+    return userData;
   }
 }
