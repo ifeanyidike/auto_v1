@@ -121,16 +121,12 @@ model ServicePricing {
 // Discount
 // Depends on - merchantService
 
-enum DiscountType {
-   percentage
-   fixed 
-}
 
 model Discount {
   id                String           @id @default(cuid())
   code              String
   value             String
-  type              DiscountType
+  type              String
   services          MerchantService[]
 
   merchant          Merchant? @relation(fields: [merchantId], references: [id])

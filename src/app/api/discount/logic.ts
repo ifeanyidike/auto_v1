@@ -64,7 +64,7 @@ export default class Discount extends Utility {
       return await Promise.all(
         data.map(d =>
           this.db.discount.findFirst({
-            where: { ...d },
+            where: { ...d, type: d.type },
           })
         )
       );
