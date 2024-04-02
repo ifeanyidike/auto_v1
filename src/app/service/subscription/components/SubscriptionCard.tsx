@@ -56,7 +56,7 @@ const SubscriptionCard = (props: Props) => {
         {props.discount && (
           <div className="flex gap-1 items-center text-stone-100 mx-auto mb-2 bg-content-normal/20 px-2 py-[2px] rounded-full">
             <span className="text-xs">★</span>{' '}
-            <span className="text-xs">Save {props.discount}%</span>
+            <span className="text-xs">Save {props.discount}</span>
           </div>
         )}
         <span className="capitalize text-center text-sm mb-2">

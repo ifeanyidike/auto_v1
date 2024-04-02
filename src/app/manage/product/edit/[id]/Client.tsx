@@ -5,9 +5,10 @@ import EditProductView from '../../components/EditProductView';
 import { type CreateMerchantServiceParamType } from '~/types/utils';
 import { initProductData } from 'utilities/common';
 import { handleSelectMode } from 'utilities/product';
+import { type MerchantType } from '~/app/api/merchant/logic';
 
 type Props = {
-  merchantId: string | undefined;
+  merchant: MerchantType;
   product?: MerchantServiceType | null;
   hasApiKey: boolean;
 };
@@ -19,7 +20,7 @@ const Client = (props: Props) => {
     if (!props.product) return;
     if (props.product) {
       if (props.product?.pricingMode) {
-        const pricingData = props.product?.pricing;
+        const pricingData = props.product?.servicePricing;
         handleSelectMode(data, setData, props.product.pricingMode, pricingData);
       }
 
@@ -45,22 +46,6 @@ const Client = (props: Props) => {
         newData.subscriptions = [...new Set(intervals)];
       }
 
-      if (props.product?.discounts) {
-        const newDiscountData = newData.pricing.discounts.map(d => {
-          const savedDiscount = props.product?.discounts?.find(
-            dis => dis.type === d.type
-          );
-          return {
-            ...d,
-            ...(savedDiscount && {
-              code: savedDiscount.code,
-              value: savedDiscount.value,
-            }),
-          };
-        });
-        newData.pricing.discounts = newDiscountData;
-      }
-
       const faqs = props.product?.faqs;
       if (faqs?.length) {
         const faqData = faqs.map(faq => ({
@@ -80,7 +65,7 @@ const Client = (props: Props) => {
   return (
     <EditProductView
       product={props.product}
-      merchantId={props.merchantId}
+      merchant={props.merchant}
       data={data}
       setData={setData}
       hasApiKey={props.hasApiKey}

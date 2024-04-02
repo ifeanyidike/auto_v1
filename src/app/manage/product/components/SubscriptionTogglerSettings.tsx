@@ -44,6 +44,11 @@ const SubscriptionTogglerSettings = (props: Props) => {
 
   return (
     <div>
+      <input
+        type="hidden"
+        name="subscriptions"
+        value={JSON.stringify(props.data.subscriptions)}
+      />
       <div className="flex flex-col gap-6 ml-4">
         <div className="flex items-center gap-4">
           <Toggler

@@ -46,6 +46,20 @@ const Subscription = async ({
     userId: user?.id,
   });
 
+  if (sessionUser.email === service?.merchant?.email) {
+    return (
+      <div className="font-mono text-3xl text-center flex flex-col h-fit justify-center items-center gap-5 my-7">
+        <Image
+          src="/images/oops1.png"
+          width={1220}
+          height={462}
+          alt="Oops!"
+        ></Image>
+        <span className="mt-5">You cannot subscribe to your own service!</span>
+      </div>
+    );
+  }
+
   if (!service?.subscriptionPlans?.length) {
     return (
       <div className="font-mono text-3xl text-center flex flex-col h-fit justify-center items-center gap-5 my-7">
@@ -63,7 +77,7 @@ const Subscription = async ({
     );
   }
 
-  if (service?.subscriptions?.length! >= service?.pricing?.length!) {
+  if (service?.subscriptions?.length! >= service?.servicePricing?.length!) {
     return (
       <div className="font-mono text-xl font-medium text-center flex flex-col h-fit justify-center items-center gap-8 my-7">
         <Image
@@ -93,7 +107,10 @@ const Subscription = async ({
 
   if (service?.pricingMode === 'FIXED') {
     return (
-      <PlanList selectedPrice={service?.pricing?.[0]!} service={service} />
+      <PlanList
+        selectedPrice={service?.servicePricing?.[0]!}
+        service={service}
+      />
     );
   }
 

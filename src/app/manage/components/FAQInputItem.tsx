@@ -25,7 +25,6 @@ const FAQInputItem = (props: Props) => {
         <TextInput
           placeholder="Please provide the question"
           customStyle="outline-none rounded border-stone-200/80 !p-2 text-xs"
-          name="question"
           defaultValue={props.isDefault ? props?.question : ''}
           getValue={text => {
             const newData = { ...props.data };

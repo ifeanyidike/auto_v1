@@ -10,6 +10,7 @@ const Toggler = (props: Props) => {
   const { setToggled, value, classNames = '' } = props;
   return (
     <button
+      type="button"
       className={`text-sm w-11 transition duration-300  ease-in-out relative h-[18px] ${classNames} ${
         value ? 'bg-green-600' : 'bg-stone-400'
       } rounded-full p-[1px] cursor-pointer`}

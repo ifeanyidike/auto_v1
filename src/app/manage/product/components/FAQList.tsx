@@ -19,6 +19,11 @@ const FAQList = (props: Props) => {
           FAQ
         </label>
       </div>
+      <input
+        type="hidden"
+        name="faqs"
+        value={JSON.stringify(data.faq_keypoints.faq)}
+      />
 
       <div className="mb-6 gap-6 flex flex-col">
         {data.faq_keypoints?.faq.map((item, index) => (
@@ -49,6 +54,7 @@ const FAQList = (props: Props) => {
         ))}
       </div>
       <button
+        type="button"
         onClick={() => {
           const newData = { ...data };
           newData.faq_keypoints.faq.push({

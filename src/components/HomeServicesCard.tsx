@@ -34,7 +34,7 @@ const HomeServicesCard = (props: Props) => {
         >
           {props.title}
         </span>
-        <p className="text-sm font-normal text-content-normal">
+        <p className="text-sm font-normal text-content-normal line-clamp-3">
           {props.details}
         </p>
         <Link className="flex cursor-pointer gap-2" href={props.href}>

@@ -1,11 +1,11 @@
 import React from 'react';
-import Util from '~/server/utils';
 import RedirectLinks from '../../components/RedirectLinks';
 import SuccessIcon from '~/commons/icons/SuccessIcon';
 import MerchantService from '~/app/api/merchant_service/logic';
 import Booking from '~/app/api/booking/logic';
-import { dmSans } from '~/font';
 import BookingTicket from '../components/BookingTicket';
+import { Mailer } from '~/server/mail';
+import { Transaction } from '~/server/payment/transaction';
 
 const BookingConfirmPage = async ({
   searchParams,
@@ -19,8 +19,8 @@ const BookingConfirmPage = async ({
     service: serviceId,
     bookingId,
   } = (searchParams || {}) as Record<string, string>;
-  const util = new Util();
-  const verification = await util.verifyTransaction(
+  const transaction = new Transaction();
+  const verification = await transaction.verifyTransaction(
     reference,
     user_email,
     serviceId
@@ -38,6 +38,8 @@ const BookingConfirmPage = async ({
   if (verification.confirmation && bookingId && !booking?.isPaid) {
     const bookingClient = new Booking();
     await bookingClient.update(bookingId, { isPaid: true });
+    const mailer = new Mailer();
+    await mailer.sendEmailForBookedService('booking', bookingId);
   }
 
   return (

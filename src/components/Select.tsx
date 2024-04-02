@@ -1,12 +1,12 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 'use client';
 import React from 'react';
-import SelectBox, { MultiValue, SingleValue } from 'react-select';
+import SelectBox, { type MultiValue, type SingleValue } from 'react-select';
 import Creatable from 'react-select/creatable';
 import { components } from 'react-select';
 
 type Props = {
-  name: string;
+  name?: string;
   data: Array<Record<'value' | 'label', string>>;
   placeholder?: string;
   isMulti?: boolean;
@@ -18,11 +18,10 @@ type Props = {
       | MultiValue<Record<'value' | 'label', string>>
       | SingleValue<Record<'value' | 'label', string>>
   ) => void;
+  customClassNames?: string;
 };
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const Menu = (props: any) => {
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call
   const optionSelectedLength = props.getValue().length || 0;
   return (
     <components.Menu {...props}>
@@ -45,12 +44,13 @@ const Select = (props: Props) => {
     isMulti = false,
     maxLength,
     defaultValue = [],
+    customClassNames = '',
   } = props;
 
   const classNamePrefix = 'select';
   const classNames = {
     control: () => {
-      return 'text-xs !rounded-lg !outline-none !bg-white !border !border-stone-200';
+      return `${customClassNames} text-xs !rounded-lg !outline-none !bg-white !border !border-stone-200`;
     },
     option: () => {
       return 'text-xs !text-content-normal border-b border-b-slate-200 last:border-b-0 !bg-white !cursor-pointer';

@@ -163,38 +163,6 @@ export default class Util {
     return uploadedImage;
   }
 
-  public async verifyTransaction(
-    reference: string | undefined,
-    email: string | undefined,
-    serviceId: string | undefined
-  ) {
-    const { slug } = Util.getRouteType();
-    const merchant = new Merchant();
-    const merchantData = await merchant.getOne({ slug });
-    const user = new User();
-    const userData = await user.getOne({ email });
-
-    if (reference && email && serviceId && merchantData?.id) {
-      if (userData?.id) {
-        const transaction = new Transaction();
-        const subscriptionData = {
-          merchantId: merchantData.id,
-          serviceId,
-        };
-        const verification = await transaction.verify(
-          userData.id,
-          reference,
-          subscriptionData
-        );
-        return {
-          confirmation: verification.status,
-          userId: userData.id,
-        };
-      }
-    }
-
-    return { confirmation: false, userId: userData?.id };
-  }
   public static sortTransactionsByDate(
     subscriptions: SubscriptionItem[],
     bookings: BookingItem[]
@@ -231,7 +199,7 @@ export default class Util {
         userName: firstName || '' + lastName || '',
         email: email,
         amount: b.amount,
-        type: 'boooking',
+        type: 'booking',
         status: b.isFullfilled
           ? 'Fulfilled'
           : b.isPaid

@@ -24,7 +24,7 @@ const EditProduct = async ({
     <div className={`gap-5`}>
       <Client
         product={serviceData}
-        merchantId={merchantData?.id}
+        merchant={merchantData!}
         hasApiKey={hasApiKey}
       />
     </div>

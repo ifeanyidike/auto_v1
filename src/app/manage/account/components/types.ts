@@ -1,6 +1,7 @@
 export enum Tabs {
   general = 'General',
-  serviceSettings = 'Service Settings',
+  service = 'Service Settings',
   apiKeys = 'API Keys',
-  socialSettings = 'Social Settings',
+  social = 'Social Settings',
+  discount = 'Discount Settings',
 }

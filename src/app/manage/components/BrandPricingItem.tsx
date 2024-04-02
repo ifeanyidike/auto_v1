@@ -75,7 +75,6 @@ const BrandPricingItem = (props: Props) => {
         <TextInput
           customStyle="text-xs"
           prefixSign="₦"
-          name="amount"
           placeholder="Please enter amount for this product"
           defaultValue={props.currItem.amount?.toString() ?? ''}
           getValue={amountString => {

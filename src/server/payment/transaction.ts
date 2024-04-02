@@ -10,6 +10,10 @@ import Subscription from '~/app/api/subscription/logic';
 import SubscriptionPlan from '~/app/api/subscription_plan/logic';
 import SubscriptionFulfillment from '~/app/api/subscription_fulfillment/logic';
 import { monthNames } from 'utilities/common';
+import { Mailer } from '../mail';
+import Util from '../utils';
+import Merchant from '~/app/api/merchant/logic';
+import User from '~/app/api/user/logic';
 
 export class Transaction extends Utility {
   private endpoint = this.baseEndpoint + '/transaction';
@@ -106,6 +110,12 @@ export class Transaction extends Utility {
               paidOn: new Date(),
               amountPaid: response.data.amount,
             });
+
+            const mailer = new Mailer();
+            await mailer.sendEmailForBookedService(
+              'subscription',
+              newSubscription.id
+            );
           }
         }
         return response;
@@ -129,6 +139,39 @@ export class Transaction extends Utility {
         return response;
       }
     )) as TransactionDataResponse;
+  }
+
+  public async verifyTransaction(
+    reference: string | undefined,
+    email: string | undefined,
+    serviceId: string | undefined
+  ) {
+    const { slug } = Util.getRouteType();
+    const merchant = new Merchant();
+    const merchantData = await merchant.getOne({ slug });
+    const user = new User();
+    const userData = await user.getOne({ email });
+
+    if (reference && email && serviceId && merchantData?.id) {
+      if (userData?.id) {
+        const transaction = new Transaction();
+        const subscriptionData = {
+          merchantId: merchantData.id,
+          serviceId,
+        };
+        const verification = await transaction.verify(
+          userData.id,
+          reference,
+          subscriptionData
+        );
+        return {
+          confirmation: verification.status,
+          userId: userData.id,
+        };
+      }
+    }
+
+    return { confirmation: false, userId: userData?.id };
   }
 
   public async getTotalEarning() {
