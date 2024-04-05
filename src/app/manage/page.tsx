@@ -80,9 +80,9 @@ const Home = async () => {
             iconBgColor="bg-blue-300"
           />
         </div>
-        <div className="chart flex-[0.59] max-lg:flex-1 mt-4">
+        {/* <div className="chart flex-[0.59] max-lg:flex-1 mt-4">
           <HomeChart data={transactionByMonth} />
-        </div>
+        </div> */}
       </div>
       <div className="py-20 mt-10 max-lg:flex-col flex gap-5 bg-gradient-to-r from-gradient-bg-start to-gradient-bg-end">
         <LatestCustomers transactions={transactionsByDate.slice(0, 6)} />

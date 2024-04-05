@@ -45,7 +45,7 @@ export const initProductData: CreateMerchantServiceParamType = {
   } as CreateMerchantServiceParamType['faq_keypoints'],
 };
 
-export const ALLOWED_URLs = ['register-merchant'];
+export const ALLOWED_URLs = ['register-merchant', 'user-profile'];
 
 export const getShortFormattedDate = () => {
   const firstDayOfYear = new Date(new Date().getFullYear(), 0, 1);

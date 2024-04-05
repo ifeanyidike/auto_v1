@@ -28,7 +28,8 @@ export default class Merchant extends Utility {
   public async getOne(data: {
     id?: string;
     slug?: string;
-  }): Promise<Prisma.MerchantGetPayload<
+  }): 
+  Promise<Prisma.MerchantGetPayload<
     Prisma.MerchantDefaultArgs<DefaultArgs>
   > | null> {
     const { id, slug } = data || {};

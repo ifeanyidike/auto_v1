@@ -60,6 +60,7 @@ export default class User extends Utility {
   }
 
   public async findOrCreate(email: string, data: Prisma.UserCreateInput) {
+    console.log(data);
     return this.process(async () => {
       return await this.db.user.upsert({
         where: { email },

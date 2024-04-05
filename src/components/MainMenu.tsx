@@ -1,6 +1,7 @@
 'use client';
 import React, { useEffect } from 'react';
 import Logo from '~/commons/icons/Logo';
+import MoxxilLogo from '~/commons/icons/MoxxilLogo';
 import MenuToggle from '~/commons/icons/MenuToggle';
 import { useHookstate } from '@hookstate/core';
 import { getSubdomain, subdomainFunc, toggleNav } from '~/states/utility';
@@ -28,7 +29,7 @@ const MainMenu = (props: Props) => {
   return (
     <div className="relative flex h-20 items-center gap-10 px-14 max-lg:justify-between max-lg:pr-14 max-md:px-7">
       <Link href="/">
-        <Logo />
+        <MoxxilLogo />
       </Link>
       <div
         className={`text-content-light flex flex-initial gap-14 text-sm font-normal max-lg:hidden`}

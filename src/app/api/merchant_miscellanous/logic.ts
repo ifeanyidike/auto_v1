@@ -22,15 +22,15 @@ export default class MerchantMiscellanous extends Utility {
     });
   }
 
-  public async createMany(
-    data: Record<'location' | 'cost' | 'merchantId', string>[]
-  ) {
-    return this.process(async () => {
-      return await this.db.merchantMiscellanous.createMany({
-        data,
-      });
-    });
-  }
+  // public async createMany(
+  //   data: Record<'location' | 'cost' | 'merchantId', string>[]
+  // ) {
+  //   return this.process(async () => {
+  //     return await this.db.merchantMiscellanous.createMany({
+  //       data,
+  //     });
+  //   });
+  // }
 
   public async delete(id: string) {
     return this.process(async () => {

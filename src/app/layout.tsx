@@ -45,15 +45,21 @@ export default async function RootLayout({
               <MobileMenu />
             </>
           )}
+
           <Suspense fallback={<Loading />}>
-            <Page
-              isAdminLogin={isAdminLogin}
-              merchantData={merchantData}
-              slug={slug}
-            >
-              {children}
-            </Page>
+            <div className="flex relative bg-cyanBlue/40">
+              <div className="flex flex-col flex-1 overflow-hidden">
+                <Page
+                  isAdminLogin={isAdminLogin}
+                  merchantData={merchantData}
+                  slug={slug}
+                >
+                  {children}
+                </Page>
+              </div>
+            </div>
           </Suspense>
+
           {!isAdminLogin && <Footer />}
         </body>
       </UserProvider>

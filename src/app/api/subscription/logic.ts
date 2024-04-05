@@ -15,6 +15,13 @@ export type SubscriptionItem = Prisma.SubscriptionGetPayload<{
     fufillments: true;
   };
 }>;
+
+export type subscriptionByUserItem = Omit<SubscriptionItem, 'user'> & {
+  merchant: Prisma.MerchantGetPayload<
+    Prisma.MerchantDefaultArgs<DefaultArgs>
+  > | null;
+};
+
 export default class Subscription extends Utility {
   constructor() {
     super();
@@ -133,11 +140,7 @@ export default class Subscription extends Utility {
             status: d.status,
             createdAt: d.createdAt,
             updatedAt: d.updatedAt,
-          }) as Omit<SubscriptionItem, 'user'> & {
-            merchant: Prisma.MerchantGetPayload<
-              Prisma.MerchantDefaultArgs<DefaultArgs>
-            > | null;
-          }
+          }) as subscriptionByUserItem
       );
     });
   }
