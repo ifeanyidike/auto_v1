@@ -1,7 +1,6 @@
 import React from 'react';
 type Props = {
-  width?: string;
-  height?: string;
+  classNames?: string;
   viewBox?: string;
   strokeBorderColor?: string;
   strokeContentColor?: string;
@@ -10,8 +9,7 @@ type Props = {
 };
 const ChevroLeftRoundedIcon = (props: Props) => {
   const {
-    width = '24',
-    height = '24',
+    classNames = 'w-6 h-6',
     viewBox = '0 0 24 24',
     strokeBorderColor = '#212121',
     strokeContentColor = '#212121',
@@ -19,7 +17,7 @@ const ChevroLeftRoundedIcon = (props: Props) => {
     fillColor = 'none',
   } = props;
   return (
-    <svg width={width} height={height} viewBox={viewBox} fill={fillColor}>
+    <svg className={classNames} viewBox={viewBox} fill={fillColor}>
       <path
         fillRule="evenodd"
         clipRule="evenodd"

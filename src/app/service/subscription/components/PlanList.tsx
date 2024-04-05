@@ -22,7 +22,8 @@ type UniquePlans = {
   id: string;
   interval: string;
   amount: any;
-  discount: string | undefined;
+  discountValue: string | undefined | null;
+  discountType: string | undefined | null;
 };
 // 'SUV_SEDAN' | 'BRAND' | 'FIXED'
 
@@ -33,7 +34,6 @@ type Props = {
 };
 const PlanList = (props: Props) => {
   const uniquePlans: UniquePlans[] = [];
-
   for (let p of props.service?.subscriptionPlans || []) {
     const seenPlan = uniquePlans.some(plan => plan.interval === p.interval);
 
@@ -45,8 +45,8 @@ const PlanList = (props: Props) => {
       id: p.id,
       interval: p.interval,
       amount: Number(props.selectedPrice.amount),
-      discount: props.service?.discounts?.find(d => d.type === p.interval)
-        ?.value,
+      discountValue: p.discount?.value,
+      discountType: p.discount?.type,
     });
   }
 
@@ -70,12 +70,20 @@ const PlanList = (props: Props) => {
               <SubscriptionCard
                 interval={p.interval}
                 amount={
-                  p.discount
-                    ? p.amount * (1 - parseFloat(p.discount) / 100)
-                    : p.amount
+                  p.discountType === 'percentage' && p.discountValue
+                    ? p.amount * (1 - parseFloat(p.discountValue!) / 100)
+                    : p.discountType === 'fixed' && p.discountValue
+                      ? Math.max(0, p.amount - parseFloat(p.discountValue))
+                      : p.amount
                 }
                 originalAmount={p.amount}
-                discount={p.discount}
+                discount={
+                  p.discountType === 'percentage'
+                    ? `${p.discountValue}%`
+                    : p.discountType === 'fixed'
+                      ? `₦${p.discountValue}`
+                      : undefined
+                }
                 focal={p.interval === 'quarterly'}
                 planCode={
                   props.service?.subscriptionPlans?.find(p => {

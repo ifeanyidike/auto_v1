@@ -82,7 +82,10 @@ export default class SubscriptionPlan extends Utility {
 
   public async getOneByCode(code: string) {
     return this.process(async () => {
-      return await this.db.subscriptionPlan.findFirst({ where: { code } });
+      return await this.db.subscriptionPlan.findFirst({
+        where: { code },
+        include: { discount: true },
+      });
     });
   }
 
@@ -217,10 +220,6 @@ export default class SubscriptionPlan extends Utility {
         }
 
         if (plan) return plan.id;
-        console.log({
-          ...item,
-          merchantServiceId,
-        });
 
         const subscriptionPlan = await this.create(item);
         return subscriptionPlan.id;

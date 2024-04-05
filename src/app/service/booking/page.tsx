@@ -21,6 +21,22 @@ const Booking = async ({
     id,
   });
 
+  const sessionUser = await Auth0.getSessionUser();
+
+  if (sessionUser?.email === merchantService?.merchant?.email) {
+    return (
+      <div className="font-mono text-2xl font-medium text-center flex flex-col h-fit justify-center items-center gap-8 mt-7 mb-8">
+        <Image
+          src="/images/oops1.png"
+          width={976}
+          height={370}
+          alt="Oops!"
+        ></Image>
+        <span>You cannot book your own service</span>
+      </div>
+    );
+  }
+
   if (!merchantService) {
     return (
       <div className="font-mono text-2xl font-medium text-center flex flex-col h-fit justify-center items-center gap-8 mt-7 mb-8">
@@ -35,7 +51,6 @@ const Booking = async ({
     );
   }
 
-  const sessionUser = await Auth0.getSessionUser();
   const userClient = new User();
   const user = await userClient.getOne({ email: sessionUser.email }, [
     'authorization',
@@ -47,7 +62,7 @@ const Booking = async ({
   >[];
 
   return (
-    <div className="flex flex-col gap-2 items-center mx-auto my-8 max-w-[700px] shadow shadow-white">
+    <div className="flex flex-col gap-2 items-center mx-auto my-8 max-w-[800px] shadow shadow-white">
       <h2 className="text-2xl font-semibold">
         Booking for {merchantService.service?.title}
       </h2>

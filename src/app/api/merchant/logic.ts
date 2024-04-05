@@ -1,7 +1,31 @@
 import { type Prisma } from '@prisma/client';
 import Utility from '../../../server/utility';
-import { type DefaultArgs } from '@prisma/client/runtime/library';
 
+export type MerchantType = Prisma.MerchantGetPayload<{
+  include: {
+    miscellanous: true;
+    apiKeys: true;
+    services: {
+      include: {
+        service: true;
+        subscriptionPlans: true;
+        servicePricing: true;
+      };
+    };
+    discounts: {
+      include: {
+        services: {
+          include: {
+            service: true;
+            subscriptionPlans: true;
+            servicePricing: true;
+          };
+        };
+        plans: true;
+      };
+    };
+  };
+}>;
 export default class Merchant extends Utility {
   constructor() {
     super();
@@ -28,15 +52,35 @@ export default class Merchant extends Utility {
   public async getOne(data: {
     id?: string;
     slug?: string;
-  }): 
-  Promise<Prisma.MerchantGetPayload<
-    Prisma.MerchantDefaultArgs<DefaultArgs>
-  > | null> {
+  }): Promise<MerchantType | null> {
     const { id, slug } = data || {};
     return this.process(async () => {
       if (!id && !slug) throw new Error('Either id or slug must be provided');
       return await this.db.merchant.findFirst({
         where: { ...(slug ? { slug } : { id }) },
+        include: {
+          miscellanous: true,
+          services: {
+            include: {
+              service: true,
+              subscriptionPlans: true,
+              servicePricing: true,
+            },
+          },
+          apiKeys: true,
+          discounts: {
+            include: {
+              services: {
+                include: {
+                  service: true,
+                  subscriptionPlans: true,
+                  servicePricing: true,
+                },
+              },
+              plans: true,
+            },
+          },
+        },
       });
     });
   }

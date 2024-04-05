@@ -18,10 +18,15 @@ const EditProduct = async ({
 
   const service = new MerchantService();
   const serviceData = await service.getOne({ id: params.id });
+  const hasApiKey = !!merchantData?.apiKeys?.paystack;
 
   return (
     <div className={`gap-5`}>
-      <Client product={serviceData} merchantId={merchantData?.id} />
+      <Client
+        product={serviceData}
+        merchant={merchantData!}
+        hasApiKey={hasApiKey}
+      />
     </div>
   );
 };

@@ -1,12 +1,15 @@
 'use client';
-import { enqueueSnackbar } from 'notistack';
 import React, { type Dispatch, type SetStateAction } from 'react';
+import { type SingleValue } from 'react-select';
+import { type MerchantType } from '~/app/api/merchant/logic';
 import { type MerchantServiceType } from '~/app/api/merchant_service/logic';
+import Select from '~/components/Select';
 import TextInput from '~/components/TextInput';
 import { type CreateMerchantServiceParamType } from '~/types/utils';
 
 type Props = {
-  product?: MerchantServiceType;
+  merchant: MerchantType;
+  product?: MerchantServiceType | null;
   item: CreateMerchantServiceParamType['pricing']['discounts'][0];
   data: CreateMerchantServiceParamType;
   setData: Dispatch<SetStateAction<CreateMerchantServiceParamType>>;
@@ -33,17 +36,20 @@ const DiscountView = (props: Props) => {
 
       <div className="w-full">
         <label className="text-xs mb-2 font-medium" htmlFor="discount_code">
-          Code
+          Discount
         </label>
-
-        <TextInput
-          customStyle="text-xs"
-          name="discount_code"
-          placeholder="Please enter the code for this discount"
-          defaultValue={props.item?.code.toString() ?? ''}
-          getValue={code => {
+        <Select
+          data={props.merchant.discounts.map(d => ({
+            label: `${d.code} - ${d.type === 'fixed' ? '₦' : ''}${d.value}${
+              d.type === 'percentage' ? '%' : ''
+            }`,
+            value: d.code,
+          }))}
+          getValue={d => {
+            const discount = d as SingleValue<
+              Record<'value' | 'label', string>
+            >;
             const newData = { ...props.data };
-
             if (!newData.pricing.discounts) {
               newData.pricing.discounts = [];
             }
@@ -53,65 +59,11 @@ const DiscountView = (props: Props) => {
                 ...(newData.pricing.discounts || []),
                 {
                   ...props.item,
-                  code,
+                  code: discount?.value!,
                 },
               ];
             } else {
-              newData.pricing.discounts[discountIndex]!.code = code;
-            }
-            props.setData(newData);
-          }}
-        />
-      </div>
-
-      <div className="w-full">
-        <label className="text-xs mb-2 font-medium" htmlFor="discount_value">
-          Value
-        </label>
-
-        <TextInput
-          customStyle="text-xs"
-          customPrefixStyle="text-xs !min-w-[75px]"
-          customSuffixStyle="!min-w-[40px]"
-          prefixSign="Percentage discount"
-          suffixSign="%"
-          max={100}
-          min={1}
-          type="number"
-          name="discount_value"
-          placeholder="Please enter the value for this discount"
-          defaultValue={props.item?.value.toString() ?? ''}
-          getValue={valueString => {
-            let v: number | undefined = parseInt(valueString);
-            if (isNaN(v)) {
-              enqueueSnackbar('Please enter a number', {
-                variant: 'error',
-              });
-              v = undefined;
-            } else if (v < 1) {
-              enqueueSnackbar('Please enter a number greater than 0', {
-                variant: 'error',
-              });
-              v = undefined;
-            }
-            const value = !v ? '' : v.toString();
-
-            const newData = { ...props.data };
-
-            if (!newData.pricing.discounts) {
-              newData.pricing.discounts = [];
-            }
-
-            if (discountIndex === -1) {
-              newData.pricing.discounts = [
-                ...(newData.pricing.discounts || []),
-                {
-                  ...props.item,
-                  value,
-                },
-              ];
-            } else {
-              newData.pricing.discounts[discountIndex]!.value = value;
+              newData.pricing.discounts[discountIndex]!.code = discount?.value!;
             }
             props.setData(newData);
           }}

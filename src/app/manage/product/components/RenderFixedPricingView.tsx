@@ -13,17 +13,22 @@ type Props = {
 const RenderFixedPricingView = (props: Props) => {
   return (
     <div>
+      <input
+        type="hidden"
+        name="pricing"
+        value={JSON.stringify(props.data.pricing.data)}
+      />
       <label className="text-sm mb-2 font-semibold" htmlFor="amount">
         Amount
       </label>
       <TextInput
         customStyle="text-xs"
         prefixSign="₦"
-        name="amount"
         placeholder="Please enter amount for this product"
         defaultValue={
           props.product?.pricingMode === 'FIXED'
-            ? Number(props.product?.pricing?.[0]?.amount).toString() ?? ''
+            ? Number(props.product?.servicePricing?.[0]?.amount).toString() ??
+              ''
             : ''
         }
         getValue={amountString => {

@@ -9,19 +9,20 @@ import {
   LineElement,
   PointElement,
   Tooltip,
-  LinearScale,
+  registerables,
 } from 'chart.js';
 import { Line, Pie, Bar } from 'react-chartjs-2';
 
 ChartElement.register(
-  LinearScale,
-  CategoryScale,
-  PointElement,
-  LineElement,
-  BarElement,
-  ArcElement,
-  Tooltip,
-  Legend
+  // LinearScale,
+  // CategoryScale,
+  // PointElement,
+  // LineElement,
+  // BarElement,
+  // ArcElement,
+  // Tooltip,
+  // Legend
+  ...registerables
 );
 
 type Props = {

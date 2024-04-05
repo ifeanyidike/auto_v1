@@ -9,25 +9,21 @@ export const initProductData: CreateMerchantServiceParamType = {
       {
         id: globalThis.crypto.randomUUID(),
         code: '',
-        value: '',
         type: 'monthly',
       },
       {
         id: globalThis.crypto.randomUUID(),
         code: '',
-        value: '',
         type: 'quarterly',
       },
       {
         id: globalThis.crypto.randomUUID(),
         code: '',
-        value: '',
         type: 'biannually',
       },
       {
         id: globalThis.crypto.randomUUID(),
         code: '',
-        value: '',
         type: 'annually',
       },
     ],

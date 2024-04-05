@@ -8,6 +8,7 @@ import { Transaction } from './payment/transaction';
 import { type SubscriptionItem } from '~/app/api/subscription/logic';
 import { type BookingItem } from '~/app/api/booking/logic';
 import { monthNames } from 'utilities/common';
+import CryptoJS from 'crypto-js';
 
 cloudinary.config({
   cloud_name: process.env.CLOUD_NAME,
@@ -141,38 +142,27 @@ export default class Util {
     };
   }
 
-  public async verifyTransaction(
-    reference: string | undefined,
-    email: string | undefined,
-    serviceId: string | undefined
+  public async uploadOrUpdate(
+    file: File,
+    folder = '',
+    existingImage: Record<'id' | 'url', string | null | undefined> | null
   ) {
-    const { slug } = Util.getRouteType();
-    const merchant = new Merchant();
-    const merchantData = await merchant.getOne({ slug });
-    const user = new User();
-    const userData = await user.getOne({ email });
-
-    if (reference && email && serviceId && merchantData?.id) {
-      if (userData?.id) {
-        const transaction = new Transaction();
-        const subscriptionData = {
-          merchantId: merchantData.id,
-          serviceId,
-        };
-        const verification = await transaction.verify(
-          userData.id,
-          reference,
-          subscriptionData
-        );
-        return {
-          confirmation: verification.status,
-          userId: userData.id,
-        };
-      }
+    const uploadedImage = await this.upload(file, folder);
+    if (!uploadedImage) {
+      throw new Error('An error occurred in uploading image.');
     }
 
-    return { confirmation: false, userId: userData?.id };
+    if (existingImage?.url) {
+      const imageId = existingImage?.id;
+      const imageUrl = existingImage?.url;
+
+      const uploadId = existingImage?.id ? `${folder}/${imageId}` : imageUrl;
+
+      await this.deleteUpload({ uploadId: uploadId, imageUrl });
+    }
+    return uploadedImage;
   }
+
   public static sortTransactionsByDate(
     subscriptions: SubscriptionItem[],
     bookings: BookingItem[]
@@ -284,5 +274,17 @@ export default class Util {
       {} as { [k: string]: number }
     );
     return aggr;
+  }
+
+  public encryptSecret(secret: string) {
+    const key = process.env.SECRET_ENCRYPTION_KEY ?? '';
+    return CryptoJS.AES.encrypt(secret, key).toString();
+  }
+
+  public decryptSecret(encryptedSecret: string | null | undefined) {
+    if (!encryptedSecret) return '';
+    const key = process.env.SECRET_ENCRYPTION_KEY ?? '';
+    var bytes = CryptoJS.AES.decrypt(encryptedSecret, key);
+    return bytes.toString(CryptoJS.enc.Utf8);
   }
 }

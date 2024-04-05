@@ -8,6 +8,7 @@ import { enqueueSnackbar } from 'notistack';
 import Toggler from '~/components/Toggler';
 import PlusIcon from '~/commons/icons/PlusIcon';
 import CloseIcon from '~/commons/icons/CloseIcon';
+import { updateMerchantServiceSettings } from '../action';
 
 type Props = {
   merchant: Prisma.MerchantGetPayload<Prisma.MerchantDefaultArgs<DefaultArgs>>;
@@ -25,38 +26,59 @@ const ServiceSettings = (props: Props) => {
   const [locCost, setLocCost] = useState<LocData>();
 
   async function handleUpdateMerchant() {
-    // try {
-    //   props.setLoading(true);
-    //   const { error, success } = await updateMerchantGeneralSettings(
-    //     props.merchant.id,
-    //     data
-    //   );
-    //   props.setLoading(false);
-    //   if (error) {
-    //     return enqueueSnackbar(error, {
-    //       variant: 'error',
-    //     });
-    //   }
-    //   if (!success) {
-    //     return enqueueSnackbar(
-    //       'An unexpected error occurred, please tryagain later or contact support!',
-    //       {
-    //         variant: 'error',
-    //       }
-    //     );
-    //   }
-    //   enqueueSnackbar('Merchant sucessfully updated', {
-    //     variant: 'success',
-    //   });
-    // } catch (error: any) {
-    // } finally {
-    //   props.setLoading(false);
-    // }
+    try {
+      props.setLoading(true);
+
+      if (!data) {
+        return enqueueSnackbar('Please sent some data before submitting', {
+          variant: 'error',
+        });
+      }
+
+      if (data?.allowOutsideWork && !data.locationData) {
+        return enqueueSnackbar('Location data is required for outside work', {
+          variant: 'error',
+        });
+      }
+
+      if (!data?.allowOutsideWork && data.locationData) {
+        return enqueueSnackbar(
+          'Please enable outside work to set location data',
+          {
+            variant: 'error',
+          }
+        );
+      }
+
+      const { success } = await updateMerchantServiceSettings(
+        props.merchant.id,
+        {
+          ...data,
+          locationData: data.locationData || [],
+        }
+      );
+      props.setLoading(false);
+
+      if (!success) {
+        return enqueueSnackbar(
+          'An unexpected error occurred, please tryagain later or contact support!',
+          {
+            variant: 'error',
+          }
+        );
+      }
+      enqueueSnackbar('Merchant sucessfully updated', {
+        variant: 'success',
+      });
+    } catch (error: any) {
+    } finally {
+      props.setLoading(false);
+    }
   }
 
   return (
     <div>
-      <div className="flex max-lg:flex-col gap-4 px-2 py-8">
+      <div className="flex max-lg:flex-col gap-8 px-2 py-8">
         <div className="flex flex-col w-1/2 max-lg:w-full gap-10">
           <div className="flex items-center text-sm gap-2">
             <Toggler
@@ -180,22 +202,7 @@ const ServiceSettings = (props: Props) => {
           </div>
         </div>
 
-        <div className="flex flex-col w-1/2 max-lg:w-full gap-10">
-          {/* <div className="flex flex-col gap-1">
-            <label
-              htmlFor="slug"
-              className="text-[10px] uppercase font-semibold"
-            >
-              Merchant Slug
-            </label>
-            <TextInput
-              name="slug"
-              placeholder=""
-              isDisabled
-              value={props.merchant.slug}
-            />
-          </div> */}
-        </div>
+        <div className="flex flex-col w-1/2 max-lg:w-full gap-10"></div>
       </div>
       <div className="mb-4 px-2">
         <Button

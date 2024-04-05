@@ -11,6 +11,8 @@ import { useParams } from 'next/navigation';
 import { dmSans } from '~/font';
 import { type MerchantServiceType } from '~/app/api/merchant_service/logic';
 import { useRouter } from 'next/navigation';
+import { useUser } from '@auth0/nextjs-auth0/client';
+import { getSubdomain } from '~/states/utility';
 
 type Props = {
   subdomain: string;
@@ -21,9 +23,14 @@ const Client = ({ topServices, merchantService }: Props) => {
   const { slug } = useParams<{ slug: string }>();
   const router = useRouter();
 
+  const { user } = useUser();
+
   const otherServices = topServices?.filter(
     s => s.service?.title?.toLowerCase() !== decodeURI(slug)
   );
+  const domain = getSubdomain();
+
+  const isAdmin = user?.email === merchantService?.merchant?.email;
 
   return (
     <>
@@ -52,9 +59,19 @@ const Client = ({ topServices, merchantService }: Props) => {
               hasGradient
               width="w-full"
               height="h-12"
-              onClick={() => router.push(`booking?id=${merchantService?.id}`)}
+              onClick={() =>
+                router.push(
+                  isAdmin
+                    ? `${window.location.protocol}//${domain}.admin.${
+                        window.location.hostname.includes('localhost')
+                          ? 'localhost:3000'
+                          : 'moxxil.com'
+                      }/manage/booking`
+                    : `booking?id=${merchantService?.id}`
+                )
+              }
             >
-              Book Now
+              {isAdmin ? 'View Customers Bookings' : 'Book Now'}
             </Button>
           </div>
           <div className="flex w-[300px]">
@@ -66,18 +83,27 @@ const Client = ({ topServices, merchantService }: Props) => {
                 height="h-12"
                 onClick={() =>
                   router.push(
-                    `subscription?service=${slug}&id=${merchantService?.id}`
+                    isAdmin
+                      ? `${window.location.protocol}//${domain}.admin.${
+                          window.location.hostname.includes('localhost')
+                            ? 'localhost:3000'
+                            : 'moxxil.com'
+                        }/manage/subscription`
+                      : `subscription?service=${slug}&id=${merchantService?.id}`
                   )
                 }
               >
-                Subscribe Now
+                {isAdmin ? 'View Customers Subscriptions' : 'Subscribe Now'}
               </Button>
             ) : (
               <div>
                 <div className="flex flex-col text-center items-center justify-center px-9 py-3 text-xs h-12 mb-2 bg-stone-500/50 rounded-full">
                   <span>
                     Already subscribed to{' '}
-                    {merchantService?.subscriptions?.[0]?.plan?.autoBrand} brand
+                    {merchantService?.subscriptions?.[0]?.plan?.autoBrand ===
+                    'FIXED'
+                      ? merchantService.service?.title
+                      : `${merchantService?.subscriptions?.[0]?.plan?.autoBrand} brand`}
                   </span>
                   <span>
                     {merchantService?.subscriptions?.length > 1
@@ -86,7 +112,7 @@ const Client = ({ topServices, merchantService }: Props) => {
                   </span>
                 </div>
                 <div className="flex flex-col text-xs items-center mt-4 gap-1 justify-center">
-                  {merchantService?.pricing?.length! > 1 && (
+                  {merchantService?.servicePricing?.length! > 1 && (
                     <Link
                       className="hover:text-orange-500"
                       href={`subscription?service=${slug}&id=${merchantService?.id}`}
@@ -101,6 +127,22 @@ const Client = ({ topServices, merchantService }: Props) => {
               </div>
             )}
           </div>
+        </div>
+      </div>
+
+      <div className="flex flex-col py-12 px-20">
+        <div className="ml-4 flex flex-col justify-center gap-5 max-md:items-center">
+          <LeftDashText text="Description" />
+          <div className="flex items-end justify-between max-lg:flex-col max-lg:gap-5 max-md:items-center max-md:justify-center max-md:text-center">
+            <span
+              className={`text-3xl font-semibold  max-md:text-4xl max-sm:text-3xl ${dmSans.className}`}
+            >
+              Why {merchantService?.service?.title}?
+            </span>
+          </div>
+        </div>
+        <div className="flex w-full items-center gap-14  py-14 max-md:flex-col-reverse max-md:gap-3 max-md:px-5">
+          {merchantService?.description}
         </div>
       </div>
 
@@ -129,16 +171,28 @@ const Client = ({ topServices, merchantService }: Props) => {
               />
             ))}
           </div>
+
           <div className="sticky top-0 flex h-full w-1/4 flex-col items-center gap-5 bg-gradient-to-r from-gradient-bg-start to-gradient-bg-end py-8 max-md:w-full">
-            <Button hasShadow bgColor="bg-dark" width="w-full">
-              Request Appointment
-            </Button>
-            <Link className="flex gap-2" href="#">
+            <a
+              href={
+                !merchantService?.merchant?.calendlyLink
+                  ? `tel:${merchantService?.merchant?.phoneNo!}`
+                  : merchantService.merchant.calendlyLink
+              }
+              target={
+                merchantService?.merchant?.calendlyLink ? '_blank' : '_self'
+              }
+            >
+              <Button hasShadow bgColor="bg-dark" width="w-full">
+                Request Appointment
+              </Button>
+            </a>
+            {/* <Link className="flex gap-2" href="#">
               <span className="inset-x-0  bottom-0 w-fit border-b border-transparent transition-all duration-1000 ease-in-out hover:border-content-normal">
                 Learn More
               </span>
               <ArrowRight />
-            </Link>
+            </Link> */}
           </div>
         </div>
       </div>
@@ -162,15 +216,13 @@ const Client = ({ topServices, merchantService }: Props) => {
         </div>
         <div className="grid grid-cols-3 gap-x-3 gap-y-12 max-xl:grid-cols-2 max-lg:grid-cols-2 max-md:grid-cols-1">
           {otherServices
+            ?.filter(s => s.id !== merchantService?.id)
             ?.slice(0, 3)
             ?.map(s => (
               <HomeServicesCard
                 key={s.id}
                 category={s.service?.type ?? 'Repair'}
-                details={
-                  s.service?.description ??
-                  'Lorem ipsum dolor sit amet consectetur adipisicing elit. Iusto quos recusandae earum itaque quis iste quibusdam amet magni nobis labore.'
-                }
+                details={s.description || ''}
                 imgSrc={s.imgUrl ?? s.service?.imgUrl ?? ''}
                 title={s.service?.title ?? ''}
                 href={`/service/${s.service?.title?.toLowerCase() ?? ''}`}

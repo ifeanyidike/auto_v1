@@ -172,15 +172,14 @@ const DataView = (props: Props) => {
     }
   };
 
-  // !data?.isOutsideWork || (data?.isOutsideWork && data?.location);
   return (
     <div>
       <SnackbarProvider maxSnack={1} />
       {loading && <LoaderOne />}
       <div className="flex flex-col gap-3 items-center max-h-80 pt-12 overflow-auto">
-        {merchantService?.pricing?.map(p => (
+        {merchantService?.servicePricing?.map(p => (
           <div
-            className="flex items-center gap-4 uppercase text-xs px-5 py-2 bg-gray-200 min-w-[500px] max-md:min-w-[400px] max-sm:min-w-[300px] flex-grow rounded-full text-content-normal font-medium"
+            className="flex items-center gap-4 uppercase text-xs px-5 py-3 bg-gray-200 min-w-[500px] max-md:min-w-[400px] max-sm:min-w-[300px] flex-grow rounded-full text-content-normal font-medium"
             key={p.id}
           >
             <CheckBox
@@ -203,7 +202,9 @@ const DataView = (props: Props) => {
               }}
             />{' '}
             <p>{p.type}</p>{' '}
-            <span className="ml-auto">Basic Pricing: ₦{Number(p.amount)}</span>
+            <span className="ml-auto">
+              Basic Pricing: ₦{Number(p.amount)?.toLocaleString()}
+            </span>
           </div>
         ))}
       </div>

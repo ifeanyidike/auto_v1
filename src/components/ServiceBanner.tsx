@@ -45,7 +45,6 @@ const ServiceBanner = () => {
             type="text"
             className="focus:border-white-500 w-full max-w-md rounded-full border border-gray-200 bg-transparent px-4 py-2 text-white focus:outline-none"
             placeholder="Search..."
-            style={{ color: 'white' }}
           />
           <span className="absolute right-3 top-2 text-white">
             <SearchIcon />

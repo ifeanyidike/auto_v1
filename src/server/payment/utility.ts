@@ -1,22 +1,21 @@
 import axios from 'axios';
+import Util from '../utils';
 
 export class Utility {
-  protected gateway_secret: string | undefined = undefined;
-  constructor() {
-    this.gateway_secret = process.env.PAYSTACK_SECRET_KEY;
-  }
+  constructor() {}
   protected baseEndpoint = 'https://api.paystack.co';
 
-  protected Header = {
-    headers: {
-      Authorization: `Bearer ${this.gateway_secret}`,
-    },
+  private getGatewaySecret = async () => {
+    const data = await Util.getMerchantDataBySubdomain();
+    const encryptedKey = data.merchantData?.apiKeys?.paystack;
+
+    const utilClient = new Util();
+    const gateway_secret = utilClient.decryptSecret(encryptedKey);
+    if (!gateway_secret) return null;
+    return gateway_secret;
   };
 
   protected async process<T>(func: () => Promise<T>): Promise<T> {
-    if (!this.gateway_secret)
-      throw new Error('The gateway secret key is required');
-
     try {
       return await func();
     } catch (error) {
@@ -54,13 +53,16 @@ export class Utility {
     body: Record<string, any>,
     func?: (data: any) => Promise<T>
   ) {
+    const gateway_secret = await this.getGatewaySecret();
+    if (!gateway_secret) return null;
+
     return this.process(async () => {
       const response = await axios.post(
         `${endpoint}`,
         { ...body },
         {
           headers: {
-            Authorization: `Bearer ${this.gateway_secret}`,
+            Authorization: `Bearer ${gateway_secret}`,
           },
         }
       );
@@ -73,10 +75,13 @@ export class Utility {
   }
 
   protected async get<T, U>(endpoint: string, func?: (data: U) => Promise<T>) {
+    const gateway_secret = await this.getGatewaySecret();
+    if (!gateway_secret) return null;
+
     return this.process(async () => {
       const response = await axios.get(`${endpoint}`, {
         headers: {
-          Authorization: `Bearer ${this.gateway_secret}`,
+          Authorization: `Bearer ${gateway_secret}`,
         },
       });
       if (func && response.data) {
@@ -91,13 +96,17 @@ export class Utility {
     body: Record<string, any>,
     func?: (data: any) => Promise<T>
   ) {
+    const gateway_secret = await this.getGatewaySecret();
+    console.log('gateway_secret', gateway_secret);
+    if (!gateway_secret) return null;
+
     return this.process(async () => {
       const response = await axios.put(
         `${endpoint}`,
         { ...body },
         {
           headers: {
-            Authorization: `Bearer ${this.gateway_secret}`,
+            Authorization: `Bearer ${gateway_secret}`,
           },
         }
       );

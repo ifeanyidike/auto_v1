@@ -8,6 +8,7 @@ import Booking from '~/app/api/booking/logic';
 import Util from '~/server/utils';
 import Merchant from '~/app/api/merchant/logic';
 import { z } from 'zod';
+import { Mailer } from '~/server/mail';
 
 const schema = z.object({
   amount: z
@@ -115,6 +116,11 @@ export async function bookService(data: ItemData, payNow: boolean = true) {
         errors: null,
       };
     }
+  }
+
+  if (!payNow) {
+    const mailer = new Mailer();
+    await mailer.sendEmailForBookedService('booking', newBooking.id);
   }
 
   return { success_url: bookingNotChargedUrl, message: 'Successful' };

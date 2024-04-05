@@ -42,7 +42,7 @@ export default class User extends Utility {
     }
 
     return this.process(async () => {
-      if (!id && !email) throw new Error('Either id or email must be provided');
+      if (!id && !email) return null;
 
       return await this.db.user.findFirst({
         where: { ...(email ? { email } : { id }) },
@@ -71,6 +71,12 @@ export default class User extends Utility {
           lastName: data.lastName || '',
         },
       });
+    });
+  }
+
+  public async numUser(email: string) {
+    return this.process(async () => {
+      return await this.db.user.count({ where: { email } });
     });
   }
 }

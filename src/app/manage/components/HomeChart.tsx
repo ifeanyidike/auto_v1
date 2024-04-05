@@ -7,11 +7,11 @@ type Props = {
 };
 
 const HomeChart = (props: Props) => {
-  const labels = Object.keys(props.data);
-  const data = Object.values(props.data);
+  const labels = props.data ? Object.keys(props.data) : [];
+  const data = props.data ? Object.values(props.data) : [];
 
   return (
-    <div className="h-full max-h-96 overflow-hidden">
+    <div className="h-full max-h-96 max-lg:max-h-[500px] max-lg:h-[500px] overflow-hidden">
       <Chart
         labels={labels}
         caption="Transactions by months"

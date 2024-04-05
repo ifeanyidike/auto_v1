@@ -16,6 +16,8 @@ type Props = {
   radius?: string;
   onClick?: () => void;
   isDisabled?: boolean;
+  type?: 'button' | 'reset' | 'submit' | undefined;
+  name?: string;
 };
 const Button = (props: Props) => {
   const {
@@ -32,11 +34,13 @@ const Button = (props: Props) => {
     py = 'py-3',
     radius = 'rounded-3xl',
     isDisabled = false,
+    type = 'submit',
   } = props;
   return (
     <button
       disabled={isDisabled}
-      type="submit"
+      type={type}
+      name={props.name}
       onClick={props.onClick && props.onClick}
       className={`${bgColor} ${radius} ${
         hasGradient ? 'bg-gradient-to-l' : ''

@@ -84,7 +84,12 @@ export default class Booking extends Utility {
 
   public async getOne(id: string) {
     return this.process(async () => {
-      return await this.db.booking.findFirst({ where: { id } });
+      return await this.db.booking.findFirst({
+        where: { id },
+        include: {
+          review: true,
+        },
+      });
     });
   }
 

@@ -50,6 +50,7 @@ export default class FAQ extends Utility {
   public async findByQuestionAndAnswer(
     data: Record<'question' | 'answer', string>
   ) {
+    console.log('data in findByQuestionAndAnswer', data);
     return this.process(async () => {
       return await this.db.fAQ.findFirst({
         where: { ...data },
@@ -58,6 +59,7 @@ export default class FAQ extends Utility {
   }
 
   public async getOrCreateMany(data: Record<'question' | 'answer', string>[]) {
+    console.log('data in faq getOrCreateMany', data);
     return await Promise.all(
       data.map(async item => {
         const faq = await this.findByQuestionAndAnswer(item);

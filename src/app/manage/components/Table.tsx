@@ -24,8 +24,6 @@ type Props = {
 const Table = (props: Props) => {
   const isHeader = props._id === 'table_header';
 
-  console.log(props.popupOpen);
-
   const renderHeader = () => {
     return (
       <div
@@ -93,13 +91,6 @@ const Table = (props: Props) => {
             <button
               onClick={e => {
                 const rect = e.currentTarget.getBoundingClientRect();
-                // console.log(
-                //   'client rect',
-                //   window.innerHeight,
-                //   window.outerHeight,
-                //   window.screen.height,
-                //   document.documentElement.clientHeight
-                // );
                 if (props.popupOpen) {
                   props.togglePopup(null);
                 } else {

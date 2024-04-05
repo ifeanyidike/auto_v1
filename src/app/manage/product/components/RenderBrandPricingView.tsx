@@ -15,6 +15,11 @@ type Props = {
 const RenderBrandPricingView = (props: Props) => {
   return (
     <div className="flex flex-col gap-6 mt-4 relative">
+      <input
+        type="hidden"
+        name="pricing"
+        value={JSON.stringify(props.data.pricing.data)}
+      />
       {props.data.pricing.data?.map((item, index) => {
         return (
           <div key={item.id}>

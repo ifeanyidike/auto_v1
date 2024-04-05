@@ -6,14 +6,20 @@ import { dmSans, manRope } from '~/font';
 
 type Props = {
   getSelectedDate: (date: Date) => void;
+  className?: string;
+  iconClass?: string;
 };
 const Calendar = (props: Props) => {
   const [startDate, setStartDate] = useState<Date>(new Date());
+  const {
+    iconClass = 'w-5 h-[22px]',
+    className = 'w-full cursor-pointer py-2 rounded-xl !flex outline-none border border-content-normal/20 hover:border-stone-400 !items-center !justify-center',
+  } = props;
   return (
     <ReactDatePicker
       showIcon
       isClearable
-      className="w-full cursor-pointer py-2 rounded-xl !flex outline-none border border-content-normal/20 hover:border-stone-400 !items-center !justify-center"
+      className={className}
       calendarClassName="w-full text-[8px] font-normal !rounded-b-2xl !border !border-stone-300"
       wrapperClassName={`w-full text-xs font-normal ${manRope.className} flex gap-5`}
       dayClassName={() =>
@@ -29,7 +35,7 @@ const Calendar = (props: Props) => {
         props.getSelectedDate(date!);
       }}
       icon={
-        <svg width={20} height={22} viewBox="0 0 20 22" fill={'none'}>
+        <svg className={iconClass} viewBox="0 0 20 22" fill={'none'}>
           <path
             d="M1.09253 8.40421H18.9165"
             stroke={'currentColor'}
