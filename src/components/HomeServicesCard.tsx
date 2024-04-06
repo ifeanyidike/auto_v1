@@ -14,14 +14,16 @@ type Props = {
 
 const HomeServicesCard = (props: Props) => {
   return (
-    <div className={`flex h-[450px] flex-col rounded-xl p-4`}>
+    <div
+      className={`flex h-[450px] w-full flex-col rounded-xl p-4 justify-center`}
+    >
       <Link href={props.href}>
         <Image
           src={props.imgSrc}
           alt={props.title}
           width="400"
           height="280"
-          className="h-[240px] w-[400px] rounded-2xl"
+          className="h-[240px] w-full rounded-2xl"
         ></Image>
       </Link>
 

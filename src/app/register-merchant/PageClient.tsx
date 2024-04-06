@@ -2,10 +2,11 @@
 import React, { useState } from 'react';
 import Button from '~/components/Button';
 import TextInput from '~/components/TextInput';
-import { dmSans, nunitoSans } from '~/font';
+import { dmSans, manRope } from '~/font';
 import { createMerchant } from './action';
 import { SnackbarProvider, enqueueSnackbar } from 'notistack';
 import LoaderOne from '~/components/LoaderOne';
+import StylishInput from '~/components/StylishInput';
 
 type Props = {
   email: string;
@@ -16,9 +17,27 @@ type Data = {
   slug?: string;
   phoneNo?: string;
 };
+
+const ArrowLeft = () => (
+  <svg
+    fill="none"
+    viewBox="0 0 24 24"
+    strokeWidth={1.5}
+    stroke="currentColor"
+    className="w-4 h-4"
+  >
+    <path
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18"
+    />
+  </svg>
+);
+
 const PageClient = (props: Props) => {
   const [data, setData] = useState<Data>({ email: props.email });
   const [loading, setLoading] = useState<boolean>(false);
+  const [addEmail, toggleAddEmail] = useState<boolean>(!props.email);
 
   const convertToSlug = (text: string) => {
     return text
@@ -65,73 +84,129 @@ const PageClient = (props: Props) => {
   }
   return (
     <div
-      className={`${dmSans.className} w-[500px] h-fit my-14 mx-auto bg-orange-100 rounded-xl px-8 py-5 flex flex-col gap-10 max-md:w-96 max-sm:w-80`}
+      className={`${dmSans.className} ${
+        addEmail ? 'mt-48 mb-32' : 'my-32'
+      } w-[600px] h-fit  mx-auto rounded-xl px-8 py-5 flex flex-col gap-5  max-md:w-96 max-sm:w-full`}
     >
       <SnackbarProvider maxSnack={1} />
       {loading && <LoaderOne />}
-      <h2
-        className={`-mb-3 text-xl text-center font-medium ${nunitoSans.className}`}
-      >
-        Register Your Auto Shop
+      <h2 className={`mb-4 text-3xl font-bold ${manRope.className}`}>
+        Create your Auto Shop
       </h2>
-      <div className={`text-sm font-medium flex flex-col gap-2`}>
-        <span className="uppercase text-[10px]">Your email</span>
-        <TextInput
-          customStyle="pl-0 !py-1 text-sm font-light border-r-0 border-l-0 border-t-0 bg-transparent outline-0 rounded-none border-b-2 border-b-indigo-900/50 text-content-normal/80"
-          placeholder="email"
-          defaultValue={props.email!}
-          isDisabled
-        />
-      </div>
 
-      <div className={`text-sm font-medium flex flex-col gap-2`}>
-        <span className="uppercase text-[10px]">Auto Merchant name</span>
-        <TextInput
-          customStyle="pl-0 !py-1 text-sm font-light border-r-0 border-l-0 border-t-0 bg-transparent outline-0 rounded-none border-b-2 border-b-indigo-900/50 text-content-normal"
-          placeholder="Please enter your merchant name"
+      {addEmail ? (
+        <StylishInput
+          placeholder="Email address"
+          type="email"
+          pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}"
+          required
           getValue={(text: string) => {
             const newData = { ...data };
-            newData.name = text;
-            newData.slug = convertToSlug(text);
+            newData.email = text;
             setData(newData);
           }}
         />
-      </div>
+      ) : (
+        <>
+          <div
+            className={`text-sm font-medium flex flex-col bg-[#ebe8e5]/20 pl-3 !py-2 text-content-normal/80`}
+          >
+            <span className="text-[10px] py-0">Email address</span>
+            <TextInput
+              customStyle="pl-0 !py-1 text-sm font-light border-0 border-0 border-0 bg-transparent outline-0 rounded-none"
+              placeholder="email"
+              defaultValue={data.email}
+              isDisabled
+            />
+          </div>
+          <StylishInput
+            placeholder="Auto shop name"
+            required
+            getValue={(text: string) => {
+              const newData = { ...data };
+              newData.name = text;
+              newData.slug = convertToSlug(text);
+              setData(newData);
+            }}
+          />
 
-      <div className={`text-sm font-medium flex flex-col gap-2`}>
-        <span className="uppercase text-[10px]">Your slug</span>
-        <TextInput
-          customStyle="pl-0 !py-1 text-sm font-light border-r-0 border-l-0 border-t-0 bg-transparent outline-0 rounded-none border-b-2 border-b-indigo-900/50 text-content-normal"
-          defaultValue={data.slug}
-          value={data.slug}
-          getValue={(text: string) => {
-            const newData = { ...data };
-            newData.slug = convertToSlug(text);
-            setData(newData);
-          }}
-        />
-      </div>
+          <StylishInput
+            placeholder="Your slug"
+            defaultValue={data.slug}
+            value={data.slug}
+            required
+            getValue={(text: string) => {
+              const newData = { ...data };
+              newData.slug = convertToSlug(text);
+              setData(newData);
+            }}
+          />
 
-      <div className={`text-sm font-medium flex flex-col gap-2`}>
-        <span className="uppercase text-[10px]">Phone Number</span>
-        <TextInput
-          customStyle="pl-0 !py-1 text-sm font-light border-r-0 border-l-0 border-t-0 bg-transparent outline-0 rounded-none border-b-2 border-b-indigo-900/50 text-content-normal"
-          placeholder="Please enter your phone number"
-          getValue={(text: string) => {
-            const newData = { ...data };
-            newData.phoneNo = text;
-            setData(newData);
+          <StylishInput
+            placeholder="Phone number"
+            required
+            getValue={(text: string) => {
+              const newData = { ...data };
+              newData.phoneNo = text;
+              setData(newData);
+            }}
+          />
+          <button
+            onClick={() => {
+              const newData = { ...data };
+              newData.email = '';
+              setData(newData);
+              toggleAddEmail(true);
+            }}
+            className="flex gap-1 items-center my-0 py-0"
+          >
+            <ArrowLeft />{' '}
+            <small className="text-sm font-light">Use a different email</small>
+          </button>
+        </>
+      )}
+
+      {addEmail ? (
+        <Button
+          width="w-full"
+          radius="rounded-md"
+          bgColor={`bg-[#e4f222]`}
+          textColor="text-[#2e2e27]"
+          py="py-4"
+          onClick={() => {
+            if (!data.email) {
+              return enqueueSnackbar('Email address is required', {
+                variant: 'error',
+              });
+            }
+
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+            if (!emailRegex.test(data.email.trim())) {
+              return enqueueSnackbar(
+                'Email address is not in correct format.',
+                {
+                  variant: 'error',
+                }
+              );
+            }
+            toggleAddEmail(false);
           }}
-        />
-      </div>
-      <Button
-        width="w-full"
-        radius="rounded-xl"
-        bgColor={`${false ? 'bg-neutral-800' : 'bg-indigo-900'}`}
-        onClick={handleCreateMerchant}
-      >
-        Get started
-      </Button>
+        >
+          Continue
+        </Button>
+      ) : (
+        <Button
+          width="w-full"
+          radius="rounded-md"
+          bgColor={`bg-[#e4f222]`}
+          textColor="text-[#2e2e27]"
+          py="py-4"
+          onClick={handleCreateMerchant}
+        >
+          Get started
+        </Button>
+      )}
     </div>
   );
 };

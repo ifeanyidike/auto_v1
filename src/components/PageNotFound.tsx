@@ -30,7 +30,7 @@ const PageNotFound = (props: Props) => {
           <p>The page you requested does not exist.</p>
         )}
       </div>
-      <Link href="https://moxxil.com/register-merchant">
+      <Link href="/">
         <Button bgColor="bg-red-700" hasGradient hasShadow>
           Back to Homepage
         </Button>

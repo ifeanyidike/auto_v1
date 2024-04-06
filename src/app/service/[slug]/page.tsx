@@ -31,7 +31,7 @@ const Service = async ({ params }: { params: { slug: string } }) => {
   return (
     <main>
       <Client
-        topServices={data.services}
+        topServices={data?.services}
         merchantService={service}
         subdomain={pageSlug}
       />

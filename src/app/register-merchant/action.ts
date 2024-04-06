@@ -28,6 +28,17 @@ const schema = z.object({
   phoneNo: z.string({ required_error: 'Phone Number is required' }),
 });
 
+const validatePhoneNumber = (phoneNumber: string) => {
+  // Regular expressions for phone number validation
+  const internationalFormatRegex = /^(\+?234\d{10})$/;
+  const localFormatRegex = /^0\d{10}$/;
+
+  return (
+    internationalFormatRegex.test(phoneNumber) ||
+    localFormatRegex.test(phoneNumber)
+  );
+};
+
 export async function createMerchant(data: Data) {
   const validatedFields = schema.safeParse({
     ...data,
@@ -45,6 +56,10 @@ export async function createMerchant(data: Data) {
 
   if (!/^[a-z](-?[a-z])*$/.test(data.slug!)) {
     return { error: 'Slug is not in the correct format. ' };
+  }
+
+  if (!validatePhoneNumber(data.phoneNo!)) {
+    return { error: 'Phone number is not in the correct format.' };
   }
 
   const merchantClient = new Merchant();

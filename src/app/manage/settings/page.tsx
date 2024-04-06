@@ -6,7 +6,7 @@ import Util from '~/server/utils';
 import PageClient from './components/PageClient';
 import ProtectedPage from '~/server/protectedPage';
 
-const Account = async () => {
+const Settings = async () => {
   const { slug } = Util.getRouteType();
   const merchantClient = new Merchant();
   const merchant = await merchantClient.getOne({ slug });
@@ -26,14 +26,14 @@ const Account = async () => {
             <BackToPage
               toHref="/manage/"
               prevTitle="home"
-              currTitle="Account"
+              currTitle="Settings"
             />
           </div>
         }
       />
 
       <div className="px-10 bg-white w-full h-full">
-        <h2 className="text-xl font-semibold pt-5 pb-8">Account Settings</h2>
+        <h2 className="text-xl font-semibold pt-5 pb-8">Settings</h2>
 
         <PageClient merchant={merchant!} decryptedSecrets={{ paystack }} />
       </div>
@@ -41,4 +41,4 @@ const Account = async () => {
   );
 };
 
-export default await ProtectedPage(Account, { returnTo: '/account' });
+export default await ProtectedPage(Settings, { returnTo: '/settings' });

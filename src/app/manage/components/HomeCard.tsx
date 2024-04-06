@@ -6,6 +6,7 @@ type Props = {
   count: number;
   title: string;
   iconBgColor: string;
+  isAmount?: boolean;
 };
 
 const HomeCard = (props: Props) => {
@@ -16,7 +17,8 @@ const HomeCard = (props: Props) => {
       <div className={`w-fit ${props.iconBgColor} p-3 box-border rounded-full`}>
         {props.Icon}
       </div>
-      <span className={`${dmSans.className} font-extrabold text-2xl`}>
+      <span className={`${dmSans.className} font-extrabold text-2xl flex`}>
+        {props.isAmount && '₦'}
         {props.count.toLocaleString('en-US')}
       </span>
       <span className="text-xs">{props.title}</span>

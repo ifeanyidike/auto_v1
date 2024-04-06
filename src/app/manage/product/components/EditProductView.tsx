@@ -84,53 +84,55 @@ const EditProductView = (props: Props) => {
               currTitle="Add New Product"
             />
             <div className="z-50 flex gap-3 max-sm:fixed max-sm:bottom-0 max-sm:left-0 max-sm:bg-white max-sm:w-full max-sm:p-4 text-sm">
-              <ActionButton setLoading={setSaving}>
-                <Button
-                  px="px-6"
-                  radius="rounded-2xl"
-                  hasGradient={false}
-                  hasShadow={false}
-                  bgColor="bg-content-normal/50"
-                  name="draft"
-                  onClick={() => setActionCount(prev => prev + 1)}
-                  isDisabled={disableDraftSave(props.product, data)}
-                >
-                  <div className="flex gap-2 items-center">
-                    <BookmarkIcon />
-                    <span>
-                      {props.product?.isDraft
-                        ? 'Update Draft'
-                        : props.product?.isDraft === false
-                          ? 'Unpublish to Draft'
-                          : 'Save to Draft'}
-                    </span>
-                  </div>
-                </Button>
-              </ActionButton>
-              <ActionButton setLoading={setSaving}>
-                <Button
-                  px="px-6"
-                  radius="rounded-2xl"
-                  hasGradient={true}
-                  hasShadow={true}
-                  gradientStart="from-content-normal"
-                  gradientEnd="to-content-light"
-                  shadowColor="shadow-content-light"
-                  bgColor="bg-content-light"
-                  name="publish"
-                  onClick={() => setActionCount(prev => prev + 1)}
-                  isDisabled={disablePublish(props.product, data)}
-                >
-                  <div className={`flex gap-2 items-center`}>
-                    <FolderIcon />
-                    <span>
-                      {!props.product?.isDraft
-                        ? 'Update Product'
-                        : 'Publish Product'}
-                    </span>
-                  </div>
-                </Button>
-              </ActionButton>
+              <div className="flex mx-auto gap-3">
+                <ActionButton setLoading={setSaving}>
+                  <Button
+                    px="px-6"
+                    radius="rounded-2xl"
+                    hasGradient={false}
+                    hasShadow={false}
+                    bgColor="bg-content-normal/50"
+                    name="draft"
+                    onClick={() => setActionCount(prev => prev + 1)}
+                    isDisabled={disableDraftSave(props.product, data)}
+                  >
+                    <div className="flex gap-2 items-center">
+                      <BookmarkIcon />
+                      <span>
+                        {props.product?.isDraft
+                          ? 'Update Draft'
+                          : props.product?.isDraft === false
+                            ? 'Unpublish to Draft'
+                            : 'Save to Draft'}
+                      </span>
+                    </div>
+                  </Button>
+                </ActionButton>
+                <ActionButton setLoading={setSaving}>
+                  <Button
+                    px="px-6"
+                    radius="rounded-2xl"
+                    hasGradient={true}
+                    hasShadow={true}
+                    gradientStart="from-content-normal"
+                    gradientEnd="to-content-light"
+                    shadowColor="shadow-content-light"
+                    bgColor="bg-content-light"
+                    name="publish"
+                    onClick={() => setActionCount(prev => prev + 1)}
+                    isDisabled={disablePublish(props.product, data)}
+                  >
+                    <div className={`flex gap-2 items-center`}>
+                      <FolderIcon />
+                      <span>
+                        {!props.product?.isDraft
+                          ? 'Update Product'
+                          : 'Publish Product'}
+                      </span>
+                    </div>
+                  </Button>
+                </ActionButton>
+              </div>
             </div>
           </div>
         }

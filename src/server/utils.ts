@@ -3,8 +3,6 @@ import Merchant from '~/app/api/merchant/logic';
 import { v2 as cloudinary } from 'cloudinary';
 import path from 'path';
 import DatauriParser from 'datauri/parser';
-import User from '~/app/api/user/logic';
-import { Transaction } from './payment/transaction';
 import { type SubscriptionItem } from '~/app/api/subscription/logic';
 import { type BookingItem } from '~/app/api/booking/logic';
 import { monthNames } from 'utilities/common';
@@ -22,7 +20,12 @@ export default class Util {
       .replace('www.', '')
       .replace('https://', '')
       .replace('http://', '');
-    const baseUrl = `.${process.env.BASE_URL ?? ''}`;
+
+    let baseUrl = `.${process.env.BASE_URL ?? ''}`;
+    if (strToCompare === 'localhost:3000' || strToCompare === 'moxxil.com') {
+      baseUrl = strToCompare;
+    }
+
     const urlParts = strToCompare.split(baseUrl);
     return urlParts[0]!;
   };

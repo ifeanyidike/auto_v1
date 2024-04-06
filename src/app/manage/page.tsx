@@ -77,6 +77,7 @@ const Home = async () => {
             Icon={<SettingsIcon />}
             count={earnings?.data?.total_volume / 100 || 0}
             iconBgColor="bg-blue-300"
+            isAmount
           />
         </div>
         <div className="chart flex-[0.59] max-lg:flex-1 mt-4">
