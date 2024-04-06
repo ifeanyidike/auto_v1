@@ -38,17 +38,6 @@ export default async function Home() {
   const reviewClient = new Review();
   const reviews = await reviewClient.findByMerchant(merchant!.id);
 
-  const showCalendly = () => {
-    if (!merchant.calendlyLink) return;
-    window.Calendly?.initBadgeWidget({
-      url: merchant.calendlyLink,
-      text: 'Schedule time with me',
-      color: '#0069ff',
-      textColor: '#ffffff',
-      branding: undefined,
-    });
-  };
-
   return (
     <>
       <main>

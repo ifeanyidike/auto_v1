@@ -6,7 +6,6 @@ import MenuItem from './SidebarMenuItem';
 import { MenuEnum } from '../types/menu';
 import BookingIcon from '~/commons/icons/BookingIcon';
 import CalendarIcon from '~/commons/icons/CalendarIcon';
-import ProfileIcon from '~/commons/icons/ProfileIcon';
 import ChevroLeftRoundedIcon from '~/commons/icons/ChevroLeftRoundedIcon';
 import { useUser } from '@auth0/nextjs-auth0/client';
 import EllipsisIcon from '~/commons/icons/EllipsisIcon';
