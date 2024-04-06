@@ -229,7 +229,6 @@ const Client = ({ topServices, merchantService }: Props) => {
             ))}
         </div>
 
-        <Script src="https://player.vimeo.com/api/player.js"></Script>
         <Script
           src="https://assets.calendly.com/assets/external/widget.js"
           type="text/javascript"
