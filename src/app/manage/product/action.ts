@@ -232,7 +232,9 @@ function formatPlanData(data: UpdateDataParams) {
       return data.subscriptions.map(interval => {
         let amount = priceData.amount!;
 
-        const name = `${serviceName} - ${priceData.type} - ${interval}`;
+        const name = `${serviceName} - ${
+          priceData.type || 'fixed'
+        } - ${interval}`;
         return {
           interval,
           name,

@@ -13,10 +13,14 @@ type Props = {
   suffixSign?: React.ReactNode;
   defaultValue?: string;
   isDisabled?: boolean;
+  required?: boolean;
+  pattern?: string;
   value?: string;
   type?: string;
   max?: number;
   min?: number;
+  onFocus?: () => void;
+  onBlur?: () => void;
 };
 const TextInput = (props: Props) => {
   const {
@@ -29,6 +33,10 @@ const TextInput = (props: Props) => {
     prefixSign,
     suffixSign,
     type = 'text',
+    required = false,
+    pattern = '',
+    onFocus = () => {},
+    onBlur = () => {},
   } = props;
   return (
     <div className="w-full flex">
@@ -41,6 +49,8 @@ const TextInput = (props: Props) => {
       )}
       <input
         placeholder={placeholder}
+        onFocus={onFocus}
+        onBlur={onBlur}
         name={props.name}
         max={props.max}
         min={props.min}
@@ -57,6 +67,7 @@ const TextInput = (props: Props) => {
                 : 'w-full rounded-lg'
         } px-3 py-3 ${customStyle}`}
         type={type}
+        required={required}
         onChange={e => {
           if (props.getValue) {
             props.getValue(e.target.value);

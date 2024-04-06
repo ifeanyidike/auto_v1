@@ -15,6 +15,7 @@
     --color-bg-grad-start: 240deg 6% 93%;
     --color-bg-grad-end: 312deg 12% 92%;
     --color-cyan-blue: 207deg 24% 91%;
+    --color-grad-start: 58deg 89% 54%;
   }
 
   @media (prefers-color-scheme: dark) {

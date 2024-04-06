@@ -46,7 +46,7 @@ export default async function RootLayout({
     <html lang="en" className={manRope.className}>
       <UserProvider loginUrl="/api/auth/login">
         <body className={manRope.className}>
-          {!isAdminLogin && (
+          {!isAdminLogin && slug && (
             <>
               <MainMenu
                 formattedPhoneNo={formattedPhoneNo}
@@ -66,7 +66,7 @@ export default async function RootLayout({
               {children}
             </Page>
           </Suspense>
-          {!isAdminLogin && <Footer merchantData={merchantData} />}
+          {!isAdminLogin && slug && <Footer merchantData={merchantData} />}
         </body>
       </UserProvider>
     </html>

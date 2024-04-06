@@ -13,10 +13,12 @@ import { type MerchantServiceType } from '~/app/api/merchant_service/logic';
 import { useRouter } from 'next/navigation';
 import { useUser } from '@auth0/nextjs-auth0/client';
 import { getSubdomain } from '~/states/utility';
+import Script from 'next/script';
+import OpenCalendly from '~/components/OpenCalendly';
 
 type Props = {
   subdomain: string;
-  topServices: MerchantServiceType[] | null;
+  topServices?: MerchantServiceType[] | null;
   merchantService: MerchantServiceType | null;
 };
 const Client = ({ topServices, merchantService }: Props) => {
@@ -31,7 +33,7 @@ const Client = ({ topServices, merchantService }: Props) => {
   const domain = getSubdomain();
 
   const isAdmin = user?.email === merchantService?.merchant?.email;
-
+  console.log('merchantService?.subscriptions', merchantService?.subscriptions);
   return (
     <>
       <div
@@ -53,7 +55,7 @@ const Client = ({ topServices, merchantService }: Props) => {
             </div>
           ))}
         </div>
-        <div className="sticky top-0 flex w-[600px] max-md:w-full gap-5 max-sm:flex-col">
+        <div className="sticky top-0 flex w-[600px] max-md:w-full gap-5 max-sm:flex-col max-sm:items-center">
           <div className="flex w-[300px]">
             <Button
               hasGradient
@@ -97,7 +99,7 @@ const Client = ({ topServices, merchantService }: Props) => {
               </Button>
             ) : (
               <div>
-                <div className="flex flex-col text-center items-center justify-center px-9 py-3 text-xs h-12 mb-2 bg-stone-500/50 rounded-full">
+                <div className="flex w-[300px] flex-col text-center items-center justify-center px-9 py-3 text-xs h-12 mb-2 bg-stone-500/50 rounded-full">
                   <span>
                     Already subscribed to{' '}
                     {merchantService?.subscriptions?.[0]?.plan?.autoBrand ===
@@ -130,7 +132,7 @@ const Client = ({ topServices, merchantService }: Props) => {
         </div>
       </div>
 
-      <div className="flex flex-col py-12 px-20">
+      <div className="flex flex-col py-12 px-20 max-sm:px-7">
         <div className="ml-4 flex flex-col justify-center gap-5 max-md:items-center">
           <LeftDashText text="Description" />
           <div className="flex items-end justify-between max-lg:flex-col max-lg:gap-5 max-md:items-center max-md:justify-center max-md:text-center">
@@ -146,7 +148,7 @@ const Client = ({ topServices, merchantService }: Props) => {
         </div>
       </div>
 
-      <div className="flex flex-col py-28 bg-gradient-to-r from-gradient-bg-start to-gradient-bg-end px-20">
+      <div className="flex flex-col py-28 bg-gradient-to-r from-gradient-bg-start to-gradient-bg-end px-20 max-sm:px-7">
         <div className="ml-4 flex flex-col justify-center gap-5 max-md:items-center">
           <LeftDashText text="FAQ" />
           <div className="flex items-end justify-between max-lg:flex-col max-lg:gap-5 max-md:items-center max-md:justify-center max-md:text-center">
@@ -173,20 +175,17 @@ const Client = ({ topServices, merchantService }: Props) => {
           </div>
 
           <div className="sticky top-0 flex h-full w-1/4 flex-col items-center gap-5 bg-gradient-to-r from-gradient-bg-start to-gradient-bg-end py-8 max-md:w-full">
-            <a
-              href={
-                !merchantService?.merchant?.calendlyLink
-                  ? `tel:${merchantService?.merchant?.phoneNo!}`
-                  : merchantService.merchant.calendlyLink
-              }
-              target={
-                merchantService?.merchant?.calendlyLink ? '_blank' : '_self'
-              }
-            >
-              <Button hasShadow bgColor="bg-dark" width="w-full">
-                Request Appointment
-              </Button>
-            </a>
+            <OpenCalendly
+              calendlyLink={merchantService?.merchant?.calendlyLink}
+              phoneNo={merchantService?.merchant?.phoneNo!}
+              text="Request Appointment"
+              rest={{
+                bgColor: 'bg-dark',
+                hasShadow: true,
+                width: 'w-full',
+              }}
+            />
+
             {/* <Link className="flex gap-2" href="#">
               <span className="inset-x-0  bottom-0 w-fit border-b border-transparent transition-all duration-1000 ease-in-out hover:border-content-normal">
                 Learn More
@@ -197,7 +196,7 @@ const Client = ({ topServices, merchantService }: Props) => {
         </div>
       </div>
 
-      <div className="flex flex-col gap-12 px-14 pb-28 pt-20">
+      <div className="flex flex-col gap-12 px-14 pb-28 pt-20 max-sm:px-7">
         <div className="ml-4 flex flex-col justify-center gap-5 max-md:items-center">
           <LeftDashText text="Other Services" />
           <div className="flex items-end justify-between max-lg:flex-col max-lg:gap-5 max-md:items-center max-md:justify-center max-md:text-center">
@@ -229,6 +228,17 @@ const Client = ({ topServices, merchantService }: Props) => {
               />
             ))}
         </div>
+
+        <Script src="https://player.vimeo.com/api/player.js"></Script>
+        <Script
+          src="https://assets.calendly.com/assets/external/widget.js"
+          type="text/javascript"
+          async
+        />
+        <link
+          href="https://assets.calendly.com/assets/external/widget.css"
+          rel="stylesheet"
+        ></link>
       </div>
     </>
   );

@@ -112,6 +112,7 @@ const DragAndDrop = (props: Props) => {
       <div className="flex min-w-0 overflow-hidden w-full h-full relative">
         <div className="absolute w-full h-full top-0 flex-col justify-center gap-5 flex opacity-0 transition-opacity duration-300 hover:opacity-100 hover:bg-stone-600/50 rounded-xl">
           <button
+            type="button"
             {...getRootProps({ className: 'dropzone' })}
             className="bg-white w-32 mx-auto rounded-xl text-sm py-3 flex items-center justify-center"
           >
@@ -121,6 +122,7 @@ const DragAndDrop = (props: Props) => {
             </span>
           </button>
           <button
+            type="button"
             onClick={() => setFiles([])}
             className="bg-cyanBlue w-32 mx-auto rounded-xl text-sm py-3 text-red-1 flex items-center justify-center"
           >

@@ -10,7 +10,11 @@ export type MerchantServiceType = Prisma.MerchantServiceGetPayload<{
     keyPoints: true;
     service: true;
     servicePricing: true;
-    merchant: true;
+    merchant: {
+      include: {
+        miscellanous: true;
+      };
+    };
     discounts: {
       include: {
         plans: true;
@@ -186,7 +190,6 @@ export default class MerchantService extends Utility {
             },
           },
         });
-        console.log('serviceData', serviceData);
         serviceId = serviceData?.id;
       }
 
@@ -201,7 +204,11 @@ export default class MerchantService extends Utility {
           keyPoints: true,
           service: true,
           servicePricing: true,
-          merchant: true,
+          merchant: {
+            include: {
+              miscellanous: true,
+            },
+          },
           discounts: {
             include: {
               plans: true,
@@ -219,23 +226,21 @@ export default class MerchantService extends Utility {
           },
 
           subscriptions: {
-            ...(data.userId && {
-              where: {
-                userId: data.userId,
-              },
-            }),
+            where: {
+              userId: data.userId || '',
+            },
             include: {
               plan: true,
             },
           },
 
           bookings: {
-            ...(data.userId && {
-              where: {
-                userId: data.userId,
-              },
-            }),
+            where: {
+              userId: data.userId || '',
+            },
           },
+
+          // bookings: true,
         },
       });
 
@@ -247,7 +252,7 @@ export default class MerchantService extends Utility {
     return this.process(async () => {
       const merchant = new Merchant();
       const merchantData = await merchant.getOne({ slug });
-      if (!merchantData) throw new Error('Merchant does not exist');
+      if (!merchantData) return null;
 
       const services = await this.db.merchantService.findMany({
         where: { merchantId: merchantData.id },
@@ -257,7 +262,11 @@ export default class MerchantService extends Utility {
           keyPoints: true,
           service: true,
           servicePricing: true,
-          merchant: true,
+          merchant: {
+            include: {
+              miscellanous: true,
+            },
+          },
           discounts: {
             include: {
               plans: true,

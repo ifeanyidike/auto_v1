@@ -8,10 +8,10 @@ import LinkedInIcon from '~/commons/icons/LinkedInIcon';
 import Logo from '~/commons/icons/Logo';
 import XIcon from '~/commons/icons/XIcon';
 
-const Footer = ({ merchantData }: { merchantData: MerchantType | null }) => {
+const Footer = ({ merchantData }: { merchantData?: MerchantType | null }) => {
   return (
     <div className="from-gradient-bg-start to-gradient-bg-end flex flex-col items-start justify-between gap-1 bg-gradient-to-r px-14 ">
-      <div className="py-4 flex w-full items-center justify-between border-b-2 border-slate-300 max-md:flex-col max-md:pb-7">
+      <div className="py-4 flex w-full items-center justify-between border-b-2 border-slate-300 max-md:flex-col max-md:pb-7 max-sm:gap-7">
         <Link href="/">
           {merchantData?.logo ? (
             <Image

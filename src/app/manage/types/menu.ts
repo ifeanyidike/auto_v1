@@ -8,7 +8,8 @@ export enum MenuEnum {
   product = 'Products',
   pricing = 'Pricing',
   fund = 'Funds',
-  account = 'Account',
+  settings = 'Settings',
+  page = 'Visit page',
 }
 
 export enum BookingSubMenu {

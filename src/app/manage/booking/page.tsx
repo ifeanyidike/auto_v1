@@ -36,7 +36,7 @@ const BookingPage = async () => {
       />
 
       <div className="px-8">
-        {bookingList.length ? (
+        {!bookingList.length ? (
           <div className="text-base font-normal px-8 flex flex-col gap-10 mt-20 mb-10 items-center box-border">
             <Image
               src="/images/auto_wheel.webp"

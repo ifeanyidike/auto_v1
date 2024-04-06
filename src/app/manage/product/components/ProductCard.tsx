@@ -100,7 +100,7 @@ const ProductCard = (props: Props) => {
   });
   return (
     <div
-      className={`w-full relative border border-[#484848]/30 rounded-xl ${manRope.className}`}
+      className={`w-[450px] relative border border-[#484848]/30 rounded-xl ${manRope.className}`}
     >
       <div
         className={`text-[10px] absolute top-3 right-3 font-semibold text-white px-3 py-1 ${
