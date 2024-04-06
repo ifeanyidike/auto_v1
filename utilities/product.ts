@@ -46,6 +46,51 @@ export const services = [
     value: 'Car radiator',
     label: 'Car radiator',
   },
+  {
+    value: 'Tire rotation and balancing',
+    label: 'Tire rotation and balancing',
+  },
+  {
+    value: 'Brake system inspection and repairs',
+    label: 'Brake system inspection and repairs',
+  },
+  {
+    value: 'Engine diagnostics',
+    label: 'Engine diagnostics',
+  },
+  {
+    value: 'Transmission fluid flush and replacement',
+    label: 'Transmission fluid flush and replacement',
+  },
+  { value: 'Wheel alignment', label: 'Wheel alignment' },
+  {
+    value: 'Air conditioning system service and recharge',
+    label: 'Air conditioning system service and recharge',
+  },
+  {
+    value: 'Suspension system repairs',
+    label: 'Suspension system repairs',
+  },
+  {
+    value: 'Battery testing and replacement',
+    label: 'Battery testing and replacement',
+  },
+  { value: 'Fuel system cleaning', label: 'Fuel system cleaning' },
+  {
+    value: 'Exhaust system repairs and replacement',
+    label: 'Exhaust system repairs and replacement',
+  },
+  {
+    value: 'Radiator flush and coolant replacement',
+    label: 'Radiator flush and coolant replacement',
+  },
+  { value: 'Timing belt replacement', label: 'Timing belt replacement' },
+  { value: 'Spark plug replacement', label: 'Spark plug replacement' },
+  { value: 'Wiper blade replacement', label: 'Wiper blade replacement' },
+  {
+    value: 'Headlight restoration and bulb replacement',
+    label: 'Headlight restoration and bulb replacement',
+  },
 ];
 
 export const suv_sedan_data = [
