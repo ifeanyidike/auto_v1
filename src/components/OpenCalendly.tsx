@@ -16,17 +16,11 @@ const OpenCalendly = (props: Props) => {
       url: props.calendlyLink,
     });
   };
-  //   https://calendly.com/ifeanyidike/follow-up-meeting
 
   return (
     <Button {...rest} onClick={showCalendly}>
       {!props.calendlyLink ? (
-        <a
-          href={
-            !props.calendlyLink ? `tel:${props.phoneNo}` : props.calendlyLink
-          }
-          target={props.calendlyLink ? '_blank' : '_self'}
-        ></a>
+        <a href={`tel:${props.phoneNo}`}>{props.text}</a>
       ) : (
         props.text
       )}
