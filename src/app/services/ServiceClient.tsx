@@ -5,7 +5,7 @@ import ServicesPageCard from '~/components/ServicesCard';
 import { type MerchantServiceType } from '../api/merchant_service/logic';
 
 type Props = {
-  services: MerchantServiceType[] | null;
+  services: MerchantServiceType[] | null | undefined;
 };
 
 const ServiceClient = (props: Props) => {

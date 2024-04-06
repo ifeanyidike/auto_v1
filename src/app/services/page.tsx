@@ -10,7 +10,7 @@ const Services = async () => {
   if (isAdminLogin) redirect('/manage');
 
   const merchantService = new MerchantService();
-  const { services } = await merchantService.getAllByMerchant(slug);
+  const { services } = (await merchantService.getAllByMerchant(slug)) || {};
   return (
     <div>
       <ServiceBanner />
