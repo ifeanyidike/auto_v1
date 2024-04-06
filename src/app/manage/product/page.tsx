@@ -18,7 +18,7 @@ const Product = async () => {
 
   const merchantService = new MerchantService();
   const all_products = await merchantService.getAllByMerchant(slug);
-  const formatted_products = (all_products.services ?? [])?.map(p => {
+  const formatted_products = (all_products?.services ?? [])?.map(p => {
     const formatted_pricing = p.servicePricing?.map(pricing => ({
       ...pricing,
       amount: Number(pricing.amount),
@@ -45,7 +45,7 @@ const Product = async () => {
           </div>
         }
       />
-      {!all_products.services?.length ? (
+      {!all_products?.services?.length ? (
         <div className="text-base font-normal px-8 flex flex-col gap-10 mt-20 mb-10 items-center box-border">
           <Image
             src="/images/auto_wheel.webp"
