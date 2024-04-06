@@ -35,6 +35,13 @@ const SubscriptionDetail = (props: Props) => {
     return () => clearTimeout(timer);
   }, [closing]);
 
+  const getName = () => {
+    const firstName = props.item?.user?.firstName || '';
+    const lastName = props.item?.user?.lastName || '';
+    if (firstName || lastName) return firstName + ' ' + lastName;
+    return props.item?.user?.email;
+  };
+
   return (
     <>
       <SnackbarProvider maxSnack={1} />
@@ -77,9 +84,7 @@ const SubscriptionDetail = (props: Props) => {
 
                   <div className="flex gap-1">
                     <PersonIcon />
-                    <p className={`${dmSans.className}`}>
-                      {item.user?.firstName} {item.user?.lastName}
-                    </p>
+                    <p className={`${dmSans.className}`}>{getName()}</p>
                   </div>
                 </div>
 

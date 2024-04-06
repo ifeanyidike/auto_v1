@@ -19,6 +19,7 @@ const Subscription = (props: Props) => {
     let name = '';
     let firstName = items.user?.firstName;
     let lastName = items.user?.lastName;
+    if (!firstName && !lastName) return items.user?.email;
 
     if (firstName) name += firstName;
     if (!firstName && lastName) name += lastName;

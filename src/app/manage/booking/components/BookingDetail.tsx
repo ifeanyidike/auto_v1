@@ -111,7 +111,11 @@ const BookingDetail = (props: Props) => {
                   <div className="flex gap-1">
                     <PersonIcon />
                     <p className={`${dmSans.className}`}>
-                      {item.user?.firstName} {item.user?.lastName}
+                      {item?.user?.firstName || item?.user?.lastName
+                        ? `${item.user?.firstName || ''} ${
+                            item.user?.lastName || ''
+                          }`
+                        : item.user?.email}
                     </p>
                   </div>
                 </div>

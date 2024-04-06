@@ -22,6 +22,13 @@ const BookersDetail = (props: Props) => {
     return () => clearTimeout(timer);
   }, [closing]);
 
+  const getName = () => {
+    const firstName = props.item[0]?.user?.firstName || '';
+    const lastName = props.item[0]?.user?.lastName || '';
+    if (firstName || lastName) return firstName + ' ' + lastName;
+    return props.item[0]?.user?.email;
+  };
+
   return (
     <div
       className={`${
@@ -39,8 +46,7 @@ const BookersDetail = (props: Props) => {
       </div>
       <div className="text-center mb-4 h-14">
         <h2 className={` text-2xl ${dmSans.className}`}>
-          Booking details for {props.item[0]?.user?.firstName || ''}{' '}
-          {props.item[0]?.user?.lastName || ''}
+          Booking details for {getName()}
         </h2>
       </div>
       <BookingList bookingList={props.item} />

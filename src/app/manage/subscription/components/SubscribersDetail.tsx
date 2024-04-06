@@ -21,6 +21,12 @@ const SubscribersDetail = (props: Props) => {
 
     return () => clearTimeout(timer);
   }, [closing]);
+  const getName = () => {
+    const firstName = props.item[0]?.user?.firstName || '';
+    const lastName = props.item[0]?.user?.lastName || '';
+    if (firstName || lastName) return firstName + ' ' + lastName;
+    return props.item[0]?.user?.email;
+  };
 
   return (
     <div
@@ -39,8 +45,7 @@ const SubscribersDetail = (props: Props) => {
       </div>
       <div className="text-center mb-4 h-14">
         <h2 className={` text-2xl ${dmSans.className}`}>
-          Subscription details for {props.item[0]?.user?.firstName || ''}{' '}
-          {props.item[0]?.user?.lastName || ''}
+          Subscription details for {getName()}
         </h2>
       </div>
       <SubscriptionList subscriptions={props.item} />

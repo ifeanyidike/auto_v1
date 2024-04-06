@@ -19,6 +19,7 @@ const Bookings = (props: Props) => {
     let name = '';
     let firstName = props.data.user?.firstName;
     let lastName = props.data.user?.lastName;
+    if (!firstName && !lastName) return props.data.user?.email;
 
     if (firstName) name += firstName;
     if (!firstName && lastName) name += lastName;
