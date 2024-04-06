@@ -23,7 +23,7 @@ async function Layout({ children }: { children: React.ReactNode }) {
   const sessionUser = await Auth0.getSessionUser();
 
   if (merchant?.email !== sessionUser?.email) {
-    return <MerchantUnauthorizedPage />;
+    return <MerchantUnauthorizedPage isLoggedIn={!!sessionUser?.email} />;
   }
 
   return (
