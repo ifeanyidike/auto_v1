@@ -30,7 +30,7 @@ const LinkedService = (props: Props) => {
 
   const getAmountAfterDiscount = (initialAmount: number) => {
     if (item.type === 'percentage') {
-      return initialAmount * ((1 - parseFloat(item.value)) / 100) * 100;
+      return initialAmount * (1 - parseFloat(item.value) / 100) * 100;
     }
     return Math.max(0, (initialAmount - parseFloat(item.value)) * 100);
   };
@@ -61,6 +61,7 @@ const LinkedService = (props: Props) => {
         code: p.code,
         amount: getAmountAfterDiscount(Number(getBrandAmount(p))),
       }));
+    console.log('plans to connect', plansToConnect);
 
     const result = await linkOrUnlinkPlansToDiscount(
       props.merchantId,
@@ -83,8 +84,8 @@ const LinkedService = (props: Props) => {
     });
   };
   return (
-    <div className="w-full bg-gray-100 px-8 py-2 rounded">
-      <div className="flex items-center gap-8">
+    <div className="w-full bg-gray-100 px-8 max-md:px-2 py-2 rounded">
+      <div className="flex items-center gap-8 max-sm:gap-2 max-sm:flex-wrap">
         <div className="flex text-lg font-medium">{service.service?.title}</div>
         <div className="w-1 h-1 bg-black rounded-full"></div>
         <small className="text-[10px]">{service.service?.type}</small>

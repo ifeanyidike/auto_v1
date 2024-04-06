@@ -120,7 +120,7 @@ const DiscountList = (props: Props) => {
     </>
   );
   return (
-    <div className="relative mt-8 mx-5 mb-5">
+    <div className="relative mt-8 mx-5 max-sm:mx-0 mb-5">
       <div className="relative">
         <button
           onClick={() => toggleDropdown(true)}

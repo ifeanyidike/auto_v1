@@ -162,7 +162,7 @@ const DiscountDetails = (props: Props) => {
       <div
         className={`${
           !closing ? 'animate-slideIn' : 'animate-slideOut'
-        } w-[70%] bg-gray-50 fixed right-0 top-[75px] h-[90.5%] z-[51] rounded-l-3xl px-14 py-4 max-md:w-full opacity-0 transition-opacity duration-200 ease-in-out ${
+        } w-[70%] bg-gray-50 fixed right-0 top-[75px] h-[90.5%] z-[51] rounded-l-3xl max-md:px-8 max-sm:px-4 px-14 py-4 max-md:w-full opacity-0 transition-opacity duration-200 ease-in-out ${
           props.item ? 'opacity-100' : ''
         } shadow-right-bottom-md shadow-black`}
       >
