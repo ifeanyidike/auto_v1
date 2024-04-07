@@ -61,7 +61,7 @@ const Sidebar = (props: Props) => {
         hideBar.get() && 'hidden'
       }  z-[90] sticky top-0 max-sm:h-screen h-screen w-48 ${
         manRope.className
-      } max-sm:absolute text-sm flex-initial flex flex-col items-center gap-4 bg-white  border-r border-stone-200 py-5  ease-in duration-100`}
+      }  max-sm:fixed text-sm flex-initial flex flex-col items-center gap-4 bg-white  border-r border-stone-200 py-5  ease-in duration-100`}
     >
       <button
         onClick={() => hideAdminBar.set(true)}

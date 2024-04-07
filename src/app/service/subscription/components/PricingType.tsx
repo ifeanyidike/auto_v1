@@ -37,7 +37,7 @@ const SelectPlanType = (props: Props) => {
               value={tempPricingData?.id === p.id}
             />{' '}
             <p>{p.type}</p>{' '}
-            <span className="ml-auto">Basic Priicing: ₦{p.amount}</span>
+            <span className="ml-auto">Basic Priicing: {`₦${p.amount}`}</span>
           </div>
         ))}
       </div>

@@ -228,10 +228,9 @@ const SubscriptionFulfillmentDetail = (props: Props) => {
 
                 <div className="flex gap-1 items-center">
                   <p className={`${dmSans.className} font-mono`}>
-                    ₦
-                    {Number(
+                    {`₦${Number(
                       props.item.fulfillment?.amountPaid
-                    ).toLocaleString()}
+                    ).toLocaleString()}`}
                   </p>
                 </div>
               </div>

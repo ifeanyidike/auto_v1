@@ -55,7 +55,11 @@ const ProductPane = (props: Props) => {
   const isIncomplete = calcIsIncomplete();
 
   return (
-    <div className={`bg-white rounded-xl ${!isExpanded ? 'pb-14' : 'pb-3'}`}>
+    <div
+      className={`bg-white rounded-xl ${
+        !isExpanded ? 'pb-14' : 'pb-3'
+      } relative`}
+    >
       <div className="border border-b-stone-200 py-3 px-3 flex justify-between rounded-t-xl">
         <span className={`${dmSans.className} font-bold`}>
           {props.paneTitle}

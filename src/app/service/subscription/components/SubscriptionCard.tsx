@@ -64,11 +64,11 @@ const SubscriptionCard = (props: Props) => {
         </span>
         <div className="text-center flex justify-center items-center gap-2">
           <p className={`${nunitoSans.className} text-4xl font-bold`}>
-            ₦{props.amount.toLocaleString()}
+            {`₦${props.amount.toLocaleString()}`}
           </p>
           {props.discount && (
             <span className=" text-xs line-through mt-2">
-              ₦{props.originalAmount.toLocaleString()}
+              {`₦${props.originalAmount.toLocaleString()}`}
             </span>
           )}
         </div>
