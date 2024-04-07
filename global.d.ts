@@ -16,3 +16,9 @@ interface Window {
     }): void;
   };
 }
+
+declare global {
+  interface GlobalThis {
+    serviceId?: string;
+  }
+}

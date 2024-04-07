@@ -50,10 +50,18 @@ const MobileMenu = () => {
           )}
           {pathname !== '/register-merchant' && (
             <>
-              <Link href="/" className="cursor-pointer">
+              <Link
+                href="/"
+                onClick={() => toggleNav.set(false)}
+                className="cursor-pointer"
+              >
                 Home
               </Link>
-              <Link href="/services" className="cursor-pointer">
+              <Link
+                href="/services"
+                onClick={() => toggleNav.set(false)}
+                className="cursor-pointer"
+              >
                 Services
               </Link>
 
