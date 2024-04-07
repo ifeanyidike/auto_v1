@@ -2,6 +2,7 @@ import React from 'react';
 import RedirectLinks from '../../components/RedirectLinks';
 import SuccessIcon from '~/commons/icons/SuccessIcon';
 import { Transaction } from '~/server/payment/transaction';
+import { unstable_noStore as noStore } from 'next/cache';
 
 const SubscriptionConfirmation = async ({
   searchParams,
@@ -9,6 +10,7 @@ const SubscriptionConfirmation = async ({
   params: { slug: string; id: string };
   searchParams?: Record<string, string | string[] | undefined>;
 }) => {
+  noStore();
   const { reference, user_email, service } = (searchParams || {}) as Record<
     string,
     string

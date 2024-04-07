@@ -6,6 +6,7 @@ import Booking from '~/app/api/booking/logic';
 import BookingTicket from '../components/BookingTicket';
 import { Mailer } from '~/server/mail';
 import { Transaction } from '~/server/payment/transaction';
+import { unstable_noStore as noStore } from 'next/cache';
 
 const BookingConfirmPage = async ({
   searchParams,
@@ -13,6 +14,7 @@ const BookingConfirmPage = async ({
   params: { slug: string; id: string };
   searchParams?: Record<string, string | string[] | undefined>;
 }) => {
+  noStore();
   const {
     reference,
     user_email,
