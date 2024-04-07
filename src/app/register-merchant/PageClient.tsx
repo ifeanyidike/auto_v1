@@ -85,7 +85,7 @@ const PageClient = (props: Props) => {
   return (
     <div
       className={`${dmSans.className} ${
-        addEmail ? 'mt-48 mb-32' : 'my-32'
+        addEmail ? 'mt-44 mb-32' : 'my-24'
       } w-[600px] h-fit  mx-auto rounded-xl px-8 py-5 flex flex-col gap-5  max-md:w-96 max-sm:w-full`}
     >
       <SnackbarProvider maxSnack={1} />

@@ -1,6 +1,5 @@
 import Image from 'next/image';
 import React, { Suspense } from 'react';
-import Script from 'next/script';
 import Link from 'next/link';
 import { dmSans, manRope } from '~/font';
 import ParentHeader from '~/components/ParentHeader';

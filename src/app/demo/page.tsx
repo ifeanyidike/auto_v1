@@ -1,24 +1,18 @@
 import React from 'react';
-import Script from 'next/script';
 import PageClient from './PageClient';
 import ParentHeader from '~/components/ParentHeader';
+import Util from '~/server/utils';
+import { notFound } from 'next/navigation';
 
-const page = () => {
+const Demo = () => {
+  const { slug } = Util.getRouteType();
+  if (slug) return notFound();
   return (
     <div>
       <ParentHeader />
-      {/* <Script
-        src="https://assets.calendly.com/assets/external/widget.js"
-        type="text/javascript"
-        async
-      />
-      <link
-        href="https://assets.calendly.com/assets/external/widget.css"
-        rel="stylesheet"
-      ></link> */}
       <PageClient />
     </div>
   );
 };
 
-export default page;
+export default Demo;
