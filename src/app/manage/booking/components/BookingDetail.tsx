@@ -278,7 +278,7 @@ const BookingDetail = (props: Props) => {
 
                 <div className="flex gap-1 items-center capitalize">
                   <p className={`${dmSans.className} text-lg font-mono`}>
-                    ₦{item.amount.toLocaleString()}
+                    {`₦${item.amount.toLocaleString()}`}
                   </p>
                 </div>
               </div>

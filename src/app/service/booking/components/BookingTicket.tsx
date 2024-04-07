@@ -52,7 +52,7 @@ const BookingTicket = (props: Props) => {
       <div className="flex gap-2 text-sm px-8">
         <span className="font-medium w-32">Amount</span>{' '}
         <span className="text-sm font-mono">
-          ₦{Number(booking?.amount)?.toLocaleString()}
+          {`₦${Number(booking?.amount)?.toLocaleString()}`}
         </span>
       </div>
       <div className="flex gap-2 text-sm px-8">

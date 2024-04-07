@@ -1,5 +1,5 @@
 import Image from 'next/image';
-import { dmSans, manRope } from '~/font';
+import { dmSans, manRope, nunitoSans, openSans } from '~/font';
 import Button from '~/components/Button';
 import LeftDashText from '~/components/LeftDashText';
 import HomeServicesCard from '~/components/HomeServicesCard';
@@ -44,13 +44,14 @@ export default async function Home() {
         <div className="flex items-center justify-between bg-gradient-to-r from-gradient-bg-start to-gradient-bg-end px-14 py-16 max-md:flex-col">
           <div className="flex w-[50%] flex-col gap-8 max-md:w-full max-md:text-center">
             <p
-              className={`${manRope.className} font-semibold text-6xl  text-content-light max-md:text-4xl `}
+              className={`${nunitoSans.className} font-semibold text-6xl  text-content-light max-md:text-4xl `}
             >
-              {merchant?.caption ?? 'One-stop auto service solution.'}
+              {merchant?.caption ??
+                'This is a sample caption. Please add your caption in the admin page.'}
             </p>
             <p className={`text-dark`}>
               {merchant?.shortDescription ??
-                'Lorem ipsum dolor sit amet consectetur adipisicing elit. Aliquam provident placeat doloremque id laborum aliquid.'}
+                'This is a sample description please add a short description in the admin page.'}
             </p>
             <div className="flex justify-between max-md:flex-col max-md:gap-3">
               {/* <Button

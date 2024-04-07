@@ -186,7 +186,9 @@ export default class MerchantService extends Utility {
         const serviceData = await this.db.service.findFirst({
           where: {
             title: {
-              contains: title,
+              ...(process.env.NODE_ENV === 'production'
+                ? { equals: title, mode: 'insensitive' }
+                : { contains: title }),
             },
           },
         });

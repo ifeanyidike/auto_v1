@@ -197,7 +197,7 @@ const DataView = (props: Props) => {
             />{' '}
             <p>{p.type}</p>{' '}
             <span className="ml-auto">
-              Basic Pricing: ₦{Number(p.amount)?.toLocaleString()}
+              Basic Pricing: {`₦${Number(p.amount)?.toLocaleString()}`}
             </span>
           </div>
         ))}
@@ -281,7 +281,7 @@ const DataView = (props: Props) => {
 
       <hr className="my-6" />
 
-      <div className="text-right font-mono text-3xl">₦{totalAmount}</div>
+      <div className="text-right font-mono text-3xl">{`₦${totalAmount}`}</div>
 
       {Boolean(existingAuthorizations?.length) && (
         <>
