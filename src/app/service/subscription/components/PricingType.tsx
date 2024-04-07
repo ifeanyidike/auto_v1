@@ -2,8 +2,11 @@ import React, { useState } from 'react';
 import { type ServicePricing } from './data';
 import Button from '~/components/Button';
 import RadioCheckbox from '~/components/RadioCheckBox';
+import { type MerchantServiceType } from '~/app/api/merchant_service/logic';
+import { dmSans } from '~/font';
 
 type Props = {
+  subscriptions: MerchantServiceType['subscriptions'];
   pricingList: ServicePricing[];
   setSelectedPriceType: React.Dispatch<
     React.SetStateAction<ServicePricing | undefined>
@@ -15,7 +18,7 @@ const SelectPlanType = (props: Props) => {
   >();
   return (
     <div className="">
-      <div className="font-mono text-3xl mt-20 mb-8 text-center">
+      <div className={`text-3xl mt-20 mb-8 text-center ${dmSans.className}`}>
         Choose the auto brand you wish to subscribe.
       </div>
 
@@ -34,7 +37,7 @@ const SelectPlanType = (props: Props) => {
               value={tempPricingData?.id === p.id}
             />{' '}
             <p>{p.type}</p>{' '}
-            <span className="ml-auto">Basic Priicing: ₦{p.amount}</span>
+            <span className="ml-auto">Basic Priicing: {`₦${p.amount}`}</span>
           </div>
         ))}
       </div>

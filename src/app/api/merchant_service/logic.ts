@@ -179,14 +179,16 @@ export default class MerchantService extends Utility {
 
     return this.process(async () => {
       if (!id && !title) {
-        throw new Error('ID or title must be provided');
+        throw new Error('Service id or title must be provided');
       }
       let serviceId;
       if (title) {
         const serviceData = await this.db.service.findFirst({
           where: {
             title: {
-              contains: title,
+              ...(process.env.NODE_ENV === 'production'
+                ? { equals: title, mode: 'insensitive' }
+                : { contains: title }),
             },
           },
         });
@@ -226,21 +228,12 @@ export default class MerchantService extends Utility {
           },
 
           subscriptions: {
-            where: {
-              userId: data.userId || '',
-            },
             include: {
               plan: true,
             },
           },
 
-          bookings: {
-            where: {
-              userId: data.userId || '',
-            },
-          },
-
-          // bookings: true,
+          bookings: true,
         },
       });
 

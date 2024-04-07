@@ -10,7 +10,7 @@ import { useUser } from '@auth0/nextjs-auth0/client';
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 
-const MobileMenu = () => {
+const MobileMenu = ({ phoneNo }: { phoneNo: string }) => {
   const navOpen = useHookstate(toggleNav);
   const { user } = useUser();
   const pathname = usePathname();
@@ -18,7 +18,7 @@ const MobileMenu = () => {
     <>
       {navOpen.get() && (
         <div
-          className={`absolute right-0 top-0 hidden h-screen w-[300px] max-[300px]:w-full flex-col gap-6 bg-white z-50 px-7 py-8 text-lg transition-all duration-300 ease-in-out max-lg:flex`}
+          className={`fixed right-0 top-0 hidden h-screen w-[300px] max-[300px]:w-full flex-col gap-6 bg-white z-50 px-7 py-8 text-lg transition-all duration-300 ease-in-out max-lg:flex`}
         >
           <button
             onClick={() => toggleNav.set(false)}
@@ -50,18 +50,26 @@ const MobileMenu = () => {
           )}
           {pathname !== '/register-merchant' && (
             <>
-              <Link href="/" className="cursor-pointer">
+              <Link
+                href="/"
+                onClick={() => toggleNav.set(false)}
+                className="cursor-pointer"
+              >
                 Home
               </Link>
-              <Link href="/services" className="cursor-pointer">
+              <Link
+                href="/services"
+                onClick={() => toggleNav.set(false)}
+                className="cursor-pointer"
+              >
                 Services
               </Link>
 
-              <div>
+              <a href={`tel:${phoneNo}`}>
                 <Button hasGradient={false} hasShadow={false} bgColor="bg-dark">
                   GET AN ESTIMATE
                 </Button>
-              </div>
+              </a>
             </>
           )}
         </div>

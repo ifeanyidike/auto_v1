@@ -55,7 +55,7 @@ export default async function RootLayout({
                 merchant={merchantData}
                 notifications={notifications}
               />
-              <MobileMenu />
+              <MobileMenu phoneNo={rawPhoneNo!} />
             </>
           )}
           <Suspense fallback={<Loading />}>

@@ -347,3 +347,62 @@ export async function linkOrUnlinkPlansToDiscount(
     return { success: false, error: err_message };
   }
 }
+
+export async function editDiscount(
+  merchantId: string,
+  id: string,
+  data: Record<'value' | 'type', string>,
+  plans: {
+    id: string;
+    code: string;
+    amount: number;
+  }[]
+) {
+  try {
+    const discountClient = new Discount();
+    await discountClient.update(id, {
+      ...data,
+    });
+    // console.log('plansToUpdate', plansToUpdate);
+    if (plans.length) {
+      const planClient = new Plan();
+      await planClient.updatePlansAmount(plans);
+    }
+    const discounts = await discountClient.getManyByMerchant(merchantId);
+    return { success: true, discounts };
+  } catch (error: any) {
+    const err_message =
+      error.message === 'unique_constraint_failed'
+        ? 'You have already created a discount with the same code. Please try another code'
+        : error.message;
+    return { success: false, error: err_message };
+  }
+}
+
+export async function deleteDiscount(
+  merchantId: string,
+  id: string,
+  plans: {
+    id: string;
+    code: string;
+    amount: number;
+  }[]
+) {
+  try {
+    const discountClient = new Discount();
+    await discountClient.delete(id);
+    // console.log('plansToUpdate', plansToUpdate);
+    if (plans.length) {
+      const planClient = new Plan();
+      await planClient.updatePlansAmount(plans);
+    }
+    const discounts = await discountClient.getManyByMerchant(merchantId);
+    return { success: true, discounts };
+  } catch (error: any) {
+    const err_message =
+      error.message === 'unique_constraint_failed'
+        ? 'You have already created a discount with the same code. Please try another code'
+        : error.message;
+    return { success: false, error: err_message };
+  }
+}

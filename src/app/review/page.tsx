@@ -11,15 +11,15 @@ const Review = async ({
   params: { slug: string; id: string };
   searchParams?: Record<string, string>;
 }) => {
-  if (!searchParams?.id) {
+  if (!searchParams?.review_id) {
     return notFound();
   }
 
   const fulfillment = new SubscriptionFulfillment();
-  const sub = await fulfillment.getOne(searchParams.id);
+  const sub = await fulfillment.getOne(searchParams.review_id);
 
   const bookingClient = new Booking();
-  const booking = await bookingClient.getOne(searchParams.id);
+  const booking = await bookingClient.getOne(searchParams.review_id);
 
   if (!sub && !booking) return notFound();
 
@@ -37,5 +37,9 @@ const Review = async ({
 };
 
 export default ProtectedPage(Review, {
-  returnTo: '/reviews',
+  // @ts-ignore
+  returnTo: `/review'${
+    // @ts-ignore
+    globalThis.reviewId ? `?review_id=${globalThis.review_id}` : ''
+  }`,
 });

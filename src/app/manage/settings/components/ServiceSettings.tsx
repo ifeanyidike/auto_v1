@@ -194,7 +194,7 @@ const ServiceSettings = (props: Props) => {
                     <p className="max-w-40 overflow-hidden text-ellipsis">
                       {locData.location}
                     </p>
-                    <span>₦{locData?.cost}</span>
+                    <span>{`₦${locData?.cost}`}</span>
                   </div>
                 ))}
               </div>

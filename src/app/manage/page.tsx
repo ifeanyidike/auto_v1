@@ -18,8 +18,10 @@ import Subscription from '../api/subscription/logic';
 import { Transaction } from '~/server/payment/transaction';
 import { getShortFormattedDate } from 'utilities/common';
 import ProtectedPage from '~/server/protectedPage';
+import { unstable_noStore as noStore } from 'next/cache';
 
 const Home = async () => {
+  noStore();
   const { slug } = Util.getRouteType();
   const merchantClient = new Merchant();
   const merchant = await merchantClient.getOne({ slug });

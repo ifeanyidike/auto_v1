@@ -34,6 +34,7 @@ const Service = async ({ params }: { params: { slug: string } }) => {
         topServices={data?.services}
         merchantService={service}
         subdomain={pageSlug}
+        userId={userId}
       />
     </main>
   );
