@@ -173,12 +173,13 @@ export default class Util {
     const formatted_subscriptions = subscriptions.flatMap(sub => {
       const { title, type } = sub.merchantService.service || {};
       const { firstName, lastName, email, imgUrl } = sub.user || {};
+      const name = firstName || '' + lastName || '';
       return sub.fufillments.map(f => ({
         id: f.id,
         serviceName: title!,
         serviceType: type!,
         imgUrl: imgUrl!,
-        userName: firstName || '' + lastName || '',
+        userName: name || email,
         email: email,
         amount: f.amountPaid.toNumber(),
         type: 'subscription',
@@ -194,12 +195,13 @@ export default class Util {
     const formatted_bookings = bookings.map(b => {
       const { title, type } = b.merchantService.service || {};
       const { firstName, lastName, email, imgUrl } = b.user || {};
+      const name = firstName || '' + lastName || '';
       return {
         id: b.id,
         serviceName: title!,
         serviceType: type!,
         imgUrl: imgUrl!,
-        userName: firstName || '' + lastName || '',
+        userName: name || email,
         email: email,
         amount: b.amount,
         type: 'booking',
