@@ -20,8 +20,9 @@ type Props = {
   subdomain: string;
   topServices?: MerchantServiceType[] | null;
   merchantService: MerchantServiceType | null;
+  userId: string | undefined;
 };
-const Client = ({ topServices, merchantService }: Props) => {
+const Client = ({ topServices, merchantService, userId }: Props) => {
   const { slug } = useParams<{ slug: string }>();
   const router = useRouter();
 
@@ -32,8 +33,19 @@ const Client = ({ topServices, merchantService }: Props) => {
   );
   const domain = getSubdomain();
 
-  const isAdmin = user?.email === merchantService?.merchant?.email;
-  console.log('merchantService?.subscriptions', merchantService?.subscriptions);
+  const isAdmin = !!(
+    user?.email && user?.email === merchantService?.merchant?.email
+  );
+
+  const getSubscriptions = (): MerchantServiceType['subscriptions'] => {
+    if (!userId) return [];
+    return (
+      merchantService?.subscriptions?.filter(s => s.userId === userId) || []
+    );
+  };
+
+  const subscriptions = getSubscriptions();
+
   return (
     <>
       <div
@@ -69,7 +81,7 @@ const Client = ({ topServices, merchantService }: Props) => {
                           ? 'localhost:3000'
                           : 'moxxil.com'
                       }/manage/booking`
-                    : `booking?id=${merchantService?.id}`
+                    : `booking?service_id=${merchantService?.id}`
                 )
               }
             >
@@ -77,7 +89,7 @@ const Client = ({ topServices, merchantService }: Props) => {
             </Button>
           </div>
           <div className="flex w-[300px]">
-            {!merchantService?.subscriptions?.length ? (
+            {!subscriptions?.length ? (
               <Button
                 textColor="text-content-normal"
                 bgColor="bg-stone-300"
@@ -91,7 +103,7 @@ const Client = ({ topServices, merchantService }: Props) => {
                             ? 'localhost:3000'
                             : 'moxxil.com'
                         }/manage/subscription`
-                      : `subscription?service=${slug}&id=${merchantService?.id}`
+                      : `subscription?service=${slug}&service_id=${merchantService?.id}`
                   )
                 }
               >
@@ -102,14 +114,13 @@ const Client = ({ topServices, merchantService }: Props) => {
                 <div className="flex w-[300px] flex-col text-center items-center justify-center px-9 py-3 text-xs h-12 mb-2 bg-stone-500/50 rounded-full">
                   <span>
                     Already subscribed to{' '}
-                    {merchantService?.subscriptions?.[0]?.plan?.autoBrand ===
-                    'FIXED'
-                      ? merchantService.service?.title
+                    {subscriptions[0]?.plan?.autoBrand === 'FIXED'
+                      ? merchantService?.service?.title
                       : `${merchantService?.subscriptions?.[0]?.plan?.autoBrand} brand`}
                   </span>
                   <span>
-                    {merchantService?.subscriptions?.length > 1
-                      ? `+${merchantService?.subscriptions?.length - 1} more`
+                    {subscriptions?.length > 1
+                      ? `+${subscriptions?.length - 1} more`
                       : null}
                   </span>
                 </div>

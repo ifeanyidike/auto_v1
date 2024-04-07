@@ -15,7 +15,7 @@ cloudinary.config({
 });
 
 export default class Util {
-  public static getSubdomain = (url: string) => {
+  public static getServerSubdomain = (url: string) => {
     const strToCompare = url
       .replace('www.', '')
       .replace('https://', '')
@@ -35,7 +35,7 @@ export default class Util {
 
     const next_url = headersList.get('next-url');
     const hostname = headersList.get('host');
-    let slug = Util.getSubdomain(hostname ?? '')!;
+    let slug = Util.getServerSubdomain(hostname ?? '')!;
 
     const adminSlug = process.env.ADMIN_SLUG ?? '';
     const slugParts = slug.split('.');

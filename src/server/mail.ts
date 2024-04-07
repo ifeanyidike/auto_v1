@@ -97,7 +97,7 @@ export class Mailer {
         <p>You can access your ${
           type === 'booking' ? 'booking' : 'subscription'
         } info in your profile page at <a href="https://moxxil.com/user-profile">moxxil.com/user-profile</a></p>
-        <p>Please also take some time to drop a review on this service to let us know how we served you. Click <a href="https://${merchantData?.slug}.moxxil.com/reviews/${id}">here</a> or visit ${merchantData?.slug}.moxxil.com/reviews/${id} to leave a review.</p>
+        <p>Please also take some time to drop a review on this service to let us know how we served you. Click <a href="https://${merchantData?.slug}.moxxil.com/review?review_id=${id}">here</a> or visit ${merchantData?.slug}.moxxil.com/review?review_id=${id} to leave a review.</p>
         ${
           merchantData?.phoneNo
             ? `<p>You can also call us at ${merchantData?.phoneNo} for any other issue.</p>`

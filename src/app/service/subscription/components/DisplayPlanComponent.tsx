@@ -7,6 +7,7 @@ import { type MerchantServiceType } from '~/app/api/merchant_service/logic';
 
 type Props = {
   service: MerchantServiceType;
+  subscriptions: MerchantServiceType['subscriptions'];
 };
 const DisplayPlanComponent = (props: Props) => {
   const [selectedPrice, setSelectedPriceType] = useState<
@@ -15,10 +16,7 @@ const DisplayPlanComponent = (props: Props) => {
 
   const pricingList =
     props.service?.servicePricing?.filter(
-      p =>
-        !props.service?.subscriptions?.some(
-          sub => p.type === sub.plan?.autoBrand
-        )
+      p => !props.subscriptions?.some(sub => p.type === sub.plan?.autoBrand)
     ) || [];
 
   return (
@@ -27,6 +25,7 @@ const DisplayPlanComponent = (props: Props) => {
         <PricingType
           pricingList={pricingList}
           setSelectedPriceType={setSelectedPriceType}
+          subscriptions={props.subscriptions}
         />
       ) : (
         <PlanList service={props.service} selectedPrice={selectedPrice} />

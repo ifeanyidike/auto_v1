@@ -7,6 +7,7 @@ import User from '~/app/api/user/logic';
 import { type Prisma } from '@prisma/client';
 import { type DefaultArgs } from '@prisma/client/runtime/library';
 import ProtectedPage from '~/server/protectedPage';
+import { dmSans } from '~/font';
 
 const Booking = async ({
   searchParams,
@@ -14,7 +15,10 @@ const Booking = async ({
   params: { slug: string; id: string };
   searchParams?: Record<string, string | string[] | undefined>;
 }) => {
-  const id = searchParams?.id as string;
+  const id = searchParams?.service_id as string;
+
+  // @ts-ignore
+  globalThis.service_id = undefined;
 
   const merchantServiceClient = new MerchantService();
   const merchantService = await merchantServiceClient.getOne({
@@ -25,28 +29,30 @@ const Booking = async ({
 
   if (sessionUser?.email === merchantService?.merchant?.email) {
     return (
-      <div className="font-mono text-2xl font-medium text-center flex flex-col h-fit justify-center items-center gap-8 mt-7 mb-8">
+      <div className="text-2xl font-medium text-center flex flex-col h-fit justify-center items-center gap-8 mt-7 mb-8">
         <Image
           src="/images/oops1.png"
           width={976}
           height={370}
           alt="Oops!"
         ></Image>
-        <span>You cannot book your own service</span>
+        <span className={`${dmSans.className}`}>
+          You cannot book your own service
+        </span>
       </div>
     );
   }
 
   if (!merchantService) {
     return (
-      <div className="font-mono text-2xl font-medium text-center flex flex-col h-fit justify-center items-center gap-8 mt-7 mb-8">
+      <div className="text-2xl font-medium text-center flex flex-col h-fit justify-center items-center gap-8 mt-7 mb-8">
         <Image
           src="/images/oops1.png"
           width={976}
           height={370}
           alt="Oops!"
         ></Image>
-        <span>Service does not exist</span>
+        <span className={`${dmSans.className}`}>Service does not exist</span>
       </div>
     );
   }
@@ -76,5 +82,9 @@ const Booking = async ({
 };
 
 export default ProtectedPage(Booking, {
-  returnTo: '/service/booking',
+  // @ts-ignore
+  returnTo: `/service/booking${
+    // @ts-ignore
+    globalThis.serviceId ? `?service_id=${globalThis.serviceId}` : ''
+  }`,
 });
