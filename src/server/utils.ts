@@ -179,7 +179,7 @@ export default class Util {
         serviceName: title!,
         serviceType: type!,
         imgUrl: imgUrl!,
-        userName: name || email,
+        userName: name || email!,
         email: email,
         amount: f.amountPaid.toNumber(),
         type: 'subscription',
@@ -196,12 +196,13 @@ export default class Util {
       const { title, type } = b.merchantService.service || {};
       const { firstName, lastName, email, imgUrl } = b.user || {};
       const name = firstName || '' + lastName || '';
+
       return {
         id: b.id,
         serviceName: title!,
         serviceType: type!,
         imgUrl: imgUrl!,
-        userName: name || email,
+        userName: name || email!,
         email: email,
         amount: b.amount,
         type: 'booking',
