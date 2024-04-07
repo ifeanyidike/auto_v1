@@ -6,12 +6,12 @@ const ProtectedPage = (Component: any, options = {}) => {
     const headersList = headers();
     const hostname = headersList.get('host');
 
-    if (ctx.searchParams.review_id) {
+    if (ctx?.searchParams?.review_id) {
       // @ts-ignore
       globalThis.reviewId = ctx.searchParams.review_id;
     }
 
-    if (ctx.searchParams.service_id) {
+    if (ctx?.searchParams?.service_id) {
       // @ts-ignore
       globalThis.serviceId = ctx.searchParams.service_id;
     }
