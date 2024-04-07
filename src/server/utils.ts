@@ -196,6 +196,7 @@ export default class Util {
       const { title, type } = b.merchantService.service || {};
       const { firstName, lastName, email, imgUrl } = b.user || {};
       const name = firstName || '' + lastName || '';
+
       return {
         id: b.id,
         serviceName: title!,
