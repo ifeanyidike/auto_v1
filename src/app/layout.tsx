@@ -43,6 +43,7 @@ export default async function RootLayout({
   const notificationClient = new Notification();
   const notifications = await notificationClient.getManyByUser(user?.id, slug);
 
+  const userIsAdmin = !!(user?.email && merchantData?.email === user?.email);
   return (
     <html lang="en" className={manRope.className}>
       <UserProvider loginUrl="/api/auth/login">
@@ -54,8 +55,9 @@ export default async function RootLayout({
                 rawPhoneNo={rawPhoneNo}
                 merchant={merchantData}
                 notifications={notifications}
+                userIsAdmin={userIsAdmin}
               />
-              <MobileMenu phoneNo={rawPhoneNo!} />
+              <MobileMenu phoneNo={rawPhoneNo!} userIsAdmin={userIsAdmin} />
             </>
           )}
           <Suspense fallback={<Loading />}>
