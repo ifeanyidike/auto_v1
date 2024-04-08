@@ -6,6 +6,8 @@ import { useClickOutside } from '~/hooks/useClickOutside';
 
 type Props = {
   user: UserProfile;
+  userIsAdmin: boolean;
+  domain: string;
 };
 
 const DropdownUserMenu = (props: Props) => {
@@ -45,6 +47,18 @@ const DropdownUserMenu = (props: Props) => {
               <a className="border-t-[1px] py-2 mt-4" href="/api/auth/logout">
                 Sign Out
               </a>
+              {props.userIsAdmin && (
+                <a
+                  className="border-b-[1px] py-2 text-red-1 cursor-pointer"
+                  href={`${window.location.protocol}//${props.domain}.admin.${
+                    window.location.hostname.includes('localhost')
+                      ? 'localhost:3000'
+                      : 'moxxil.com'
+                  }/manage/booking`}
+                >
+                  Go to admin dashboard
+                </a>
+              )}
             </div>
           )}
         </button>

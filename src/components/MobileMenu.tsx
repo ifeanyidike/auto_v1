@@ -1,7 +1,7 @@
 'use client';
 import React from 'react';
 import CloseIcon from '~/commons/icons/CloseIcon';
-import { toggleNav } from '~/states/utility';
+import { getSubdomain, toggleNav } from '~/states/utility';
 import Button from './Button';
 import { useHookstate } from '@hookstate/core';
 import Link from 'next/link';
@@ -10,10 +10,17 @@ import { useUser } from '@auth0/nextjs-auth0/client';
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 
-const MobileMenu = ({ phoneNo }: { phoneNo: string }) => {
+const MobileMenu = ({
+  phoneNo,
+  userIsAdmin,
+}: {
+  phoneNo: string;
+  userIsAdmin: boolean;
+}) => {
   const navOpen = useHookstate(toggleNav);
   const { user } = useUser();
   const pathname = usePathname();
+  const domain = getSubdomain();
   return (
     <>
       {navOpen.get() && (
@@ -46,6 +53,18 @@ const MobileMenu = ({ phoneNo }: { phoneNo: string }) => {
               >
                 Sign Out
               </a>
+              {userIsAdmin && (
+                <a
+                  className="py-2 text-red-1 cursor-pointer"
+                  href={`${window.location.protocol}//${domain}.admin.${
+                    window.location.hostname.includes('localhost')
+                      ? 'localhost:3000'
+                      : 'moxxil.com'
+                  }/manage/booking`}
+                >
+                  Go to admin dashboard
+                </a>
+              )}
             </div>
           )}
           {pathname !== '/register-merchant' && (

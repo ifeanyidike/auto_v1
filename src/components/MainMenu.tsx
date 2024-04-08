@@ -25,6 +25,7 @@ type Props = {
   rawPhoneNo: string | undefined;
   merchant: MerchantType | null;
   notifications: Notification[];
+  userIsAdmin: boolean;
 };
 
 const MainMenu = (props: Props) => {
@@ -105,7 +106,15 @@ const MainMenu = (props: Props) => {
             </>
           )}
 
-          {!user ? <LoginButton /> : <DropdownUserMenu user={user} />}
+          {!user ? (
+            <LoginButton />
+          ) : (
+            <DropdownUserMenu
+              userIsAdmin={props.userIsAdmin}
+              user={user}
+              domain={domain!}
+            />
+          )}
         </div>
       </div>
 
