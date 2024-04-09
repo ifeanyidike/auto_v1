@@ -19,11 +19,9 @@ const Subscription = async ({
   // @ts-ignore
   globalThis.service_id = undefined;
 
-  const sessionUser = await Auth0.getSessionUser();
-  const userClient = new User();
-  const user = await userClient.getOne({ email: sessionUser.email });
+  const user = await Auth0.findOrCreateAuth0User();
 
-  if (!id || !sessionUser || !user?.id) {
+  if (!id || !user || !user?.id) {
     return (
       <div className="text-2xl text-center flex flex-col h-fit justify-center items-center gap-5 my-7">
         <Image
@@ -35,7 +33,7 @@ const Subscription = async ({
         <span className={`${dmSans.className}`}>
           {!id
             ? 'Please choose the merchant service to subscribe!'
-            : !sessionUser
+            : !user
               ? 'You need to login to proceed'
               : 'User does not exist'}
         </span>
@@ -49,7 +47,7 @@ const Subscription = async ({
     userId: user?.id,
   });
 
-  if (sessionUser.email === service?.merchant?.email) {
+  if (user.email === service?.merchant?.email) {
     return (
       <div className="text-2xl text-center flex flex-col h-fit justify-center items-center gap-5 my-7">
         <Image

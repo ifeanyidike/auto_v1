@@ -22,7 +22,8 @@ type ApiKeySettingsData = {
 
 type ServiceSettingsData = {
   allowOutsideWork: boolean;
-  locationData: Record<'location' | 'cost', string>[];
+  locationToAdd: Record<'location' | 'cost', string>[];
+  locationToRemove: string[];
 };
 
 type DiscountSettingsData = {

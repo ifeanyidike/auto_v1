@@ -43,9 +43,7 @@ export async function saveReview(prevState: any, formData: FormData) {
     return { error: 'Merchant does not exist' };
   }
 
-  const userClient = new User();
-  const userSession = await Auth0.getSessionUser();
-  const user = await userClient.getOne({ email: userSession.email });
+  const user = await Auth0.findOrCreateAuth0User();
   if (!user) {
     return { error: 'Please login to leave a review' };
   }

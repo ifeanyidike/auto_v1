@@ -10,22 +10,14 @@ const Service = async ({ params }: { params: { slug: string } }) => {
   const { isAdminLogin, slug: pageSlug } = Util.getRouteType();
   if (isAdminLogin) redirect('/manage');
 
-  const sessionUser = await Auth0.getSessionUser();
-  const userClient = new User();
-
-  let userId;
-
-  if (sessionUser?.email) {
-    const user = await userClient.getOne({ email: sessionUser?.email });
-    userId = user?.id;
-  }
+  const user = await Auth0.findOrCreateAuth0User();
 
   const merchantService = new MerchantService();
   const data = await merchantService.getAllByMerchant(pageSlug, 8);
 
   const service = await merchantService.getOne({
     title: decodeURI(params.slug),
-    userId,
+    userId: user?.id,
   });
 
   return (
@@ -34,7 +26,7 @@ const Service = async ({ params }: { params: { slug: string } }) => {
         topServices={data?.services}
         merchantService={service}
         subdomain={pageSlug}
-        userId={userId}
+        userId={user?.id}
       />
     </main>
   );

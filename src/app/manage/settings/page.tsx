@@ -41,4 +41,4 @@ const Settings = async () => {
   );
 };
 
-export default await ProtectedPage(Settings, { returnTo: '/settings' });
+export default ProtectedPage(Settings, { returnTo: '/settings' });
