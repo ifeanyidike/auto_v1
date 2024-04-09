@@ -25,7 +25,7 @@ const Booking = async ({
     id,
   });
 
-  const sessionUser = await Auth0.getSessionUser();
+  const sessionUser = await Auth0.findOrCreateAuth0User();
 
   if (sessionUser?.email === merchantService?.merchant?.email) {
     return (
@@ -58,7 +58,7 @@ const Booking = async ({
   }
 
   const userClient = new User();
-  const user = await userClient.getOne({ email: sessionUser.email }, [
+  const user = await userClient.getOne({ email: sessionUser?.email }, [
     'authorization',
   ]);
 

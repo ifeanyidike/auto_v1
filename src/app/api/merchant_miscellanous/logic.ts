@@ -26,12 +26,13 @@ export default class MerchantMiscellanous extends Utility {
     merchantId: string,
     data: {
       allowOutsideWork: boolean;
-      locationData: Record<'location' | 'cost', string>[];
+      locationToAdd: Record<'location' | 'cost', string>[];
+      locationToRemove: string[];
     }
   ) {
     return this.process(async () => {
       const locData = await Promise.all(
-        data.locationData.map(async d => {
+        data.locationToAdd.map(async d => {
           const misc = await this.db.merchantMiscellanous.findFirst({
             where: { location: d.location },
           });
@@ -45,6 +46,10 @@ export default class MerchantMiscellanous extends Utility {
           return updatedMisc.id;
         })
       );
+
+      if (data.locationToRemove.length) {
+        await this.deleteMany(data.locationToRemove);
+      }
 
       await this.db.merchant.update({
         where: { id: merchantId },
@@ -61,6 +66,18 @@ export default class MerchantMiscellanous extends Utility {
   public async delete(id: string) {
     return this.process(async () => {
       return await this.db.merchantMiscellanous.delete({ where: { id } });
+    });
+  }
+
+  public async deleteMany(ids: string[]) {
+    return this.process(async () => {
+      return await this.db.merchantMiscellanous.deleteMany({
+        where: {
+          id: {
+            in: ids,
+          },
+        },
+      });
     });
   }
 

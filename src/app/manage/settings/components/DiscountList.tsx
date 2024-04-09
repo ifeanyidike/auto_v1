@@ -1,7 +1,6 @@
 'use client';
 import React, { type Dispatch, type SetStateAction, useState } from 'react';
 import OpenLeftIcon from '~/commons/icons/OpenLeftIcon';
-import DocumentIcon from '~/commons/icons/DocumentIcon';
 import { useClickOutside } from '~/hooks/useClickOutside';
 import FilterIcon from '~/commons/icons/FilterIcon';
 import 'react-datepicker/dist/react-datepicker.css';

@@ -130,7 +130,7 @@ export class Mailer {
         </div>
         <br />
         <p>You can browse the services in this auto shop to book or subscribe.</p>
-        <p>When you book any of the services, you have an option to either pay online (with just a single click) or in-shop</p>
+        <p>When you book any of the services, you have an option to either pay online (with just a single click) or in-shop.</p>
         <p>Some services may also have discounts. So do well to get the discount code before booking for a service.</p>
         <p>Also, most subscription services are usually subsidized. You'll enjoy some percentage off over what you could have gotten the services otherwise.</p>
         ${

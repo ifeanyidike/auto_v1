@@ -36,9 +36,7 @@ export default async function RootLayout({
   const rawPhoneNo = merchantData?.phoneNo;
   const formattedPhoneNo = Util.formatPhoneNo(rawPhoneNo!);
 
-  const sessionUser = await Auth0.getSessionUser();
-  const userClient = new User();
-  const user = await userClient.getOne({ email: sessionUser?.email });
+  const user = await Auth0.findOrCreateAuth0User();
 
   const notificationClient = new Notification();
   const notifications = await notificationClient.getManyByUser(user?.id, slug);

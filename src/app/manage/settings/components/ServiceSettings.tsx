@@ -1,7 +1,10 @@
 'use client';
-import { type Prisma } from '@prisma/client';
-import { type DefaultArgs } from '@prisma/client/runtime/library';
-import React, { type SetStateAction, useState, type Dispatch } from 'react';
+import React, {
+  type SetStateAction,
+  useState,
+  type Dispatch,
+  useEffect,
+} from 'react';
 import Button from '~/components/Button';
 import TextInput from '~/components/TextInput';
 import { enqueueSnackbar } from 'notistack';
@@ -9,9 +12,10 @@ import Toggler from '~/components/Toggler';
 import PlusIcon from '~/commons/icons/PlusIcon';
 import CloseIcon from '~/commons/icons/CloseIcon';
 import { updateMerchantServiceSettings } from '../action';
+import { type MerchantType } from '~/app/api/merchant/logic';
 
 type Props = {
-  merchant: Prisma.MerchantGetPayload<Prisma.MerchantDefaultArgs<DefaultArgs>>;
+  merchant: MerchantType;
   setLoading: Dispatch<SetStateAction<boolean>>;
 };
 
@@ -22,8 +26,24 @@ type Data = {
   locationData: LocData[] | null;
 };
 const ServiceSettings = (props: Props) => {
-  const [data, setData] = useState<Data | null>(null);
+  const getSavedLocationData = () => {
+    const { allowOutsideWork, miscellanous } = props.merchant;
+    if (!allowOutsideWork && !miscellanous) return null;
+
+    const locationData = miscellanous.map(m => ({
+      location: m.location,
+      cost: m.cost,
+    }));
+    return {
+      allowOutsideWork,
+      locationData,
+    };
+  };
+
+  const [data, setData] = useState<Data | null>(getSavedLocationData());
   const [locCost, setLocCost] = useState<LocData>();
+
+  useEffect(() => {}, []);
 
   async function handleUpdateMerchant() {
     try {
@@ -50,11 +70,18 @@ const ServiceSettings = (props: Props) => {
         );
       }
 
+      const locationToRemove = props.merchant.miscellanous
+        .filter(m => {
+          return !data.locationData?.some(l => l.location === m.location);
+        })
+        .map(m => m.id);
+
       const { success } = await updateMerchantServiceSettings(
         props.merchant.id,
         {
           ...data,
-          locationData: data.locationData || [],
+          locationToAdd: data.locationData || [],
+          locationToRemove,
         }
       );
       props.setLoading(false);
