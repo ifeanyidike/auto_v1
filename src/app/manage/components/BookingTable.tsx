@@ -19,6 +19,7 @@ const Bookings = (props: Props) => {
     let name = '';
     let firstName = props.data.user?.firstName;
     let lastName = props.data.user?.lastName;
+    if (!firstName && !lastName) return props.data.user?.email;
 
     if (firstName) name += firstName;
     if (!firstName && lastName) name += lastName;
@@ -44,7 +45,9 @@ const Bookings = (props: Props) => {
     _id: props.placeholderId,
     name: getName(),
     title: props.data.merchantService?.service?.title,
-    amount: `₦${props.data.amount}`,
+    amount: (
+      <div className="font-mono">₦{props.data.amount?.toLocaleString()}</div>
+    ),
     isPaid: (
       <span
         className={`flex-shrink-0 w-14px  border rounded-full px-3 py-[2px] ${

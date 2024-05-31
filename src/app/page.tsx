@@ -1,5 +1,5 @@
 import Image from 'next/image';
-import { dmSans, robotoMono } from '~/font';
+import { dmSans, manRope, nunitoSans, openSans } from '~/font';
 import Button from '~/components/Button';
 import LeftDashText from '~/components/LeftDashText';
 import HomeServicesCard from '~/components/HomeServicesCard';
@@ -7,19 +7,32 @@ import ReviewCards from '~/components/ReviewCards';
 import Link from 'next/link';
 import ArrowRight from '~/commons/icons/ArrowRight';
 import AllFAQs from '~/components/AllFAQs';
+import ReadMore from '~/components/ReadMore';
 import Util from '~/server/utils';
-import { redirect } from 'next/navigation';
+import { notFound, redirect } from 'next/navigation';
 import MerchantService from './api/merchant_service/logic';
 import Auth0 from '~/server/auth0';
 import Review from './api/review/logic';
+import MainHome from './MainHome';
+import Script from 'next/script';
+import OpenCalendly from '~/components/OpenCalendly';
 
 export default async function Home() {
   const { isAdminLogin, slug } = Util.getRouteType();
   if (isAdminLogin) redirect('/manage');
   const sessionUser = await Auth0.getSessionUser();
 
+  if (!slug) {
+    return <MainHome />;
+  }
+
   const merchantService = new MerchantService();
-  const { merchant, services } = await merchantService.getAllByMerchant(slug);
+  const serviceData = await merchantService.getAllByMerchant(slug);
+  const { merchant, services } = serviceData || {};
+
+  if (!merchant && slug) return notFound();
+  if (!merchant) return null;
+
   const unshuffledFaqs = services?.flatMap(s => s.faqs);
   const faqs = Util.shuffleArray(unshuffledFaqs ?? []).slice(0, 7);
 
@@ -32,32 +45,49 @@ export default async function Home() {
         <div className="flex items-center justify-between bg-gradient-to-r from-gradient-bg-start to-gradient-bg-end px-14 py-16 max-md:flex-col">
           <div className="flex w-[50%] flex-col gap-8 max-md:w-full max-md:text-center">
             <p
-              className={`${robotoMono.className} text-6xl uppercase  text-content-light max-lg:text-6xl max-md:text-4xl `}
+              className={`${nunitoSans.className} font-semibold text-6xl  text-content-light max-md:text-4xl `}
             >
-              {merchant?.caption ?? 'One-stop auto service solution.'}
+              {merchant?.caption?.substring(0, 43) ??
+                'This is a sample caption. Please add your caption in the admin page.'}
             </p>
-            <p className={`text-dark`}>
-              {merchant?.shortDescription ??
-                'Lorem ipsum dolor sit amet consectetur adipisicing elit. Aliquam provident placeat doloremque id laborum aliquid.'}
-            </p>
+            <ReadMore
+              text={
+                merchant?.shortDescription ??
+                'This is a sample description please add a short description in the admin page.'
+              }
+              maxLength={200}
+            />
+
             <div className="flex justify-between max-md:flex-col max-md:gap-3">
-              <a
-                href={
-                  !merchant.calendlyLink
-                    ? `tel:${merchant.phoneNo}`
-                    : merchant.calendlyLink
-                }
-                target={merchant.calendlyLink ? '_blank' : '_self'}
+              {/* <Button
+                hasGradient={true}
+                hasShadow={true}
+                onClick={showCalendly}
               >
-                <Button hasGradient={true} hasShadow={true}>
+                <a
+                  href={
+                    !merchant.calendlyLink
+                      ? `tel:${merchant.phoneNo}`
+                      : merchant.calendlyLink
+                  }
+                  target={merchant.calendlyLink ? '_blank' : '_self'}
+                >
                   REQUEST APPOINTMENT
-                </Button>
-              </a>
-              <a href={`tel:${merchant.phoneNo}`}>
-                <Button hasGradient={false} hasShadow={false} bgColor="bg-dark">
-                  GET AN ESTIMATE
-                </Button>
-              </a>
+                </a>
+              </Button> */}
+              <OpenCalendly
+                calendlyLink={merchant.calendlyLink}
+                phoneNo={merchant.phoneNo}
+                text="REQUEST APPOINTMENT"
+                rest={{
+                  hasGradient: true,
+                  hasShadow: true,
+                }}
+              />
+
+              <Button hasGradient={false} hasShadow={false} bgColor="bg-dark">
+                <a href={`tel:${merchant.phoneNo}`}>GET AN ESTIMATE</a>
+              </Button>
             </div>
           </div>
           <div className="ml-auto">
@@ -69,7 +99,7 @@ export default async function Home() {
             ></Image>
           </div>
         </div>
-        <div className="flex flex-col gap-12 px-14 py-16">
+        <div className="flex flex-col gap-12 px-14 py-16 max-sm:px-7">
           <div className="ml-4 flex flex-col justify-center gap-5 max-md:items-center">
             <LeftDashText text="Our Services" />
             <div className="flex items-end justify-between max-lg:flex-col max-lg:gap-5 max-md:items-center max-md:justify-center max-md:text-center">
@@ -89,7 +119,7 @@ export default async function Home() {
             </div>
           </div>
 
-          <div className="grid grid-cols-3 gap-x-3 gap-y-12 max-xl:grid-cols-2 max-lg:grid-cols-2 max-md:grid-cols-1">
+          <div className="grid grid-cols-3 gap-x-3 gap-y-12 max-xl:grid-cols-2 max-lg:grid-cols-2 max-md:flex max-md:flex-col max-md:gap-6 max-md:items-center max-md:justify-center">
             {services
               ?.slice(0, 5)
               ?.map(s => (
@@ -140,7 +170,7 @@ export default async function Home() {
                 )}
               </>
             ) : (
-              Boolean(services.length === 0) && (
+              Boolean(services?.length === 0) && (
                 <div className="px-8 col-span-3 text-sm text-center">
                   There is currently no service in this store please check back
                   later!
@@ -193,7 +223,7 @@ export default async function Home() {
           </div>
         </div>
 
-        <div className="flex flex-col gap-12 px-14 py-16 max-md:text-center">
+        <div className="flex flex-col gap-12 px-14 max-sm:px-7 py-16 max-md:text-center">
           <div className="ml-4 flex flex-col justify-center gap-5 max-md:ml-0 max-md:items-center">
             <LeftDashText text="FAQ" />
             <div className="flex items-end justify-between max-lg:flex-col max-lg:gap-5 max-md:items-center">
@@ -214,6 +244,15 @@ export default async function Home() {
             <AllFAQs data={faqs} />
           </div>
         </div>
+        <Script
+          src="https://assets.calendly.com/assets/external/widget.js"
+          type="text/javascript"
+          async
+        />
+        <link
+          href="https://assets.calendly.com/assets/external/widget.css"
+          rel="stylesheet"
+        ></link>
       </main>
     </>
   );

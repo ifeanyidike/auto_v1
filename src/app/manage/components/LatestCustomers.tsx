@@ -54,7 +54,9 @@ const LatestCustomers = (props: Props) => {
                     <span className="text-[10px]">{data.email}</span>
                   </div>
                 </div>
-                <span className="text-sm font-mono">₦{data.amount}</span>
+                <span className="text-sm font-mono">
+                  &#8358;{data.amount?.toLocaleString()}
+                </span>
               </div>
             </div>
           ))

@@ -4,9 +4,11 @@ import { type DefaultArgs } from '@prisma/client/runtime/library';
 import React, { type SetStateAction, useState, type Dispatch } from 'react';
 import Button from '~/components/Button';
 import MultilineTextInput from '~/components/MultilineTextInput';
+import Link from 'next/link';
 import TextInput from '~/components/TextInput';
 import { updateMerchantGeneralSettings } from '../action';
 import { enqueueSnackbar } from 'notistack';
+import ReadMore from '~/components/ReadMore';
 
 type Props = {
   merchant: Prisma.MerchantGetPayload<Prisma.MerchantDefaultArgs<DefaultArgs>>;
@@ -182,7 +184,16 @@ const GeneralSettings = (props: Props) => {
             <MultilineTextInput
               name="shortDescription"
               placeholder="Please enter a short description for your page (max: 30 words)"
-              defaultValue={props.merchant.shortDescription || ''}
+              defaultValue={
+                props.merchant.shortDescription ||
+                `Welcome to ${
+                  props.merchant.name || 'our auto shop'
+                }! We provide top-notch automotive care with a customer-focused approach, from routine maintenance to complex repairs. Visit us in ${
+                  props.merchant.address || 'our shop'
+                } or call ${
+                  props.merchant.phoneNo || 'our phone no'
+                } – we look forward to serving you!`
+              }
               getValue={(desc: string) => {
                 const newData = { ...data };
                 newData.shortDescription = desc;
@@ -201,6 +212,7 @@ const GeneralSettings = (props: Props) => {
           Save changes
         </Button>
       </div>
+      <div></div>
     </div>
   );
 };

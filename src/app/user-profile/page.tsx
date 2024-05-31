@@ -1,33 +1,36 @@
 import React from 'react';
 import PageClient from './PageClient';
+import Auth0 from '~/server/auth0';
 import TopMenu from '../manage/components/TopMenu';
 import Booking, { type BookingItem } from '~/app/api/booking/logic';
+import { notFound } from 'next/navigation';
 import Subscription, {
   type SubscriptionItem,
 } from '~/app/api/subscription/logic';
+
 import BackToPage from '../manage/components/BackToPage';
 import { Transaction } from '~/server/payment/transaction';
 import Util from '~/server/utils';
 import ProtectedPage from '~/server/protectedPage';
 
-export default async function UserProfilePage(data: {
-  userId: string;
-  info: string;
-  location: string;
-  amount: string;
-  status: string;
-  service: string;
-  discounts: string;
-  merchantServiceId: string;
-  planId: string;
-}) {
-  const { userId } = data;
+const UserProfilePage = async () => {
+  const user = await Auth0.findOrCreateAuth0User();
+  console.log('This is the user here', user);
+  const userId = user?.id;
+
+  if (!userId) {
+    return notFound();
+  }
+
+  // const { userId } = data;
 
   const userTransaction = new Transaction();
 
   const booking = new Booking();
 
   const bookings = await booking.findByUser(userId);
+  console.log('This is the User Id', userId);
+  console.log('This is the bookings', bookings);
 
   const subscription = new Subscription();
 
@@ -47,7 +50,8 @@ export default async function UserProfilePage(data: {
   );
 
   return (
-    <div className={`w-full bg-white flex flex-col text-inherit mb-11 z-10`}>
+    <div className={`w-full bg-white flex flex-col text-inherit mb-11`}>
+      {/* <MainMenu /> */}
       <TopMenu
         showToggle
         component={
@@ -74,4 +78,7 @@ export default async function UserProfilePage(data: {
       </div>
     </div>
   );
-}
+};
+export default ProtectedPage(UserProfilePage, {
+  returnTo: `/user_profile`,
+});

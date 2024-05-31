@@ -7,6 +7,7 @@ import MerchantService from '~/app/api/merchant_service/logic';
 import User from '~/app/api/user/logic';
 import Link from 'next/link';
 import ProtectedPage from '~/server/protectedPage';
+import { dmSans } from '~/font';
 
 const Subscription = async ({
   searchParams,
@@ -14,25 +15,25 @@ const Subscription = async ({
   params: { slug: string; id: string };
   searchParams?: Record<string, string | string[] | undefined>;
 }) => {
-  const id = searchParams?.id as string;
+  const id = searchParams?.service_id as string;
+  // @ts-ignore
+  globalThis.serviceId = undefined;
 
-  const sessionUser = await Auth0.getSessionUser();
-  const userClient = new User();
-  const user = await userClient.getOne({ email: sessionUser.email });
+  const user = await Auth0.findOrCreateAuth0User();
 
-  if (!id || !sessionUser || !user?.id) {
+  if (!id || !user || !user?.id) {
     return (
-      <div className="font-mono text-4xl text-center flex flex-col h-fit justify-center items-center gap-5 my-7">
+      <div className="text-2xl text-center flex flex-col h-fit justify-center items-center gap-5 my-7">
         <Image
           src="/images/oops1.png"
           width={1220}
           height={462}
           alt="Oops!"
         ></Image>
-        <span>
+        <span className={`${dmSans.className}`}>
           {!id
             ? 'Please choose the merchant service to subscribe!'
-            : !sessionUser
+            : !user
               ? 'You need to login to proceed'
               : 'User does not exist'}
         </span>
@@ -46,30 +47,32 @@ const Subscription = async ({
     userId: user?.id,
   });
 
-  if (sessionUser.email === service?.merchant?.email) {
+  if (user.email === service?.merchant?.email) {
     return (
-      <div className="font-mono text-3xl text-center flex flex-col h-fit justify-center items-center gap-5 my-7">
+      <div className="text-2xl text-center flex flex-col h-fit justify-center items-center gap-5 my-7">
         <Image
           src="/images/oops1.png"
           width={1220}
           height={462}
           alt="Oops!"
         ></Image>
-        <span className="mt-5">You cannot subscribe to your own service!</span>
+        <span className={`mt-5 ${dmSans.className}`}>
+          You cannot subscribe to your own service!
+        </span>
       </div>
     );
   }
 
   if (!service?.subscriptionPlans?.length) {
     return (
-      <div className="font-mono text-3xl text-center flex flex-col h-fit justify-center items-center gap-5 my-7">
+      <div className="text-2xl text-center flex flex-col h-fit justify-center items-center gap-5 my-7">
         <Image
           src="/images/oops1.png"
           width={1220}
           height={462}
           alt="Oops!"
         ></Image>
-        <span className="mt-5">
+        <span className={`mt-5 ${dmSans.className}`}>
           The merchant do not have any active subscription plan for this
           service!
         </span>
@@ -77,16 +80,21 @@ const Subscription = async ({
     );
   }
 
-  if (service?.subscriptions?.length! >= service?.servicePricing?.length!) {
+  const getUserSubscriptions = () => {
+    return service?.subscriptions?.filter(s => s.userId === user?.id) || [];
+  };
+  const userSubscriptions = getUserSubscriptions();
+
+  if (userSubscriptions?.length! >= service?.servicePricing?.length!) {
     return (
-      <div className="font-mono text-xl font-medium text-center flex flex-col h-fit justify-center items-center gap-8 my-7">
+      <div className="text-2xl font-medium text-center flex flex-col h-fit justify-center items-center gap-8 my-7">
         <Image
           src="/images/congrats.png"
           width={600}
           height={357}
           alt="Oops!"
         ></Image>
-        <span className="mb-8">
+        <span className={`mb-8 ${dmSans.className}`}>
           Congratulations, you have already subscribed to all plans in this
           service.
         </span>
@@ -114,9 +122,15 @@ const Subscription = async ({
     );
   }
 
-  return <DisplayPlanComponent service={service} />;
+  return (
+    <DisplayPlanComponent service={service} subscriptions={userSubscriptions} />
+  );
 };
 
 export default ProtectedPage(Subscription, {
-  returnTo: '/service/subscription',
+  // @ts-ignore
+  returnTo: `/service/subscription${
+    // @ts-ignore
+    globalThis.serviceId ? `?service_id=${globalThis.serviceId}` : ''
+  }`,
 });

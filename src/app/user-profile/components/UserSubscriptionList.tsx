@@ -6,6 +6,7 @@ import OpenLeftIcon from '~/commons/icons/OpenLeftIcon';
 import DocumentIcon from '~/commons/icons/DocumentIcon';
 import DownloadIcon from '~/commons/icons/DownloadIcon';
 import { useClickOutside } from '~/hooks/useClickOutside';
+import Link from 'next/link';
 import FilterIcon from '~/commons/icons/FilterIcon';
 import 'react-datepicker/dist/react-datepicker.css';
 import Calendar from '~/components/Calendar';
@@ -39,7 +40,7 @@ const SubscriptionList = (props: Props) => {
   const [itemDetail, setItemDetail] = useState<subscriptionByUserItem | null>(
     null
   );
-
+  console.log(popupOpen?.id);
   const handleFilter = () => {
     const newSubscriptionList = props.subscriptions.filter(subscription => {
       let condition = true;
@@ -139,10 +140,16 @@ const SubscriptionList = (props: Props) => {
           </button>
 
           <button className="flex gap-2 w-full items-center p-4 hover:bg-stone-200">
-            <span>
-              <DocumentIcon />
-            </span>
-            <span>View invoice</span>
+            <Link
+              href={`/user-subscriptioninvoice/${popupOpen.id}`}
+              target="_blank"
+              className="flex gap-2 w-full items-center py-2 px-4 hover:bg-stone-200"
+            >
+              <span>
+                <DocumentIcon />
+              </span>
+              <span>View invoice</span>
+            </Link>
           </button>
           <button className="flex gap-2 w-full items-center p-4 hover:bg-stone-200 hover:rounded-b-xl">
             <span>
@@ -195,11 +202,11 @@ const SubscriptionList = (props: Props) => {
         </button>
 
         <button className="flex gap-1 mb-2 flex-col w-full px-3 pt-2">
-          <span>Subscriber's name</span>
+          <span>Merchant's name</span>
           <TextInput
             suffixSign={<SearchIcon />}
             name="name"
-            placeholder="Search by subscriber's name"
+            placeholder="Search by merchant's name"
             customStyle="!py-2 !rounded-l-full text-xs"
             customSuffixStyle="!rounded-r-full"
             getValue={(value: string) => {
@@ -229,9 +236,9 @@ const SubscriptionList = (props: Props) => {
         <button className="flex gap-1 mb-2 flex-col w-full p-2">
           <span>Plan Code</span>
           <TextInput
-            name="serviceName"
+            name="planCode"
             suffixSign={<SearchIcon />}
-            placeholder="Search by subscriber's name"
+            placeholder="Search by plancode's name"
             customStyle="!py-2 !rounded-l-full text-xs"
             customSuffixStyle="!rounded-r-full"
             getValue={(value: string) => {

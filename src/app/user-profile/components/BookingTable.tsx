@@ -18,13 +18,9 @@ const BookingTable = (props: Props) => {
   const items = props.data;
   const getName = () => {
     let name = '';
-    let firstName = props.data.merchant?.name;
-    // let lastName = props.data.merchant?.lastName;
+    let merchantName = items.merchant?.name;
 
-    if (firstName) name += firstName;
-    // if (!firstName && lastName) name += lastName;
-
-    // if (firstName && lastName) name += ` ${lastName}`;
+    if (merchantName) name += merchantName;
 
     return name;
   };
@@ -34,7 +30,7 @@ const BookingTable = (props: Props) => {
       _id: 'id',
       customWidth: 'w-16',
     },
-    { name: 'Mercant name', grow: true },
+    { name: 'Merchant name', grow: true },
     { title: 'Service name', grow: true },
     { location: 'Location', grow: true },
     { paymentMode: 'Payment Mode', customWidth: 'w-28' },

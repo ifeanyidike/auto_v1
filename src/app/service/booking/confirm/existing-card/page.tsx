@@ -44,7 +44,11 @@ const BookingExistingCardConfirmPage = async ({
       <div>Your booking is successful</div>
       {booking && (
         <BookingTicket
-          booking={{ ...booking, amount: booking.amount.toNumber() }}
+          booking={{
+            ...booking,
+            amount: booking.amount.toNumber(),
+            isPaid: true,
+          }}
           serviceTitle={merchantService?.service?.title}
           serviceType={merchantService?.service?.type}
         />

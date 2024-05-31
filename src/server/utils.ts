@@ -3,8 +3,6 @@ import Merchant from '~/app/api/merchant/logic';
 import { v2 as cloudinary } from 'cloudinary';
 import path from 'path';
 import DatauriParser from 'datauri/parser';
-import User from '~/app/api/user/logic';
-import { Transaction } from './payment/transaction';
 import { type SubscriptionItem } from '~/app/api/subscription/logic';
 import { type BookingItem } from '~/app/api/booking/logic';
 import { monthNames } from 'utilities/common';
@@ -17,12 +15,17 @@ cloudinary.config({
 });
 
 export default class Util {
-  public static getSubdomain = (url: string) => {
+  public static getServerSubdomain = (url: string) => {
     const strToCompare = url
       .replace('www.', '')
       .replace('https://', '')
       .replace('http://', '');
-    const baseUrl = `.${process.env.BASE_URL ?? ''}`;
+
+    let baseUrl = `.${process.env.BASE_URL ?? ''}`;
+    if (strToCompare === 'localhost:3000' || strToCompare === 'moxxil.com') {
+      baseUrl = strToCompare;
+    }
+
     const urlParts = strToCompare.split(baseUrl);
     return urlParts[0]!;
   };
@@ -32,7 +35,7 @@ export default class Util {
 
     const next_url = headersList.get('next-url');
     const hostname = headersList.get('host');
-    let slug = Util.getSubdomain(hostname ?? '')!;
+    let slug = Util.getServerSubdomain(hostname ?? '')!;
 
     const adminSlug = process.env.ADMIN_SLUG ?? '';
     const slugParts = slug.split('.');
@@ -170,12 +173,13 @@ export default class Util {
     const formatted_subscriptions = subscriptions.flatMap(sub => {
       const { title, type } = sub.merchantService.service || {};
       const { firstName, lastName, email, imgUrl } = sub.user || {};
+      const name = firstName || '' + lastName || '';
       return sub.fufillments?.map(f => ({
         id: f.id,
         serviceName: title!,
         serviceType: type!,
         imgUrl: imgUrl!,
-        userName: firstName || '' + lastName || '',
+        userName: name || email!,
         email: email,
         amount: f.amountPaid.toNumber(),
         type: 'subscription',
@@ -191,12 +195,14 @@ export default class Util {
     const formatted_bookings = bookings.map(b => {
       const { title, type } = b.merchantService.service || {};
       const { firstName, lastName, email, imgUrl } = b.user || {};
+      const name = firstName || '' + lastName || '';
+
       return {
         id: b.id,
         serviceName: title!,
         serviceType: type!,
         imgUrl: imgUrl!,
-        userName: firstName || '' + lastName || '',
+        userName: name || email!,
         email: email,
         amount: b.amount,
         type: 'booking',

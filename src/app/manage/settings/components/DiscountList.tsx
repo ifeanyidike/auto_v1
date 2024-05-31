@@ -1,8 +1,6 @@
 'use client';
 import React, { type Dispatch, type SetStateAction, useState } from 'react';
 import OpenLeftIcon from '~/commons/icons/OpenLeftIcon';
-import DocumentIcon from '~/commons/icons/DocumentIcon';
-import DownloadIcon from '~/commons/icons/DownloadIcon';
 import { useClickOutside } from '~/hooks/useClickOutside';
 import FilterIcon from '~/commons/icons/FilterIcon';
 import 'react-datepicker/dist/react-datepicker.css';
@@ -12,6 +10,25 @@ import DiscountTable from './DiscountTable';
 import { type TablePopupData } from '../../types/general';
 import { type MerchantType } from '~/app/api/merchant/logic';
 import DiscountDetails from './DiscountDetails';
+import { getBrandAmount } from './data';
+import { deleteDiscount } from '../action';
+import { enqueueSnackbar } from 'notistack';
+
+const DeleteIcon = () => (
+  <svg
+    fill="none"
+    viewBox="0 0 24 24"
+    strokeWidth={1.5}
+    stroke="currentColor"
+    className="w-4 h-4"
+  >
+    <path
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0"
+    />
+  </svg>
+);
 
 type Props = {
   merchantId: string;
@@ -57,18 +74,40 @@ const DiscountList = (props: Props) => {
       ? { bottom: spaceBelow - 67 + 'px' }
       : { top: top + 'px' };
 
+    const item = props.discounts.find(b => b.id === popupOpen.id);
+
+    const handleDeleteDiscount = async () => {
+      togglePopup(null);
+      if (!item) return;
+      const plans = item?.services.flatMap(s => {
+        const plans = item.plans.filter(p => p.merchantServiceId === s.id);
+        return plans.map(p => ({
+          id: p.id,
+          code: p.code,
+          amount: Number(getBrandAmount(s, p)) * 100,
+        }));
+      });
+      const result = await deleteDiscount(props.merchantId, item.id, plans);
+      if (result.error) {
+        return enqueueSnackbar(result.error, { variant: 'error' });
+      }
+      props.setDiscounts(result.discounts || []);
+      enqueueSnackbar('Discount successfully deleted', {
+        variant: 'success',
+      });
+    };
+
     return (
       <>
         <div
           ref={popupRef}
-          className={`bg-white absolute box-border h-[158px] right-5 w-48 z-50 text-content-normal text-xs flex-flex-col items-center rounded-xl border border-stone-200`}
+          className={`bg-white absolute box-border h-[101px] right-5 w-48 z-50 text-content-normal text-xs flex-flex-col items-center rounded-xl border border-stone-200`}
           style={{
             ...setStyle,
           }}
         >
           <button
             onClick={() => {
-              const item = props.discounts.find(b => b.id === popupOpen.id);
               if (item) setItemDetail(item);
             }}
             className="flex gap-2 w-full items-center p-4 hover:bg-stone-200 hover:rounded-t-xl"
@@ -78,17 +117,14 @@ const DiscountList = (props: Props) => {
             </span>
             <span>View details</span>
           </button>
-          <button className="flex gap-2 w-full items-center p-4 hover:bg-stone-200">
+          <button
+            onClick={handleDeleteDiscount}
+            className="flex gap-2 w-full items-center p-4 hover:bg-stone-200 hover:rounded-b-xl"
+          >
             <span>
-              <DocumentIcon />
+              <DeleteIcon />
             </span>
-            <span>View invoice</span>
-          </button>
-          <button className="flex gap-2 w-full items-center p-4 hover:bg-stone-200 hover:rounded-b-xl">
-            <span>
-              <DownloadIcon />
-            </span>
-            <span>Download</span>
+            <span>Delete discount</span>
           </button>
         </div>
         <div className="fixed bg-transparent top-0 right-0 w-screen h-screen z-40"></div>
@@ -120,7 +156,7 @@ const DiscountList = (props: Props) => {
     </>
   );
   return (
-    <div className="relative mt-8 mx-5 mb-5">
+    <div className="relative mt-8 mx-5 max-sm:mx-0 mb-5">
       <div className="relative">
         <button
           onClick={() => toggleDropdown(true)}

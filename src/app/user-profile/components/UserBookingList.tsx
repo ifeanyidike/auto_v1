@@ -1,5 +1,5 @@
 'use client';
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 
 import BookingTable from './BookingTable';
 import OpenLeftIcon from '~/commons/icons/OpenLeftIcon';
@@ -28,6 +28,7 @@ type Props = {
   usFulfilled: boolean;
   paymentMode: string;
   merchantId: string;
+  merchantSlug: string;
   data: string;
 };
 type Filter = {
@@ -36,6 +37,7 @@ type Filter = {
   isPaid: boolean;
   name: string;
   serviceName: string;
+  merchantName: any;
 };
 
 const UserBookingList = (props: Props) => {
@@ -47,6 +49,7 @@ const UserBookingList = (props: Props) => {
     props.bookings || []
   );
 
+  console.log(popupOpen?.id);
   const handleFilter = () => {
     const newBookingList = props.bookings.filter(booking => {
       let condition = true;
@@ -72,6 +75,33 @@ const UserBookingList = (props: Props) => {
         const filterName =
           bookersName.includes(filterData.name.trim().replace(/\s+/g, '')) ||
           filterData.name.trim().replace(/\s+/g, '').includes(bookersName);
+        condition &&= filterName;
+      }
+
+      // if (filterData?.merchantName) {
+      //   console.log(booking.merchant);
+      //   let merchantsName = booking.merchant?.name || '';
+
+      //   const filterMerchantName =
+      //     (filterData.merchantName?.name?.trim() ?? '').replace(/\s+/g, '') !==
+      //       '' &&
+      //     merchantsName.includes(
+      //       filterData.merchantName?.name.trim().replace(/\s+/g, '')
+      //     );
+
+      //   condition &&= filterMerchantName;
+      // }
+      if (filterData?.merchantName) {
+        let merchantsName =
+          (booking.merchant?.name || '') + (booking.merchant?.name || '');
+        const filterName =
+          merchantsName.includes(
+            filterData.merchantName.trim().replace(/\s+/g, '')
+          ) ||
+          filterData.merchantName
+            .trim()
+            .replace(/\s+/g, '')
+            .includes(merchantsName);
         condition &&= filterName;
       }
 
@@ -134,8 +164,8 @@ const UserBookingList = (props: Props) => {
             <span>View details</span>
           </button>
           <Link
-            // href={`/manage/booking/bookinginvoice/${popupOpen.id}`}
-            href={`/booking/user-profile/bookinginvoice?=${popupOpen.id}`}
+            href={`/user-bookinginvoice/${popupOpen.id}`}
+            target="_blank"
             className="flex gap-2 w-full items-center p-4 hover:bg-stone-200"
           >
             <span>
@@ -207,7 +237,7 @@ const UserBookingList = (props: Props) => {
           />
         </button>
 
-        <button className="flex gap-1 mb-2 flex-col w-full px-3 pt-2">
+        {/* <button className="flex gap-1 mb-2 flex-col w-full px-3 pt-2">
           <span>Booker's name</span>
           <TextInput
             suffixSign={<SearchIcon />}
@@ -218,6 +248,21 @@ const UserBookingList = (props: Props) => {
             getValue={(value: string) => {
               const newFilterData = { ...(filterData || {}) };
               newFilterData.name = value;
+              setFilterData(newFilterData);
+            }}
+          />
+        </button> */}
+        <button className="flex gap-1 mb-2 flex-col w-full px-3 pt-2">
+          <span>Merchant's name</span>
+          <TextInput
+            suffixSign={<SearchIcon />}
+            name="merchantName"
+            placeholder="Search by merchant's name"
+            customStyle="!py-2 !rounded-l-full text-xs"
+            customSuffixStyle="!rounded-r-full"
+            getValue={(value: string) => {
+              const newFilterData = { ...(filterData || {}) };
+              newFilterData.merchantName = value;
               setFilterData(newFilterData);
             }}
           />

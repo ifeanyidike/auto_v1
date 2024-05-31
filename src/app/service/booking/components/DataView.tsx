@@ -42,26 +42,16 @@ export type ItemData = {
   selectedAuthCode?: string;
 };
 
-export const sample_locations = [
-  {
-    value: 'Port Harcourt',
-    label: 'Port Harcourt',
-  },
-  {
-    value: 'Abuja',
-    label: 'Abuja',
-  },
-  {
-    value: 'Lagos',
-    label: 'Lagos',
-  },
-];
-
 const DataView = (props: Props) => {
   const { merchantService, userId } = props;
   const initialData = { serviceId: merchantService.id, userId } as ItemData;
   const [data, setData] = useState<ItemData>(initialData);
   const [loading, setLoading] = useState<boolean>(false);
+
+  const locations = merchantService.merchant?.miscellanous.map(l => ({
+    value: l.location,
+    label: l.location,
+  }));
 
   const existingAuthorizations = props.authorizations?.filter(a => a.reusable);
 
@@ -70,13 +60,17 @@ const DataView = (props: Props) => {
 
   const getTotalAmount = () => {
     let amount = 0;
-    let outsideWorkAmount = 10000;
 
     if (!data?.items?.length) return amount.toFixed(2).toLocaleString();
 
     amount = data?.items?.reduce((acc, curr) => acc + Number(curr.amount), 0);
 
     if (data?.isOutsideWork && data?.location) {
+      const outsideWorkAmount = parseFloat(
+        merchantService.merchant?.miscellanous?.find(
+          m => m.location === data.location
+        )?.cost!
+      );
       amount += outsideWorkAmount;
     }
 
@@ -203,7 +197,7 @@ const DataView = (props: Props) => {
             />{' '}
             <p>{p.type}</p>{' '}
             <span className="ml-auto">
-              Basic Pricing: ₦{Number(p.amount)?.toLocaleString()}
+              Basic Pricing: {`₦${Number(p.amount)?.toLocaleString()}`}
             </span>
           </div>
         ))}
@@ -228,7 +222,7 @@ const DataView = (props: Props) => {
           <Select
             name="work_location"
             placeholder="Work Location"
-            data={sample_locations}
+            data={[{ value: '', label: 'In Auto Shop' }, ...(locations || [])]}
             getValue={value => {
               const locationData = value as SingleValue<
                 Record<'value' | 'label', string>
@@ -287,7 +281,7 @@ const DataView = (props: Props) => {
 
       <hr className="my-6" />
 
-      <div className="text-right font-mono text-3xl">₦{totalAmount}</div>
+      <div className="text-right font-mono text-3xl">{`₦${totalAmount}`}</div>
 
       {Boolean(existingAuthorizations?.length) && (
         <>

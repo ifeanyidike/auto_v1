@@ -6,18 +6,19 @@ import React, {
 } from 'react';
 import { type MenuEnum } from '../types/menu';
 import { useRouter, usePathname } from 'next/navigation';
-import { hideAdminBar } from '~/states/utility';
+import { getSubdomain, hideAdminBar } from '~/states/utility';
 
 type ItemProps = {
   title: MenuEnum;
   Icon: ReactNode;
   IconRight?: ReactNode;
-  isSelected: boolean;
+  isSelected?: boolean;
   // isCollapsed: boolean;
-  setIsSelected: Dispatch<SetStateAction<MenuEnum | null>>;
+  setIsSelected?: Dispatch<SetStateAction<MenuEnum | null>>;
   href: string;
 };
 const MenuItem = (props: ItemProps) => {
+  const subdomain = getSubdomain();
   const route = `/manage/${props.href}`;
   const pathname = usePathname();
   const isInPath = route === pathname;
@@ -25,7 +26,16 @@ const MenuItem = (props: ItemProps) => {
   return (
     <button
       onClick={() => {
-        props.setIsSelected(props.title);
+        if (props.href === 'visit_page') {
+          return router.push(
+            `${window.location.protocol}//${subdomain}.${
+              window.location.hostname.includes('localhost')
+                ? 'localhost:3000'
+                : 'moxxil.com'
+            }`
+          );
+        }
+        props.setIsSelected && props.setIsSelected(props.title);
         if (window.innerWidth < 650) {
           hideAdminBar.set(true);
         }

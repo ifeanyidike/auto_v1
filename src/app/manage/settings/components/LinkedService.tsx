@@ -7,6 +7,7 @@ import Button from '~/components/Button';
 import Select from '~/components/Select';
 import Spinner from '~/components/Spinner';
 import { linkOrUnlinkPlansToDiscount } from '../action';
+import { getAmountAfterDiscount, getBrandAmount } from './data';
 
 type Props = {
   service: MerchantType['services'][0];
@@ -28,21 +29,6 @@ const LinkedService = (props: Props) => {
   );
   const [savingPlanConnect, setSavingPlanConnect] = useState(false);
 
-  const getAmountAfterDiscount = (initialAmount: number) => {
-    if (item.type === 'percentage') {
-      return initialAmount * ((1 - parseFloat(item.value)) / 100) * 100;
-    }
-    return Math.max(0, (initialAmount - parseFloat(item.value)) * 100);
-  };
-
-  const getBrandAmount = (p: MerchantType['discounts'][0]['plans'][0]) => {
-    if (p.autoBrand === 'FIXED') {
-      return props.service.servicePricing.find(a => a.mode === 'FIXED')?.amount;
-    }
-    return props.service.servicePricing.find(a => a.type === p.autoBrand)
-      ?.amount;
-  };
-
   const handleConnectPlans = async () => {
     setSavingPlanConnect(true);
 
@@ -51,7 +37,7 @@ const LinkedService = (props: Props) => {
       .map(p => ({
         id: p.id,
         code: p.code,
-        amount: Number(getBrandAmount(p)) * 100,
+        amount: Number(getBrandAmount(props.service, p)) * 100,
       }));
 
     const plansToConnect = service.subscriptionPlans
@@ -59,8 +45,12 @@ const LinkedService = (props: Props) => {
       .map(p => ({
         id: p.id,
         code: p.code,
-        amount: getAmountAfterDiscount(Number(getBrandAmount(p))),
+        amount: getAmountAfterDiscount(
+          Number(getBrandAmount(props.service, p)),
+          item
+        ),
       }));
+    console.log('plans to connect', plansToConnect);
 
     const result = await linkOrUnlinkPlansToDiscount(
       props.merchantId,
@@ -83,8 +73,8 @@ const LinkedService = (props: Props) => {
     });
   };
   return (
-    <div className="w-full bg-gray-100 px-8 py-2 rounded">
-      <div className="flex items-center gap-8">
+    <div className="w-full bg-gray-100 px-8 max-md:px-2 py-2 rounded">
+      <div className="flex items-center gap-8 max-sm:gap-2 max-sm:flex-wrap">
         <div className="flex text-lg font-medium">{service.service?.title}</div>
         <div className="w-1 h-1 bg-black rounded-full"></div>
         <small className="text-[10px]">{service.service?.type}</small>

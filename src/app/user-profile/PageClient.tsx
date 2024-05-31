@@ -3,8 +3,9 @@
 import { useUser } from '@auth0/nextjs-auth0/client';
 import Image from 'next/image';
 import UserBookingList from './components/UserBookingList';
-import UserSubscriptionTable from './components/UserSubscriptionList';
+import UserSubscriptionList from './components/UserSubscriptionList';
 import { type bookingByUserItem } from '~/app/api/booking/logic';
+
 import { type subscriptionByUserItem } from '~/app/api/subscription/logic';
 
 type Props = {
@@ -54,8 +55,18 @@ const PageClient = ({ bookings, subscriptions }: Props) => {
       <div className="w-full mt-6 space-y-6">
         <div className="w-full">
           <div className="flex justify-left items-center gap-6 mt-10">
-            <h1 className="font-semibold text-lg md:text-xl">Bookings:</h1>
-            <p className="md:hidden block">{bookings?.length}</p>
+            <h1 className="font-semibold text-lg md:text-xl">Bookings</h1>
+            <p className="md:hidden block">
+              {bookings.length === 1
+                ? 'One'
+                : bookings.length === 2
+                  ? 'Two'
+                  : bookings.length === 3
+                    ? 'Three'
+                    : bookings.length === 4
+                      ? 'Four'
+                      : bookings.length}
+            </p>
           </div>
 
           <UserBookingList
@@ -68,16 +79,26 @@ const PageClient = ({ bookings, subscriptions }: Props) => {
             usFulfilled={false}
             paymentMode={''}
             merchantId={''}
+            merchantSlug={''}
             data={''}
           />
         </div>
-        <div className="w-full">
-          <h1 className="font-semibold text-lg md:text-xl">Subscriptions:</h1>
-          <UserSubscriptionTable
-            subscriptions={subscriptions}
-            // transactionsByDate={transactionsByDate}
-            // subscriptionsByMonth={subscriptionsByMonth}
-          />
+        <div className="w-full p-2">
+          <div className="w-full flex gap-4 p-2">
+            <h1 className="font-semibold text-lg md:text-xl">Subscriptions</h1>
+            <p className="md:hidden block">
+              {subscriptions.length === 1
+                ? 'One'
+                : subscriptions.length === 2
+                  ? 'Two'
+                  : subscriptions.length === 3
+                    ? 'Three'
+                    : subscriptions.length === 4
+                      ? 'Four'
+                      : subscriptions.length}
+            </p>
+          </div>
+          <UserSubscriptionList subscriptions={subscriptions} />
         </div>
       </div>
     </div>

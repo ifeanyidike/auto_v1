@@ -111,7 +111,11 @@ const BookingDetail = (props: Props) => {
                   <div className="flex gap-1">
                     <PersonIcon />
                     <p className={`${dmSans.className}`}>
-                      {item.user?.firstName} {item.user?.lastName}
+                      {item?.user?.firstName || item?.user?.lastName
+                        ? `${item.user?.firstName || ''} ${
+                            item.user?.lastName || ''
+                          }`
+                        : item.user?.email}
                     </p>
                   </div>
                 </div>
@@ -274,7 +278,7 @@ const BookingDetail = (props: Props) => {
 
                 <div className="flex gap-1 items-center capitalize">
                   <p className={`${dmSans.className} text-lg font-mono`}>
-                    ₦{item.amount.toLocaleString()}
+                    {`₦${item.amount.toLocaleString()}`}
                   </p>
                 </div>
               </div>

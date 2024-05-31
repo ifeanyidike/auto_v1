@@ -20,15 +20,15 @@ async function Layout({ children }: { children: React.ReactNode }) {
   const merchantClient = new Merchant();
   const merchant = await merchantClient.getOne({ slug });
 
-  const sessionUser = await Auth0.getSessionUser();
+  const user = await Auth0.findOrCreateAuth0User();
 
-  if (merchant?.email !== sessionUser?.email) {
-    return <MerchantUnauthorizedPage />;
+  if (merchant?.email !== user?.email) {
+    return <MerchantUnauthorizedPage isLoggedIn={!!user?.email} />;
   }
 
   return (
     <div className="relative flex bg-cyanBlue/40 min-h-screen">
-      <Sidebar logo={merchant.logo} />
+      <Sidebar logo={merchant?.logo!} />
       <div className="flex flex-col flex-1 overflow-hidden">{children}</div>
     </div>
   );

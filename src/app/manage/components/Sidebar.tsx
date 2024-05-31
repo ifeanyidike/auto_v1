@@ -6,7 +6,6 @@ import MenuItem from './SidebarMenuItem';
 import { MenuEnum } from '../types/menu';
 import BookingIcon from '~/commons/icons/BookingIcon';
 import CalendarIcon from '~/commons/icons/CalendarIcon';
-import ProfileIcon from '~/commons/icons/ProfileIcon';
 import ChevroLeftRoundedIcon from '~/commons/icons/ChevroLeftRoundedIcon';
 import { useUser } from '@auth0/nextjs-auth0/client';
 import EllipsisIcon from '~/commons/icons/EllipsisIcon';
@@ -18,10 +17,27 @@ import { hideAdminBar } from '~/states/utility';
 import { manRope } from '~/font';
 import UsersIcon from '~/commons/icons/UsersIcon';
 import DocumentIcon from '~/commons/icons/DocumentIcon';
+import SettingsIcon from '~/commons/icons/SettingsIcon';
 
 type Props = {
   logo: string | null;
 };
+const SiteDocument = () => (
+  <svg
+    fill="none"
+    viewBox="0 0 24 24"
+    strokeWidth={1.5}
+    stroke="currentColor"
+    className="w-5 h-5"
+  >
+    <path
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m2.25 0H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z"
+    />
+  </svg>
+);
+
 const Sidebar = (props: Props) => {
   const [selected, setIsSelected] = useState<MenuEnum | null>(null);
   const [openOptions, toggleOptions] = useState(false);
@@ -43,9 +59,9 @@ const Sidebar = (props: Props) => {
     <div
       className={`${
         hideBar.get() && 'hidden'
-      }  z-30 sticky top-0 max-sm:h-screen h-screen w-48 ${
+      }  z-[90] sticky top-0 max-sm:h-screen h-screen w-48 ${
         manRope.className
-      } max-sm:absolute text-sm flex-initial flex flex-col items-center gap-4 bg-white  border-r border-stone-200 py-5  ease-in duration-100`}
+      }  max-sm:fixed text-sm flex-initial flex flex-col items-center gap-4 bg-white  border-r border-stone-200 py-5  ease-in duration-100`}
     >
       <button
         onClick={() => hideAdminBar.set(true)}
@@ -210,22 +226,27 @@ const Sidebar = (props: Props) => {
         /> */}
 
         <MenuItem
-          href="account"
-          isSelected={selected === MenuEnum.account}
+          href="settings"
+          isSelected={selected === MenuEnum.settings}
           setIsSelected={setIsSelected}
-          title={MenuEnum.account}
+          title={MenuEnum.settings}
           // isCollapsed={isCollapsed}
           Icon={
-            <ProfileIcon
+            <SettingsIcon
               strokeWidth="2"
-              //   strokeColor={
-              //     selected === MenuEnum.account ? 'currentColor' : '#484848'
-              //   }
               strokeColor="currentColor"
               width="18"
               height="18"
             />
           }
+        />
+
+        <div className="horizontal w-full h-[1px] mt-8 bg-gray-300"></div>
+        <MenuItem
+          href="visit_page"
+          title={MenuEnum.page}
+          // isCollapsed={isCollapsed}
+          Icon={<SiteDocument />}
         />
       </div>
 

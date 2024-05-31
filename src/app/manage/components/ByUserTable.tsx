@@ -24,6 +24,7 @@ const ByUserTable = (props: Props) => {
     let name = '';
     let firstName = props.data?.firstName;
     let lastName = props.data?.lastName;
+    if (!firstName && !lastName) return props.data?.email;
 
     if (firstName) name += firstName;
     if (!firstName && lastName) name += lastName;
