@@ -1,6 +1,7 @@
 'use client';
 import React, { useRef } from 'react';
 import html2pdf from 'html2pdf.js';
+import { useUser } from '@auth0/nextjs-auth0/client';
 import Image from 'next/image';
 import Logo from '~/commons/icons/Logo';
 
@@ -24,6 +25,8 @@ type Invoice = {
 };
 
 const InvoicePage = ({ invoice }: Props) => {
+  const { user } = useUser();
+
   const invoiceRef = useRef<HTMLDivElement>(null);
 
   const handleDownloadPDF = () => {
@@ -93,27 +96,30 @@ const InvoicePage = ({ invoice }: Props) => {
         </div>
       </div>
       <div className="flex flex-col items-center md:flex-row md:justify-between md:items-center mb-4">
-        <div className="text-center md:text-left p-4">
-          <h5 className="font-bold">Booker's Details:</h5>
-          <p className="font-bold">
-            {' '}
-            Name:{' '}
-            <span className="font-normal">
-              {invoice.user?.firstName} {invoice.user.lastName}
-            </span>{' '}
-          </p>
-          <p className="font-bold">
-            {' '}
-            Email: <span className="font-normal">{invoice.user.email}</span>
-          </p>
-          <Image
-            src={invoice.user.imgUrl}
-            width={40}
-            height={40}
-            alt={invoice.user.id}
-            className="rounded-full mt-3"
-          />
-        </div>
+        {user && (
+          <div className="text-center md:text-left p-4">
+            <h5 className="font-bold">Booker's Details:</h5>
+            <p className="font-bold">
+              {' '}
+              Name:{' '}
+              <span className="font-normal">
+                {invoice.user?.firstName} {invoice.user.lastName}
+              </span>{' '}
+            </p>
+            <p className="font-bold">
+              {' '}
+              Email: <span className="font-normal">{invoice.user.email}</span>
+            </p>
+            <Image
+              src={invoice.user.imgUrl}
+              width={40}
+              height={40}
+              alt={invoice.user.id}
+              className="rounded-full mt-3"
+            />
+          </div>
+        )}
+
         <div className="text-center p-4"></div>
         <div className="text-center md:text-left p-4">
           <p className="mr-1 font-bold">

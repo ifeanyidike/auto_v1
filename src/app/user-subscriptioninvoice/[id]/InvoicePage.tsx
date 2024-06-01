@@ -9,25 +9,18 @@ type Props = {
   invoice: Invoice;
 };
 
-// type Invoice = {
-//   id: string;
-//   createdAt: Date;
-//   merchant: any;
-//   merchantService: any;
-//   pricingMode: string;
-//   discounts: [];
-//   service: string;
-//   status: string;
-
-//   //   info: string;
-//   //   location: string;
-//   //   userId: string;
-//   user: string;
-//   amount: any;
-//   //   isPaid: boolean;
-//   //   isFulfilled: boolean;
-//   //   paymentMode: string;
-// };
+type Invoice = {
+  id: string;
+  createdAt: Date;
+  merchant: any;
+  merchantService: any;
+  pricingMode: string;
+  discounts: [];
+  service: string;
+  status: string;
+  user: string;
+  amount: any;
+};
 
 const InvoicePage = ({ invoice }: Props) => {
   const { user } = useUser();
