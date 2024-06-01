@@ -8,25 +8,6 @@ import UserSubscriptionInvoice from './UserSubscriptionInvoice';
 import ProtectedPage from '~/server/protectedPage';
 
 const Invoice = async () => {
-  // export default async function Invoice(data: {
-  //   id: string;
-  //   createdAt: Date;
-  //   merchant: any;
-  //   merchantService: any;
-  //   pricingMode: string;
-  //   discounts: [];
-  //   service: string;
-  //   status: string;
-
-  //   //   info: string;
-  //   //   location: string;
-  //   userId: string;
-  //   //   user: any;
-  //   amount: any;
-  //   //   isPaid: boolean;
-  //   //   isFulfilled: boolean;
-  //   //   paymentMode: string;
-  // }) {
   const user = await Auth0.findOrCreateAuth0User();
 
   const userId = user?.id;

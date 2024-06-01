@@ -8,20 +8,20 @@ type Props = {
   invoice: Invoice;
 };
 
-type Invoice = {
-  id: string;
-  createdAt: Date;
-  merchant: any;
-  merchantService: any;
-  info: string;
-  location: string;
-  userId: string;
-  user: any;
-  amount: any;
-  isPaid: boolean;
-  isFulfilled: boolean;
-  paymentMode: string;
-};
+// type Invoice = {
+//   id: string;
+//   createdAt: Date;
+//   merchant: any;
+//   merchantService: any;
+//   info: string;
+//   location: string;
+//   userId: string;
+//   user: any;
+//   amount: any;
+//   isPaid: boolean;
+//   isFulfilled: boolean;
+//   paymentMode: string;
+// };
 
 const InvoicePage = ({ invoice }: Props) => {
   console.log(invoice.createdAt);

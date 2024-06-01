@@ -15,7 +15,7 @@ const UserSubscriptionInvoice = ({ subscriptions }: Props) => {
   const invoice = subscriptions.find(
     item => String(item.id) === String(invoiceId)
   );
-  console.log(invoice);
+  
   return (
     <div className="p-8">{invoice && <InvoicePage invoice={invoice} />}</div>
   );
