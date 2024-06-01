@@ -71,16 +71,16 @@ const PageClient = ({ bookings, subscriptions }: Props) => {
 
           <UserBookingList
             bookings={bookings}
-            info={''}
-            location={''}
-            userId={''}
-            amount={''}
-            isPaid={true}
-            usFulfilled={false}
-            paymentMode={''}
-            merchantId={''}
-            merchantSlug={''}
-            data={''}
+            // info={''}
+            // location={''}
+            // userId={''}
+            // amount={''}
+            // isPaid={true}
+            // usFulfilled={false}
+            // paymentMode={''}
+            // merchantId={''}
+            // merchantSlug={''}
+            // data={''}
           />
         </div>
         <div className="w-full p-2">

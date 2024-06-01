@@ -7,7 +7,6 @@ import { notFound } from 'next/navigation';
 import Subscription, {
   type SubscriptionItem,
 } from '~/app/api/subscription/logic';
-
 import BackToPage from '../manage/components/BackToPage';
 import { Transaction } from '~/server/payment/transaction';
 import Util from '~/server/utils';
@@ -15,22 +14,18 @@ import ProtectedPage from '~/server/protectedPage';
 
 const UserProfilePage = async () => {
   const user = await Auth0.findOrCreateAuth0User();
-  console.log('This is the user here', user);
+
   const userId = user?.id;
 
   if (!userId) {
     return notFound();
   }
 
-  // const { userId } = data;
-
   const userTransaction = new Transaction();
 
   const booking = new Booking();
 
   const bookings = await booking.findByUser(userId);
-  console.log('This is the User Id', userId);
-  console.log('This is the bookings', bookings);
 
   const subscription = new Subscription();
 

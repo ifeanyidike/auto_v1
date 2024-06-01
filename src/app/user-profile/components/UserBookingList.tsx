@@ -20,16 +20,16 @@ import Link from 'next/link';
 
 type Props = {
   bookings: bookingByUserItem[];
-  info: string;
-  location: string;
-  userId: string;
-  amount: string;
-  isPaid: boolean;
-  usFulfilled: boolean;
-  paymentMode: string;
-  merchantId: string;
-  merchantSlug: string;
-  data: string;
+  // info: string;
+  // location: string;
+  // userId: string;
+  // amount: string;
+  // isPaid: boolean;
+  // usFulfilled: boolean;
+  // paymentMode: string;
+  // merchantId: string;
+  // merchantSlug: string;
+  // data: string;
 };
 type Filter = {
   bookedOn: Date;
