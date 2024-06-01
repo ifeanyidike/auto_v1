@@ -1,30 +1,38 @@
 import React from 'react';
-
+import Auth0 from '~/server/auth0';
+import { notFound } from 'next/navigation';
 import TopMenu from '../../manage/components/TopMenu';
 import Subscription from '~/app/api/subscription/logic';
 import BackToPage from '../../manage/components/BackToPage';
 import UserSubscriptionInvoice from './UserSubscriptionInvoice';
+import ProtectedPage from '~/server/protectedPage';
 
-export default async function Invoice(data: {
-  id: string;
-  createdAt: Date;
-  merchant: any;
-  merchantService: any;
-  pricingMode: string;
-  discounts: [];
-  service: string;
-  status: string;
+const Invoice = async () => {
+  // export default async function Invoice(data: {
+  //   id: string;
+  //   createdAt: Date;
+  //   merchant: any;
+  //   merchantService: any;
+  //   pricingMode: string;
+  //   discounts: [];
+  //   service: string;
+  //   status: string;
 
-  //   info: string;
-  //   location: string;
-  userId: string;
-  //   user: any;
-  amount: any;
-  //   isPaid: boolean;
-  //   isFulfilled: boolean;
-  //   paymentMode: string;
-}) {
-  const { userId } = data;
+  //   //   info: string;
+  //   //   location: string;
+  //   userId: string;
+  //   //   user: any;
+  //   amount: any;
+  //   //   isPaid: boolean;
+  //   //   isFulfilled: boolean;
+  //   //   paymentMode: string;
+  // }) {
+  const user = await Auth0.findOrCreateAuth0User();
+
+  const userId = user?.id;
+  if (!userId) {
+    return notFound();
+  }
 
   const subscription = new Subscription();
 
@@ -54,4 +62,7 @@ export default async function Invoice(data: {
       </div>
     </div>
   );
-}
+};
+export default ProtectedPage(Invoice, {
+  returnTo: `/user_profile`,
+});
