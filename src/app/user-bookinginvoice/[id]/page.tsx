@@ -1,21 +1,19 @@
 import React from 'react';
+import Auth0 from '~/server/auth0';
+import { notFound } from 'next/navigation';
 import TopMenu from '../../manage/components/TopMenu';
 import Booking from '~/app/api/booking/logic';
 import BackToPage from '../../manage/components/BackToPage';
 import UserBookingInvoice from './UserBookingInvoice';
+import ProtectedPage from '~/server/protectedPage';
 
-export default async function Invoice(data: {
-  userId: string;
-  info: string;
-  location: string;
-  amount: string;
-  status: string;
-  service: string;
-  discounts: string;
-  merchantServiceId: string;
-  planId: string;
-}) {
-  const { userId } = data;
+const Invoice = async () => {
+  const user = await Auth0.findOrCreateAuth0User();
+
+  const userId = user?.id;
+  if (!userId) {
+    return notFound();
+  }
 
   const booking = new Booking();
 
@@ -43,4 +41,8 @@ export default async function Invoice(data: {
       </div>
     </div>
   );
-}
+};
+
+export default ProtectedPage(Invoice, {
+  returnTo: `/user_profile`,
+});
