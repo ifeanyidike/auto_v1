@@ -4,9 +4,10 @@ import html2pdf from 'html2pdf.js';
 import { useUser } from '@auth0/nextjs-auth0/client';
 import Image from 'next/image';
 import Logo from '~/commons/icons/Logo';
+import { bookingByUserItem } from '~/app/api/booking/logic';
 
 type Props = {
-  invoice: Invoice;
+  invoice: bookingByUserItem;
 };
 
 type Invoice = {
@@ -46,25 +47,25 @@ const InvoicePage = ({ invoice }: Props) => {
     window.print();
   };
 
-  const addressParts = invoice.merchant.address.split(',');
+  const addressParts = invoice?.merchant?.address?.split(',');
 
   return (
     <div ref={invoiceRef} className="bg-white rounded-lg p-4">
       <div className="flex justify-between items-center">
         <span
           className={` w-40 my-0 mx-auto font-bold text-center p-2 rounded-full ${
-            invoice.isPaid ? 'text-green-600' : 'text-red-600'
+            invoice?.isPaid ? 'text-green-600' : 'text-red-600'
           }`}
         >
           {' '}
-          {invoice.isPaid ? 'PAID' : 'NOT PAID'}
+          {invoice?.isPaid ? 'PAID' : 'NOT PAID'}
         </span>
         <span
           className={`rounded-full p-2 text-sm mt-4 font-bold ${
-            invoice.isFulfilled ? 'text-green-600' : 'text-red-600'
+            invoice?.isFullfilled ? 'text-green-600' : 'text-red-600'
           }`}
         >
-          {invoice.isFulfilled ? 'FULFILLED' : 'NOT FULFILLED'}
+          {invoice?.isFullfilled ? 'FULFILLED' : 'NOT FULFILLED'}
         </span>
         <h5 className="text-xl font-bold">
           {' '}
@@ -75,12 +76,12 @@ const InvoicePage = ({ invoice }: Props) => {
 
       <div className="flex flex-col md:flex-row justify-between items-center md:px-4 p-4">
         <div className="">
-          {invoice.merchant.logo ? (
+          {invoice?.merchant?.logo ? (
             <Image
-              src={invoice.merchant.logo ? invoice.merchant.logo : ''}
+              src={invoice?.merchant?.logo ? invoice?.merchant?.logo : ''}
               width={30}
               height={10}
-              alt={invoice.merchant.name}
+              alt={invoice?.merchant?.name}
             />
           ) : (
             <Logo />
@@ -88,10 +89,10 @@ const InvoicePage = ({ invoice }: Props) => {
         </div>
         <div className="text-center">
           <h3 className="font-bold text-4xl text-shadow-xl">
-            {invoice.merchant.name.toUpperCase()}
+            {invoice?.merchant?.name?.toUpperCase()}
           </h3>
           <p className="text-sm md:text-10 italic px-3">
-            {invoice.merchant.caption}
+            {invoice?.merchant?.caption}
           </p>
         </div>
       </div>
@@ -103,26 +104,26 @@ const InvoicePage = ({ invoice }: Props) => {
               {' '}
               Name:{' '}
               <span className="font-normal">
-                {invoice.user?.firstName} {invoice.user.lastName}
+                {invoice?.user?.firstName} {invoice?.user?.lastName}
               </span>{' '}
             </p>
             <p className="font-bold">
               {' '}
-              Email: <span className="font-normal">{invoice.user.email}</span>
+              Email: <span className="font-normal">{invoice?.user?.email}</span>
             </p>
-            <Image
-              src={invoice.user.imgUrl}
+            {/* <Image
+              src={invoice?.user?.imgUrl}
               width={40}
               height={40}
-              alt={invoice.user.id}
+              alt={invoice?.user?.id}
               className="rounded-full mt-3"
-            />
+            /> */}
           </div>
         )}
 
         <div className="text-center p-4"></div>
         <div className="text-center md:text-left p-4">
-          <p className="mr-1 font-bold">
+          {/* <p className="mr-1 font-bold">
             Street: <span className="font-normal">{addressParts[0]}</span>
           </p>
 
@@ -135,7 +136,7 @@ const InvoicePage = ({ invoice }: Props) => {
             <p className="mr-1 font-bold">
               Country: <span className="font-normal"> {addressParts[2]}</span>
             </p>
-          )}
+          )} */}
 
           <p className="font-bold">
             Service location:{' '}
@@ -144,11 +145,13 @@ const InvoicePage = ({ invoice }: Props) => {
           {/* <p>{invoice.merchant.address?.slice(-8)}</p> */}
           <p className="font-bold">
             {' '}
-            Email: <span className="font-normal">{invoice.merchant.email}</span>
+            Email:{' '}
+            <span className="font-normal">{invoice?.merchant?.email}</span>
           </p>
           <p className="font-bold">
             {' '}
-            Tel: <span className="font-normal">{invoice.merchant.phoneNo}</span>
+            Tel:{' '}
+            <span className="font-normal">{invoice?.merchant?.phoneNo}</span>
           </p>
           <p className="text-blue-600 font-bold">
             Date :
@@ -174,9 +177,10 @@ const InvoicePage = ({ invoice }: Props) => {
           <tbody className="text-left">
             <tr>
               <td className="border border-gray-200 px-4 py-2">
-                <h5>{invoice.merchantService.service.title}</h5>
+                <h5>{invoice?.merchantService?.service?.title}</h5>
                 <p className="text-sm">
-                  {invoice.merchantService.description.slice(0, 40)}...
+                  {invoice?.merchantService?.service?.description?.slice(0, 40)}
+                  ...
                 </p>
               </td>
               <td className="border border-gray-200 px-4 py-2">
@@ -191,16 +195,17 @@ const InvoicePage = ({ invoice }: Props) => {
               </td>
               <td className="border border-gray-200 px-4 py-2">
                 <h5>
-                  {invoice.merchantService?.vat?.length
+                  {/* {invoice.merchantService?.vat?.length
                     ? invoice.merchantService.vat
-                    : 0}
+                    : 0} */}
+                  0
                 </h5>
               </td>
               <td className="border border-gray-200 px-4 py-2">
                 <h5>
-                  {(
-                    invoice.amount - (invoice.merchantService?.discount || 0)
-                  ).toLocaleString(undefined, { minimumFractionDigits: 2 })}
+                  {invoice.amount.toLocaleString(undefined, {
+                    minimumFractionDigits: 2,
+                  })}
                 </h5>
               </td>
             </tr>
@@ -215,29 +220,27 @@ const InvoicePage = ({ invoice }: Props) => {
               </td>
               <td className="border border-gray-200 px-4 py-2 text-left w-1/5">
                 <p>
-                  {(
-                    invoice.amount - (invoice.merchantService?.discount || 0)
-                  ).toLocaleString(undefined, { minimumFractionDigits: 2 })}
+                  {invoice.amount.toLocaleString(undefined, {
+                    minimumFractionDigits: 2,
+                  })}
                 </p>
                 <p>
-                  {' '}
+                  {/* {' '}
                   {invoice.merchantService?.discount?.length
                     ? invoice.merchantService.discount[0]
-                    : 0}
+                    : 0} */}
+                  0
                 </p>
                 <p>
-                  {' '}
+                  {/* {' '}
                   {invoice.merchantService?.vat?.length
                     ? invoice.merchantService.vat
-                    : 0}
+                    : 0} */}
+                  0
                 </p>
                 <h3 className="text-blue-600 font-bold">
                   &#x20a6;{' '}
-                  {(
-                    invoice.amount -
-                    (invoice.merchantService?.discount || 0) +
-                    (invoice.merchantService?.vat || 0)
-                  ).toLocaleString(undefined, {
+                  {invoice.amount.toLocaleString(undefined, {
                     minimumFractionDigits: 2,
                   })}{' '}
                 </h3>

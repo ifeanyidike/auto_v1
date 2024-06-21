@@ -2,6 +2,7 @@
 import { type UserProfile } from '@auth0/nextjs-auth0/client';
 import Image from 'next/image';
 import React, { useState } from 'react';
+import Link from 'next/link';
 import { useClickOutside } from '~/hooks/useClickOutside';
 
 type Props = {
@@ -44,6 +45,9 @@ const DropdownUserMenu = (props: Props) => {
                 />
                 <span>{user.name}</span>
               </div>
+              <Link href={'/user-profile'}>
+                <span>My Profile</span>
+              </Link>
               <a className="border-t-[1px] py-2 mt-4" href="/api/auth/logout">
                 Sign Out
               </a>

@@ -140,7 +140,7 @@ const SubscriptionList = (props: Props) => {
           </button>
 
           <button className="flex gap-2 w-full items-center p-4 hover:bg-stone-200">
-            <Link
+            {/* <Link
               href={`/user-subscriptioninvoice/${popupOpen.id}`}
               target="_blank"
               className="flex gap-2 w-full items-center py-2 px-4 hover:bg-stone-200"
@@ -149,7 +149,8 @@ const SubscriptionList = (props: Props) => {
                 <DocumentIcon />
               </span>
               <span>View invoice</span>
-            </Link>
+            </Link> */}
+            <span>View invoice</span>
           </button>
           <button className="flex gap-2 w-full items-center p-4 hover:bg-stone-200 hover:rounded-b-xl">
             <span>

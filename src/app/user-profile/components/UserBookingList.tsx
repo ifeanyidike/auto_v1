@@ -163,7 +163,7 @@ const UserBookingList = (props: Props) => {
             </span>
             <span>View details</span>
           </button>
-          <Link
+          {/* <Link
             href={`/user-bookinginvoice/${popupOpen.id}`}
             target="_blank"
             className="flex gap-2 w-full items-center p-4 hover:bg-stone-200"
@@ -172,7 +172,8 @@ const UserBookingList = (props: Props) => {
               <DocumentIcon />
             </span>
             <span>View invoice</span>
-          </Link>
+          </Link> */}
+          <span>View invoice</span>
 
           <button className="flex gap-2 w-full items-center p-4">
             <span>

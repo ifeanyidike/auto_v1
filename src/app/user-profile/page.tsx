@@ -21,7 +21,7 @@ const UserProfilePage = async () => {
     return notFound();
   }
 
-  const userTransaction = new Transaction();
+  // const userTransaction = new Transaction();
 
   const booking = new Booking();
 
@@ -31,18 +31,18 @@ const UserProfilePage = async () => {
 
   const subscriptions = await subscription.findByUser(userId);
 
-  const transactionsByDate = Util.sortTransactionsByDate(
-    subscriptions as unknown as SubscriptionItem[],
-    bookings as unknown as BookingItem[]
-  );
+  // const transactionsByDate = Util.sortTransactionsByDate(
+  //   subscriptions as unknown as SubscriptionItem[],
+  //   bookings as unknown as BookingItem[]
+  // );
 
-  const subscriptionsByMonth = Util.organizeSubscriptionByMonth(
-    subscriptions as unknown as SubscriptionItem[]
-  );
+  // const subscriptionsByMonth = Util.organizeSubscriptionByMonth(
+  //   subscriptions as unknown as SubscriptionItem[]
+  // );
 
-  const bookingsByMonth = Util.organizeBookingByMonth(
-    bookings as unknown as BookingItem[]
-  );
+  // const bookingsByMonth = Util.organizeBookingByMonth(
+  //   bookings as unknown as BookingItem[]
+  // );
 
   return (
     <div className={`w-full bg-white flex flex-col text-inherit mb-11`}>
@@ -52,7 +52,7 @@ const UserProfilePage = async () => {
         component={
           <div className="flex justify-between items-center w-full">
             <BackToPage
-              toHref="/manage/"
+              toHref="/home/"
               prevTitle="home"
               currTitle="Profile Page"
             />
