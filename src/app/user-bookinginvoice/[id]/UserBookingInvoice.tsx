@@ -13,9 +13,7 @@ const UserBookingInvoice = ({ bookings }: Props) => {
 
   const invoice = bookings.find(item => String(item.id) === String(invoiceId));
 
-  return (
-    <div className="p-8">{invoice && <InvoicePage invoice={invoice} />}</div>
-  );
+  return <div className="p-8">{invoice && <InvoicePage />}</div>;
 };
 
 export default UserBookingInvoice;
