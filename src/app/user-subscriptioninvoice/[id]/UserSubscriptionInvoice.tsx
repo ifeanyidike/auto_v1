@@ -9,14 +9,14 @@ type Props = {
   subscriptions: subscriptionByUserItem[];
 };
 
-const UserSubscriptionInvoice = ({ subscriptions }: Props) => {
+const UserSubscriptionInvoice = () => {
   const { id: invoiceId } = useParams<{ id: string }>();
 
-  const invoice = subscriptions.find(
-    item => String(item.id) === String(invoiceId)
-  );
-  console.log(invoice);
-  return <div className="p-8">{invoice && <InvoicePage />}</div>;
+  // const invoice = subscriptions.find(
+  //   item => String(item.id) === String(invoiceId)
+  // );
+
+  return <div className="p-8">{<InvoicePage />}</div>;
 };
 
 export default UserSubscriptionInvoice;
