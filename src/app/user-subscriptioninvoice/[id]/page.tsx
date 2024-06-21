@@ -36,9 +36,9 @@ const Invoice = async () => {
 
       <div className="w-full bg-gray-400">
         <div className="w-full flex justify-center mx-auto">
-          {subscriptions && (
-            <UserSubscriptionInvoice  />
-          )}
+          {/* {subscriptions && (
+            <UserSubscriptionInvoice subscriptions={subscriptions} />
+          )} */}
         </div>
       </div>
     </div>
