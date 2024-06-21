@@ -16,7 +16,7 @@ const BookingInvoice = () => {
   return (
     <div>
       {invoice ? (
-        <InvoicePage invoice={invoice} />
+        <InvoicePage />
       ) : (
         <div className="text-center text-gray-700 mt-8"></div>
       )}
