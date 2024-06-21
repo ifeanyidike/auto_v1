@@ -15,11 +15,11 @@ const BookingInvoice = () => {
   console.log(invoice);
   return (
     <div>
-      {invoice ? (
+      {/* {invoice ? (
         <InvoicePage />
       ) : (
         <div className="text-center text-gray-700 mt-8"></div>
-      )}
+      )} */}
     </div>
   );
 };
