@@ -10,6 +10,7 @@ export type SubscriptionItem = Prisma.SubscriptionGetPayload<{
         discounts: true;
       };
     };
+    merchant: true;
     plan: true;
     user: true;
     fufillments: true;
