@@ -170,42 +170,16 @@ export default class Util {
     subscriptions: SubscriptionItem[],
     bookings: BookingItem[]
   ) {
-    // const formatted_subscriptions = subscriptions.flatMap(sub => {
-    //   const { title, type } = sub.merchantService.service || {};
-    //   const { firstName, lastName, email, imgUrl } = sub.user || {};
-    //   const name = firstName || '' + lastName || '';
-    //   return sub.fufillments?.map(f => ({
-    //     id: f.id,
-    //     serviceName: title!,
-    //     serviceType: type!,
-    //     imgUrl: imgUrl!,
-    //     userName: name || email!,
-    //     email: email,
-    //     amount: f.amountPaid.toNumber(),
-    //     type: 'subscription',
-    //     status: f.isFulfilled
-    //       ? 'Fulfilled'
-    //       : f.isPaid
-    //         ? 'Paid Not Fulfilled'
-    //         : 'Not Paid',
-    //     date: f.createdAt,
-    //   }));
-    // });
     const formatted_subscriptions = subscriptions.flatMap(sub => {
-      const { title = '', type = '' } = sub.merchantService.service || {};
-      const {
-        firstName = '',
-        lastName = '',
-        email = '',
-        imgUrl = '',
-      } = sub.user || {};
-      const name = `${firstName} ${lastName}`.trim() || email;
+      const { title, type } = sub.merchantService.service || {};
+      const { firstName, lastName, email, imgUrl } = sub.user || {};
+      const name = firstName || '' + lastName || '';
       return sub.fufillments?.map(f => ({
         id: f.id,
-        serviceName: title,
-        serviceType: type,
-        imgUrl: imgUrl,
-        userName: name,
+        serviceName: title!,
+        serviceType: type!,
+        imgUrl: imgUrl!,
+        userName: name || email!,
         email: email,
         amount: f.amountPaid.toNumber(),
         type: 'subscription',
@@ -218,52 +192,26 @@ export default class Util {
       }));
     });
 
-    // const formatted_bookings = bookings.map(b => {
-    //   const { title, type } = b.merchantService.service || {};
-    //   const { firstName, lastName, email, imgUrl } = b.user || {};
-    //   const name = firstName || '' + lastName || '';
+    const formatted_bookings = bookings.map(b => {
+      const { title, type } = b.merchantService.service || {};
+      const { firstName, lastName, email, imgUrl } = b.user || {};
+      const name = firstName || '' + lastName || '';
 
-    //   return {
-    //     id: b.id,
-    //     serviceName: title!,
-    //     serviceType: type!,
-    //     imgUrl: imgUrl!,
-    //     userName: name || email!,
-    //     email: email,
-    //     amount: b.amount,
-    //     type: 'booking',
-    //     status: b.isFullfilled
-    //       ? 'Fulfilled'
-    //       : b.isPaid
-    //         ? 'Paid Not Fulfilled'
-    //         : 'Not Paid',
-    //     date: b.createdAt,
-    //   };
-    // });
-    const formatted_bookings = bookings.flatMap(sub => {
-      const { title = '', type = '' } = sub.merchantService.service || {};
-      const {
-        firstName = '',
-        lastName = '',
-        email = '',
-        imgUrl = '',
-      } = sub.user || {};
-      const name = `${firstName} ${lastName}`.trim() || email;
       return {
-        id: sub.id,
-        serviceName: title,
-        serviceType: type,
-        imgUrl: imgUrl,
-        userName: name,
+        id: b.id,
+        serviceName: title!,
+        serviceType: type!,
+        imgUrl: imgUrl!,
+        userName: name || email!,
         email: email,
-        amount: sub.amount,
-        type: 'bookings',
-        status: sub.isFullfilled
+        amount: b.amount,
+        type: 'booking',
+        status: b.isFullfilled
           ? 'Fulfilled'
-          : sub.isPaid
+          : b.isPaid
             ? 'Paid Not Fulfilled'
             : 'Not Paid',
-        date: sub.createdAt,
+        date: b.createdAt,
       };
     });
 
