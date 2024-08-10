@@ -25,6 +25,13 @@ export type BookingItem = {
   createdAt: Date;
   updatedAt: Date;
 };
+
+export type bookingByUserItem = BookingItem & {
+  merchant: Prisma.MerchantGetPayload<
+    Prisma.MerchantDefaultArgs<DefaultArgs>
+  > | null;
+};
+
 export default class Booking extends Utility {
   constructor() {
     super();
@@ -167,11 +174,7 @@ export default class Booking extends Utility {
             paymentMode: d.paymentMode,
             createdAt: d.createdAt,
             updatedAt: d.updatedAt,
-          }) as BookingItem & {
-            merchant: Prisma.MerchantGetPayload<
-              Prisma.MerchantDefaultArgs<DefaultArgs>
-            > | null;
-          }
+          }) as bookingByUserItem,
       );
     });
   }

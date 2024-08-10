@@ -8,10 +8,10 @@ const ParentHeader = () => {
       <Link href="/">
         <Image
           className="cursor-pointer  mx-auto"
-          src="/images/logo.png"
+          src="/images/moxxillogo.png"
           alt="logo"
-          width={120}
-          height={50}
+          width={100}
+          height={100}
         />
       </Link>
       <div className="flex gap-2">

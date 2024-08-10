@@ -1,6 +1,7 @@
 'use client';
 import React, { useEffect } from 'react';
 import Logo from '~/commons/icons/Logo';
+import MoxxilLogo from '~/commons/icons/MoxxilLogo';
 import MenuToggle from '~/commons/icons/MenuToggle';
 import { useHookstate } from '@hookstate/core';
 import { getSubdomain, subdomainFunc, toggleNav } from '~/states/utility';
@@ -50,7 +51,12 @@ const MainMenu = (props: Props) => {
             height={50}
           />
         ) : (
-          <Logo />
+          <Image
+            width={100}
+            height={1 - 0}
+            src={'/images/moxxillogo.png'}
+            alt="moxxilimage"
+          />
         )}
       </Link>
       <div

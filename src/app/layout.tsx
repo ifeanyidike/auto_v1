@@ -23,7 +23,7 @@ export const metadata = {
   title: 'Moxxil Autos',
   description:
     'Moxxil: Empowering mechanics with their own online shop. Book and subscribe to expert auto services seamlessly.',
-  icons: [{ rel: 'icon', url: '/favicon.ico' }],
+  icons: [{ rel: 'icon', url: '/moxxil.png' }],
 };
 
 export default async function RootLayout({
@@ -58,14 +58,19 @@ export default async function RootLayout({
               <MobileMenu phoneNo={rawPhoneNo!} userIsAdmin={userIsAdmin} />
             </>
           )}
+
           <Suspense fallback={<Loading />}>
-            <Page
-              isAdminLogin={isAdminLogin}
-              merchantData={merchantData}
-              slug={slug}
-            >
-              {children}
-            </Page>
+            <div className="flex relative bg-cyanBlue/40">
+              <div className="flex flex-col flex-1 overflow-hidden">
+                <Page
+                  isAdminLogin={isAdminLogin}
+                  merchantData={merchantData}
+                  slug={slug}
+                >
+                  {children}
+                </Page>
+              </div>
+            </div>
           </Suspense>
           {!isAdminLogin && slug && <Footer merchantData={merchantData} />}
         </body>

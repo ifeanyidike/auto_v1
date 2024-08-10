@@ -25,6 +25,7 @@ export default class Auth0 {
 
   public static async findOrCreateAuth0User() {
     const auth0User = await Auth0.getSessionUser();
+
     if (!auth0User) return null;
 
     const UserLogic = new User();

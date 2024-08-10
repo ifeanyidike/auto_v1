@@ -7,6 +7,7 @@ import ReviewCards from '~/components/ReviewCards';
 import Link from 'next/link';
 import ArrowRight from '~/commons/icons/ArrowRight';
 import AllFAQs from '~/components/AllFAQs';
+import ReadMore from '~/components/ReadMore';
 import Util from '~/server/utils';
 import { notFound, redirect } from 'next/navigation';
 import MerchantService from './api/merchant_service/logic';
@@ -46,13 +47,17 @@ export default async function Home() {
             <p
               className={`${nunitoSans.className} font-semibold text-6xl  text-content-light max-md:text-4xl `}
             >
-              {merchant?.caption ??
+              {merchant?.caption?.substring(0, 43) ??
                 'This is a sample caption. Please add your caption in the admin page.'}
             </p>
-            <p className={`text-dark`}>
-              {merchant?.shortDescription ??
-                'This is a sample description please add a short description in the admin page.'}
-            </p>
+            <ReadMore
+              text={
+                merchant?.shortDescription ??
+                'This is a sample description please add a short description in the admin page.'
+              }
+              maxLength={200}
+            />
+
             <div className="flex justify-between max-md:flex-col max-md:gap-3">
               {/* <Button
                 hasGradient={true}

@@ -17,7 +17,7 @@ const Subscription = async ({
 }) => {
   const id = searchParams?.service_id as string;
   // @ts-ignore
-  globalThis.service_id = undefined;
+  globalThis.serviceId = undefined;
 
   const user = await Auth0.findOrCreateAuth0User();
 

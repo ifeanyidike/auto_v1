@@ -1,11 +1,13 @@
 // 'use client';
 // import React, { useRef } from 'react';
 // import html2pdf from 'html2pdf.js';
+// import { useUser } from '@auth0/nextjs-auth0/client';
 // import Image from 'next/image';
 // import Logo from '~/commons/icons/Logo';
+// import { subscriptionByUserItem } from '~/app/api/subscription/logic';
 
 // type Props = {
-//   invoice: Invoice;
+//   invoice: subscriptionByUserItem;
 // };
 
 // type Invoice = {
@@ -13,17 +15,17 @@
 //   createdAt: Date;
 //   merchant: any;
 //   merchantService: any;
-//   info: string;
-//   location: string;
-//   userId: string;
-//   user: any;
+//   pricingMode: string;
+//   discounts: [];
+//   service: string;
+//   status: string;
+//   user: string;
 //   amount: any;
-//   isPaid: boolean;
-//   isFulfilled: boolean;
-//   paymentMode: string;
 // };
 
 // const InvoicePage = ({ invoice }: Props) => {
+//   const { user } = useUser();
+
 //   const invoiceRef = useRef<HTMLDivElement>(null);
 
 //   const handleDownloadPDF = () => {
@@ -43,38 +45,38 @@
 //     window.print();
 //   };
 
-//   const addressParts = invoice.merchant.address.split(',');
+//   const addressParts = invoice!.merchant!.address!.split(',');
 
 //   return (
-//     <div ref={invoiceRef} className="bg-white rounded-lg p-4">
-//       <div className="flex justify-between items-center">
-//         <span
-//           className={` w-40 my-0 mx-auto font-bold text-center p-2 rounded-full ${
-//             invoice.isPaid ? 'text-green-600' : 'text-red-600'
+//     <div ref={invoiceRef} className="bg-white rounded-lg p-4 shadow-2xl">
+//       <div className="w-full px-3 bg-blue-200 border flex justify-between items-center rounded-lg shadow-lg">
+//         <p className="">
+//           <span className="font-bold text-center text-blue-500">
+//             {invoice?.merchantService?.service?.type}
+//           </span>
+//         </p>
+//         <p
+//           className={`font-bold text-center p-2 rounded-full ${
+//             invoice.status === 'active' ? 'text-green-600' : 'text-red-600'
 //           }`}
 //         >
 //           {' '}
-//           {invoice.isPaid ? 'PAID' : 'NOT PAID'}
-//         </span>
-//         <span
-//           className={`rounded-full p-2 text-sm mt-4 font-bold ${
-//             invoice.isFulfilled ? 'text-green-600' : 'text-red-600'
-//           }`}
-//         >
-//           {invoice.isFulfilled ? 'FULFILLED' : 'NOT FULFILLED'}
-//         </span>
-//         <h5 className="text-xl font-bold">
-//           {' '}
-//           InvoiceNo.{' '}
-//           <span className="text-sm text-italic">{invoice.id?.slice(-5)}</span>
-//         </h5>{' '}
+//           {invoice.status.toUpperCase()}
+//         </p>{' '}
+//         <p className="">
+//           <h5 className="text-xl font-bold">
+//             {' '}
+//             InvoiceNo.{' '}
+//             <span className="text-sm text-italic">{invoice.id?.slice(-5)}</span>
+//           </h5>{' '}
+//         </p>
 //       </div>
 
 //       <div className="flex flex-col md:flex-row justify-between items-center md:px-4 p-4">
 //         <div className="">
-//           {invoice.merchant.logo ? (
+//           {invoice?.merchant?.logo ? (
 //             <Image
-//               src={invoice.merchant.logo ? invoice.merchant.logo : ''}
+//               src={invoice?.merchant?.logo ? invoice?.merchant?.logo : ''}
 //               width={30}
 //               height={10}
 //               alt={invoice.merchant.name}
@@ -85,64 +87,70 @@
 //         </div>
 //         <div className="text-center">
 //           <h3 className="font-bold text-4xl text-shadow-xl">
-//             {invoice.merchant.name.toUpperCase()}
+//             {invoice?.merchant?.name?.toUpperCase()}
 //           </h3>
 //           <p className="text-sm md:text-10 italic px-3">
-//             {invoice.merchant.caption}
+//             {invoice?.merchant?.caption}
 //           </p>
 //         </div>
 //       </div>
 //       <div className="flex flex-col items-center md:flex-row md:justify-between md:items-center mb-4">
-//         <div className="text-center md:text-left p-4">
-//           <h5 className="font-bold">Booker's Details:</h5>
-//           <p className="font-bold">
-//             {' '}
-//             Name:{' '}
-//             <span className="font-normal">
-//               {invoice.user?.firstName} {invoice.user.lastName}
-//             </span>{' '}
-//           </p>
-//           <p className="font-bold">
-//             {' '}
-//             Email: <span className="font-normal">{invoice.user.email}</span>
-//           </p>
-//           <Image
-//             src={invoice.user.imgUrl}
-//             width={40}
-//             height={40}
-//             alt={invoice.user.id}
-//             className="rounded-full mt-3"
-//           />
-//         </div>
+//         {user && (
+//           <div className="text-center md:text-left p-4">
+//             <h5 className="font-bold">Subscriber's Detail:</h5>
+//             <p className="font-bold">
+//               {' '}
+//               Name: <span className="font-normal">{user.name}</span>{' '}
+//             </p>
+//             <p className="font-bold">
+//               {' '}
+//               Email: <span className="font-normal">{user.email}</span>
+//             </p>
+//             {user && user.picture ? (
+//               <Image
+//                 src={user?.picture}
+//                 width={50}
+//                 height={50}
+//                 alt={''}
+//                 className="rounded-full"
+//               />
+//             ) : (
+//               <Image
+//                 src={'/images/avatar.webp'}
+//                 width={20}
+//                 height={20}
+//                 alt={''}
+//                 className="rounded-lg"
+//               />
+//             )}
+//           </div>
+//         )}
+
 //         <div className="text-center p-4"></div>
 //         <div className="text-center md:text-left p-4">
 //           <p className="mr-1 font-bold">
 //             Street: <span className="font-normal">{addressParts[0]}</span>
 //           </p>
 
-//           {addressParts.length > 1 && (
+//           {addressParts?.length > 1 && (
 //             <p className="mr-1 font-bold">
 //               City: <span className="font-normal"> {addressParts[1]}</span>
 //             </p>
 //           )}
-//           {addressParts.length > 2 && (
+//           {addressParts?.length > 2 && (
 //             <p className="mr-1 font-bold">
 //               Country: <span className="font-normal"> {addressParts[2]}</span>
 //             </p>
 //           )}
-
-//           <p className="font-bold">
-//             Service location:{' '}
-//             <span className="font-normal">{invoice.location}</span>
-//           </p>
-//           {/* <p>{invoice.merchant.address?.slice(-8)}</p> */}
 //           <p className="font-bold">
 //             {' '}
-//             Email: <span className="font-normal">{invoice.merchant.email}</span>
+//             Email:{' '}
+//             <span className="font-normal">{invoice?.merchant?.email}</span>
 //           </p>
 //           <p className="font-bold">
 //             {' '}
-//             Tel: <span className="font-normal">{invoice.merchant.phoneNo}</span>
+//             Tel:{' '}
+//             <span className="font-normal">{invoice?.merchant?.phoneNo}</span>
 //           </p>
 //           <p className="text-blue-600 font-bold">
 //             Date :
@@ -152,13 +160,22 @@
 //           </p>
 //         </div>
 //       </div>
+//       <div className={`w-[55%] flex flex-col m-auto my-0 border-1`}>
+//         <h4 className="mb-3 font-bold underline text-center">
+//           Why You Should Subscribe to Our Services:
+//         </h4>
+//         <p className="text-center">
+//           {invoice?.merchant?.shortDescription?.substring(0, 150)}{' '}
+//           <span className="font-bold">..</span>
+//         </p>
+//       </div>
 //       <div className="p-4">
 //         <table className="w-full border border-collapse border-gray-200">
 //           <thead className="text-left">
 //             <tr>
 //               <th className="border border-gray-200 px-4 py-2">Service</th>
 //               <th className="border border-gray-200 px-4 py-2">Service ID</th>
-//               <th className="border border-gray-200 px-4 py-2">Unit Price</th>
+//               <th className="border border-gray-200 px-4 py-2">Mode</th>
 //               <th className="border border-gray-200 px-4 py-2">Charges</th>
 //               <th className="border border-gray-200 px-4 py-2">
 //                 Amount (&#x20a6;)
@@ -168,33 +185,32 @@
 //           <tbody className="text-left">
 //             <tr>
 //               <td className="border border-gray-200 px-4 py-2">
-//                 <h5>{invoice.merchantService.service.title}</h5>
+//                 <h5>{invoice?.merchantService?.service?.title}</h5>
 //                 <p className="text-sm">
-//                   {invoice.merchantService.description.slice(0, 40)}...
+//                   {invoice?.merchantService?.service?.description?.slice(0, 40)}
+//                   ...
 //                 </p>
 //               </td>
 //               <td className="border border-gray-200 px-4 py-2">
 //                 <h5>{invoice.id?.slice(-5)}</h5>
 //               </td>
 //               <td className="border border-gray-200 px-4 py-2 w-1/6">
-//                 <h5>
-//                   {invoice.amount.toLocaleString(undefined, {
-//                     minimumFractionDigits: 2,
-//                   })}
-//                 </h5>
+//                 <h5>{invoice.merchantService.pricingMode}</h5>
 //               </td>
 //               <td className="border border-gray-200 px-4 py-2">
 //                 <h5>
-//                   {invoice.merchantService?.vat?.length
+//                   {/* {invoice.merchantService?.vat?.length
 //                     ? invoice.merchantService.vat
-//                     : 0}
+//                     : 0} */}
+//                   0
 //                 </h5>
 //               </td>
 //               <td className="border border-gray-200 px-4 py-2">
 //                 <h5>
-//                   {(
-//                     invoice.amount - (invoice.merchantService?.discount || 0)
-//                   ).toLocaleString(undefined, { minimumFractionDigits: 2 })}
+//                   {/* {invoice?.merchantService?.service?.discounts
+//                     ? invoice?.merchantService?.service?.discounts
+//                     : '0.00'} */}
+//                   0.00
 //                 </h5>
 //               </td>
 //             </tr>
@@ -202,38 +218,37 @@
 //             <tr>
 //               <td className="border border-gray-200 px-4 py-2" colSpan={3}></td>
 //               <td className="border border-gray-200 px-4 py-2 text-left">
-//                 <p>Subtotal</p>
 //                 <p>Discount</p>
 //                 <p>VAT</p>
 //                 <h3 className="text-blue-600 font-bold">Total</h3>
 //               </td>
 //               <td className="border border-gray-200 px-4 py-2 text-left w-1/5">
 //                 <p>
-//                   {(
-//                     invoice.amount - (invoice.merchantService?.discount || 0)
-//                   ).toLocaleString(undefined, { minimumFractionDigits: 2 })}
+//                   {/* {' '}
+//                   {invoice.merchantService?.discounts?.length
+//                     ? invoice.merchantService.discounts[0]
+//                     : 0} */}
+//                   0
 //                 </p>
 //                 <p>
-//                   {' '}
-//                   {invoice.merchantService?.discount?.length
-//                     ? invoice.merchantService.discount[0]
-//                     : 0}
-//                 </p>
-//                 <p>
-//                   {' '}
+//                   {/* {' '}
 //                   {invoice.merchantService?.vat?.length
 //                     ? invoice.merchantService.vat
-//                     : 0}
+//                     : 0} */}
+//                   0
 //                 </p>
 //                 <h3 className="text-blue-600 font-bold">
 //                   &#x20a6;{' '}
-//                   {(
-//                     invoice.amount -
-//                     (invoice.merchantService?.discount || 0) +
-//                     (invoice.merchantService?.vat || 0)
-//                   ).toLocaleString(undefined, {
+//                   {/* { invoice.fufillments[0]. amount.toLocaleString(undefined, {
+//                     minimumFractionDigits: 2,})} */}
+//                   {/* {(invoice?.amount
+//                     ? invoice.amount -
+//                       (invoice.merchantService?.discounts[0] || 0) +
+//                       (invoice.merchantService?.vat || 0)
+//                     : '000'
+//                   )invoice?.amount.toLocaleString(undefined, {
 //                     minimumFractionDigits: 2,
-//                   })}{' '}
+//                   })}{' '} */}
 //                 </h3>
 //               </td>
 //             </tr>

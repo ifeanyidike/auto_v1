@@ -15,6 +15,9 @@ const Review = async ({
     return notFound();
   }
 
+  // @ts-ignore
+  globalThis.reviewId = undefined;
+
   const fulfillment = new SubscriptionFulfillment();
   const sub = await fulfillment.getOne(searchParams.review_id);
 

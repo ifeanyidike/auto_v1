@@ -174,7 +174,7 @@ export default class Util {
       const { title, type } = sub.merchantService.service || {};
       const { firstName, lastName, email, imgUrl } = sub.user || {};
       const name = firstName || '' + lastName || '';
-      return sub.fufillments.map(f => ({
+      return sub.fufillments?.map(f => ({
         id: f.id,
         serviceName: title!,
         serviceType: type!,
@@ -217,6 +217,28 @@ export default class Util {
 
     return [...formatted_subscriptions, ...formatted_bookings].sort(
       (a, b) => +new Date(b.date) - +new Date(a.date)
+    );
+  }
+
+  public static organizeBookingByMonth(bookings: BookingItem[]) {
+    const aggr = bookings.reduce(
+      (acc, curr) => {
+        const date = new Date(curr.createdAt);
+        const month = monthNames[date.getMonth()]!;
+
+        if (!acc[month]) {
+          acc[month] = 0;
+        }
+        acc[month] += 1;
+        return acc;
+      },
+      {} as { [k: string]: number }
+    );
+    return Object.fromEntries(
+      Object.entries(aggr).sort(
+        ([monthA], [monthB]) =>
+          monthNames.indexOf(monthA) - monthNames.indexOf(monthB)
+      )
     );
   }
 

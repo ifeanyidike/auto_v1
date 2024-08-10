@@ -7,7 +7,6 @@ import {
   Chart as ChartElement,
   Legend,
   LineElement,
-  LinearScale,
   PointElement,
   Tooltip,
   registerables,
@@ -45,6 +44,7 @@ const Chart = (props: Props) => {
       'rgb(201, 203, 207)',
     ],
     borderWidth = 2,
+    backgroundColor = 'rgb(70, 8, 173)',
   } = props;
   const data = {
     ...(props.labels && { labels: props.labels }),
@@ -54,6 +54,7 @@ const Chart = (props: Props) => {
         data: props.data,
         fill: false,
         borderColor,
+        backgroundColor,
         borderWidth,
         tension: 0.1,
         spanGaps: true,
@@ -83,12 +84,14 @@ const Chart = (props: Props) => {
     maintainAspectRatio: false,
     scales: {
       y: {
+        type: 'linear',
         beginAtZero: false,
         grid: {
           display: false,
         },
       },
       x: {
+        type: 'category',
         grid: {
           display: false,
         },
@@ -119,6 +122,12 @@ const Chart = (props: Props) => {
         <Line data={data} style={{ height: '100%' }} options={{ ...options }} />
       ) : props.type === 'pie' ? (
         <Pie data={data} options={{ ...pieOptions }} />
+      ) : props.type === 'bar' ? (
+        <Bar
+          data={data}
+          options={{ ...options }}
+          // style={{ backgroundColor: props.backgroundColor }}
+        />
       ) : null}
     </div>
   );

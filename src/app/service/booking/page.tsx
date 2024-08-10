@@ -18,7 +18,7 @@ const Booking = async ({
   const id = searchParams?.service_id as string;
 
   // @ts-ignore
-  globalThis.service_id = undefined;
+  globalThis.serviceId = undefined;
 
   const merchantServiceClient = new MerchantService();
   const merchantService = await merchantServiceClient.getOne({

@@ -22,7 +22,12 @@ const Footer = ({ merchantData }: { merchantData?: MerchantType | null }) => {
               height={50}
             />
           ) : (
-            <Logo />
+            <Image
+              width={100}
+              height={100}
+              src={'/images/moxxillogo.png'}
+              alt="moxxilimage"
+            />
           )}
         </Link>
         <div className="flex h-fit w-fit gap-4">
