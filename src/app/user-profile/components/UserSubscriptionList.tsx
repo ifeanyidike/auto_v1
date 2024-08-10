@@ -98,7 +98,7 @@ const SubscriptionList = (props: Props) => {
 
   const heading = {
     id: 'table_header',
-  } as unknown as SubscriptionItem;
+  } as unknown as subscriptionByUserItem;
 
   const renderPopup = () => {
     if (popupOpen === null) {
