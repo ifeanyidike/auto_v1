@@ -1,7 +1,7 @@
 # Moxxil Autos
-This application is hosted in https://moxxil.com
+This application is hosted at [https://moxxil.com](https://moxxil.com).
 
-Moxxil Autos is a multi-tenant application that allows users (typically auto-mechanics) to create and manage their online shops. Mechanics can display their services in their shops and users can book/subscribe for those services. It also features online and offline payment system, review system, etc.
+Moxxil Autos is a multi-tenant platform that allows users, typically auto-mechanics, to create and manage their online shops. Mechanics can showcase their services in their shops, and customers can book or subscribe to these services. The platform also includes features such as online and offline payment systems, a review system, and more.
 
 ## How it works
 To get started, merchants need to create their shop. They can do this by visiting [https://www.moxxil.com/register-merchant](https://www.moxxil.com/register-merchant) to register and customize their subdomain. Once completed, they will gain access to their dedicated admin page.
