@@ -4,7 +4,15 @@ This application is hosted in https://moxxil.com
 Moxxil Autos is a multi-tenant application that allows users (typically auto-mechanics) to create and manage their online shops. Mechanics can display their services in their shops and users can book/subscribe for those services. It also features online and offline payment system, review system, etc.
 
 ## How it works
-To get started merchants need to create their shop. To do this, they need to visit [https://www.moxxil.com/register-merchant](https://www.moxxil.com/register-merchant) to register and customize their subdomain. Once they do, they will have access to their dedicated admin page. In the admin page, merchants will be able to add a product (services they offer), customize their shop experience with the right kind of captions, social accounts, etc. They can also set up their discount offerings and view/manage the activities happening on their page. For instance, they can view/fulfill bookings and subscriptions on their page. If a merchant desires to receive online payments, they can set up paystack payment on the settings page.
+To get started, merchants need to create their shop. They can do this by visiting [https://www.moxxil.com/register-merchant](https://www.moxxil.com/register-merchant) to register and customize their subdomain. Once completed, they will gain access to their dedicated admin page.
+
+On the admin page, merchants can:
+- Add products or services they offer.
+- Customize their shop experience with captions, social media accounts, and more.
+- Set up discount offerings.
+- View and manage activities on their page, such as fulfilling bookings and managing subscriptions.
+
+If a merchant wishes to receive online payments, they can configure Paystack payments through the settings page.
 
 ## Tech stack
 This project makes use of the following libraries and packages.
