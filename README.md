@@ -24,4 +24,19 @@ This project makes use of the following libraries and packages.
 - Data URI
 
 ## Architecture
+---
 
+When a user accesses the entry point of the application (`layout.tsx`), we first determine their subdomain. There are three possible scenarios:
+
+1. **Empty Subdomain**:  
+   If the subdomain is empty, we route the user to the root domain.
+   
+2. **Valid Subdomain**:  
+   If a subdomain exists, we check the database to verify its validity. If the subdomain exists, we route the user to the homepage for that subdomain. If it doesn't exist, we display a "not found" page.
+
+3. **Admin Subdomain**:  
+   If the user accesses the route in the format `[THEIR SUBDOMAIN].admin.moxxil.com`, we route them to the admin page for that specific subdomain. The logic for the admin page is handled within the `manage` component of the application, which is the most complex part of the system. You can review the implementation here: [Admin page](https://github.com/ifeanyidike/auto_v1/tree/main/src/app/manage).
+
+To access the admin page, users must be authenticated. After authentication, we verify that the authenticated user is indeed the store owner. If they are not, they encounter an unauthorized firewall.
+
+For the **users' section**, authentication is required only when subscribing or booking a service. However, no authentication is needed to visit the mechanic's homepage or services page.
