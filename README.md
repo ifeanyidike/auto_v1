@@ -11,6 +11,8 @@ This project makes use of the following libraries and packages.
 
 - Next.js 14 - With server actions and server components.
 - Prisma
+- PostgresQL
+- NeonDB
 - Tailwind CSS
 - Cloudinary for assets storage.
 - Hookstate for global state management.
