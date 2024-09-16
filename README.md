@@ -33,7 +33,7 @@ This project makes use of the following libraries and packages.
 - React Select
 - Data URI
 
-## Architecture
+## Architectural overview
 
 When a user accesses the entry point of the application (`layout.tsx`), we first determine their subdomain. There are three possible scenarios:
 
